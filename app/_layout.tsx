@@ -2,12 +2,11 @@ import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
-  NavigationContainer,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -25,7 +24,6 @@ import ChatEnhancerScreen from "./screens/ChatEnhancerScreen";
 import FeedbackScreen from "./screens/FeedbackScreen";
 import LanguageScreen from "./screens/LanguageScreen";
 import PreferencesScreen from "./screens/PreferencesScreen";
-import PricingScreen from "./screens/PricingScreen";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -99,15 +97,6 @@ export default function RootLayout() {
         <Stack.Screen
           name="ChatEnhancerScreen"
           component={ChatEnhancerScreen}
-        />
-        <Stack.Screen
-          name="PricingScreen"
-          component={PricingScreen}
-          options={{
-            headerShown: true,
-            title: "Upgrade to Premium+",
-            headerTitleAlign: "center",
-          }}
         />
         <Stack.Screen
           name="LanguageScreen"
