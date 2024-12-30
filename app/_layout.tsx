@@ -1,15 +1,9 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -27,6 +21,7 @@ import LanguageScreen from "./screens/LanguageScreen";
 import PreferencesScreen from "./screens/PreferencesScreen";
 import { useNetworkStatus } from "../hooks/useNetworkStatus";
 import useOfflineStore from "../store/offlineStore";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -36,7 +31,7 @@ const Stack = createNativeStackNavigator();
 export default function RootLayout() {
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
   const [loading, setLoading] = useState(true);
-  const colorScheme = useColorScheme();
+  const [modalVisible, setModalVisible] = useState(false);
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -50,6 +45,10 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useEffect(() => {
+    setModalVisible(!isOnline);
+  }, [isOnline]);
 
   const checkOnboardingStatus = async () => {
     const onboardingCompleted = await AsyncStorage.getItem(
@@ -76,7 +75,6 @@ export default function RootLayout() {
         <Stack.Screen name="Step1" component={Step1Screen} />
         <Stack.Screen name="Step2" component={Step2Screen} />
         <Stack.Screen name="Step3" component={Step3Screen} />
-
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen
           name="SettingsScreen"
@@ -133,26 +131,89 @@ export default function RootLayout() {
           }}
         />
       </Stack.Navigator>
-      {!isOnline && (
-        <View style={styles.offlineBanner}>
-          <Text style={styles.offlineText}>
-            You are offline. Please check your internet connection.
-          </Text>
-        </View>
-      )}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalContainer}
+          activeOpacity={1}
+          onPress={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContent}>
+            <Ionicons name="wifi-outline" size={35} color="#FF6347" />
+            <Text style={styles.offlineTitle}>Connection Error</Text>
+            <Text style={styles.offlineText}>
+              Please check your internet connection.
+            </Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  offlineBanner: {
-    backgroundColor: "#FF6347",
-    paddingBottom: 30,
-    paddingTop: 10,
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 25,
+    borderRadius: 15,
+    elevation: 5,
+    alignItems: "center",
+    width: "80%",
+    maxWidth: 320, // Modal genişliği azaltıldı
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  offlineTitle: {
+    fontSize: 18, // Font boyutu küçültüldü
+    fontWeight: "600",
+    color: "#333",
+    marginTop: 12,
+    marginBottom: 6,
   },
   offlineText: {
+    color: "#666",
+    fontSize: 14, // Font boyutu küçültüldü
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  closeButton: {
+    backgroundColor: "#FF6347", // Turuncu renk
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+  },
+  closeButtonText: {
     color: "white",
     fontSize: 14,
+    fontWeight: "600",
   },
 });
