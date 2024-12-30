@@ -18,12 +18,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useLocalSearchParams } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import Header from "@/components/Header";
-
-const EXPERIENCE_OPTIONS = [
-  { id: "beginner", label: "Beginner", description: "New to flirting" },
-  { id: "intermediate", label: "Intermediate", description: "Some experience" },
-  { id: "advanced", label: "Advanced", description: "Experienced" },
-];
+import { EXPERIENCE_OPTIONS } from "@/constants/Options";
 
 const { width, height } = Dimensions.get("window");
 

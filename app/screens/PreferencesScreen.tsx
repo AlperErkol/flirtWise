@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  View,
   Text,
   TouchableOpacity,
   StyleSheet,
@@ -7,53 +8,49 @@ import {
   ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import useProfileStore from "../../store/profileStore";
+import useProfileStore from "@/store/profileStore";
 import {
   AGE_OPTIONS,
   GENDER_OPTIONS,
-  PERSONALITY_TRAIT_OPTIONS,
-  RELATIONSHIP_GOAL_OPTIONS,
+  EXPERIENCE_OPTIONS,
+  INTEREST_OPTIONS,
 } from "@/constants/Options";
 import Theme from "@/constants/Theme";
+import { LinearGradient } from "expo-linear-gradient";
+import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
+import Header from "@/components/Header";
+import { Ionicons } from "@expo/vector-icons";
+
+type ProfileType = {
+  gender: string;
+  age: string;
+  interest: string;
+  experience: string;
+};
 
 export default function PreferencesScreen({ navigation }: any) {
   const { setUserProfile }: any = useProfileStore();
-  const [localProfile, setLocalProfile] = useState<any>({
-    gender: "Female",
-    ageRange: "18-24",
-    relationshipGoal: "Friendship",
-    personalityTrait: "Confidence",
+  const [localProfile, setLocalProfile] = useState<ProfileType>({
+    gender: "",
+    age: "",
+    interest: "",
+    experience: "",
   });
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    const loadUserProfile = async () => {
-      try {
-        const storedProfile = await AsyncStorage.getItem("userProfile");
-        if (storedProfile) {
-          const parsedProfile = JSON.parse(storedProfile);
-          setLocalProfile(parsedProfile);
-          setUserProfile(parsedProfile);
-        }
-      } catch (error) {
-        console.error("Error loading user profile:", error);
-        Alert.alert("Error", "Failed to load preferences.");
-      }
-    };
-
     loadUserProfile();
   }, []);
 
-  const handleSave = async () => {
+  const loadUserProfile = async () => {
     try {
-      await AsyncStorage.setItem("userProfile", JSON.stringify(localProfile));
-      setUserProfile(localProfile);
-      Alert.alert("Success!", "Your preferences have been saved.");
-      setHasChanges(false);
-      navigation.goBack();
+      const storedProfile = await AsyncStorage.getItem("userProfile");
+      if (storedProfile) {
+        const parsedProfile = JSON.parse(storedProfile);
+        setLocalProfile(parsedProfile);
+      }
     } catch (error) {
-      console.error("Error saving preferences:", error);
-      Alert.alert("Error!", "Failed to save your preferences.");
+      Alert.alert("Error", "Failed to load preferences.");
     }
   };
 
@@ -62,102 +59,158 @@ export default function PreferencesScreen({ navigation }: any) {
     setHasChanges(true);
   };
 
-  const renderOptions = (options: any, field: any) => {
-    return options.map((option: any) => (
-      <TouchableOpacity
-        key={option.value}
-        style={[styles.optionItem]}
-        onPress={() => handleChange(field, option.value)}
-      >
-        <Text style={styles.optionText}>{option.label}</Text>
-        {localProfile[field] === option.value && (
-          <Text style={styles.checkMark}>✓</Text>
-        )}
-      </TouchableOpacity>
-    ));
+  const handleSave = async () => {
+    try {
+      await AsyncStorage.setItem("userProfile", JSON.stringify(localProfile));
+      setUserProfile(localProfile);
+      Alert.alert("Success!", "Your preferences have been saved.");
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert("Error", "Failed to save preferences.");
+    }
   };
 
-  return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      {localProfile ? (
-        <>
-          <Text style={styles.label}>Gender</Text>
-          {renderOptions(GENDER_OPTIONS, "gender")}
-          <Text style={styles.label}>Age Range</Text>
-          {renderOptions(AGE_OPTIONS, "ageRange")}
-          <Text style={styles.label}>Relationship Goal</Text>
-          {renderOptions(RELATIONSHIP_GOAL_OPTIONS, "relationshipGoal")}
-          <Text style={styles.label}>Personality Trait to Improve</Text>
-          {renderOptions(PERSONALITY_TRAIT_OPTIONS, "personalityTrait")}
+  const renderSection = (
+    title: string,
+    options: Array<{ id: string; label: string }>,
+    field: keyof ProfileType
+  ) => (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      <View style={styles.optionsContainer}>
+        {options.map((option: any) => (
           <TouchableOpacity
+            key={option.id}
             style={[
-              styles.saveButton,
-              { backgroundColor: hasChanges ? Theme.colors.primary : "#ccc" },
+              styles.optionButton,
+              localProfile[field] === option.id && styles.selectedOption,
             ]}
+            onPress={() => handleChange(field, option.id)}
+          >
+            <Text
+              style={[
+                styles.optionText,
+                localProfile[field] === option.id && styles.selectedOptionText,
+              ]}
+            >
+              {option.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
+
+  return (
+    <LinearGradient colors={["#E6E6FA", "#E6E6FA"]} style={styles.container}>
+      <GlobalSafeAreaView>
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+        >
+          {renderSection("Gender", GENDER_OPTIONS, "gender")}
+          {renderSection("Age Range", AGE_OPTIONS, "age")}
+          {renderSection("Relationship Goal", INTEREST_OPTIONS, "interest")}
+          {renderSection(
+            "Flirting Experience",
+            EXPERIENCE_OPTIONS,
+            "experience"
+          )}
+        </ScrollView>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.saveButton, !hasChanges && styles.disabledButton]}
             onPress={handleSave}
             disabled={!hasChanges}
           >
-            <Text style={styles.saveButtonText}>Save Preferences</Text>
+            <Text style={styles.saveButtonText}>Save Changes</Text>
+            {hasChanges && <Ionicons name="checkmark" size={24} color="#fff" />}
           </TouchableOpacity>
-        </>
-      ) : (
-        <Text>Loading preferences...</Text>
-      )}
-    </ScrollView>
+        </View>
+      </GlobalSafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    flex: 1,
   },
-
-  scrollContainer: {
-    backgroundColor: "#fff",
-    paddingBottom: 20,
+  safeArea: {
+    flex: 1,
   },
-
-  label: {
-    fontSize: 20,
-    marginVertical: 10,
-    paddingLeft: 15,
+  scrollView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    padding: 20,
+    paddingBottom: 120,
+  },
+  section: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
     color: "#333",
-    fontWeight: "bold",
+    marginBottom: 12,
   },
-
-  optionItem: {
+  optionsContainer: {
+    gap: 10,
+  },
+  optionButton: {
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+  },
+  selectedOption: {
+    backgroundColor: Theme.colors.primary,
+    borderColor: Theme.colors.primary,
+  },
+  optionText: {
+    fontSize: 16,
+    color: "#333",
+    textAlign: "center",
+  },
+  selectedOptionText: {
+    color: "#FFF",
+    fontWeight: "600",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 60,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(230, 230, 250, 0.9)", // Hafif saydam arka plan
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  saveButton: {
+    backgroundColor: Theme.colors.primary,
+    padding: 16,
+    borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    paddingHorizontal: 15,
+    justifyContent: "center",
+    gap: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-
-  optionText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: Theme.colors.text,
+  disabledButton: {
+    opacity: 0.5,
   },
-
-  checkMark: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: Theme.colors.primary,
-  },
-
-  saveButton: {
-    marginTop: 20,
-    marginHorizontal: 20,
-    paddingVertical: 15,
-    borderRadius: 15,
-    alignItems: "center",
-  },
-
   saveButtonText: {
+    color: "#FFF",
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: "600",
   },
 });

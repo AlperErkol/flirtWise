@@ -12,7 +12,7 @@ export default function GlobalSafeAreaView({ children, bgWhite = false }: any) {
         styles.container,
         bgWhite && styles.bgWhite,
         {
-          paddingTop: 10,
+          paddingTop: insets.top,
           paddingBottom: insets.bottom + Theme.spacing.vertical,
           paddingLeft: insets.left + Theme.spacing.horizontal,
           paddingRight: insets.right + Theme.spacing.horizontal,

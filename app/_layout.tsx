@@ -12,7 +12,6 @@ import {
   StatusBar,
 } from "react-native";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Step1Screen from "./screens/Step1Screen";
 import Step2Screen from "./screens/Step2Screen";
@@ -30,8 +29,8 @@ import { useNetworkStatus } from "../hooks/useNetworkStatus";
 import useOfflineStore from "../store/offlineStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createNativeStackNavigator();

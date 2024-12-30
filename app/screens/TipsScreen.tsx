@@ -16,7 +16,7 @@ import { getFlirtTip } from "@/utils/tips";
 import { router } from "expo-router";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import useProfileStore from "@/store/profileStore";
-import PremiumBadge from "../components/PremiumBadge";
+import PremiumBadge from "../../components/PremiumBadge";
 import * as Clipboard from "expo-clipboard";
 
 const FREE_CATEGORIES = [
@@ -149,7 +149,7 @@ export default function TipsScreen() {
   return (
     <LinearGradient colors={["#E6E6FA", "#E6E6FA"]} style={styles.gradient}>
       <GlobalSafeAreaView style={styles.container}>
-        <Header logo={true} centered={true} showBackButton={true} />
+        <Header logo={true} showBackButton={true} />
         <View style={styles.content}>
           <View style={styles.categoriesContainer}>
             <Text style={styles.sectionTitle}>Basic Tips</Text>

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -6,7 +6,6 @@ import {
   FlatList,
   View,
   Dimensions,
-  Button,
   Alert,
 } from "react-native";
 
@@ -14,13 +13,15 @@ import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { usePremiumStore } from "@/store/usePremiumStore";
-import { Ionicons } from "@expo/vector-icons";
-import PremiumBadge from "../components/PremiumBadge";
+import PremiumBadge from "../../components/PremiumBadge";
+import BottomSheet from "@gorhom/bottom-sheet";
+import SettingsBottomSheet from "@/components/SettingsBottomSheet";
 
 const { width } = Dimensions.get("window");
 
 export default function HomeScreen({ navigation }: any) {
   const { isPremium } = usePremiumStore();
+  const bottomSheetRef = useRef<BottomSheet>(null);
 
   const mainFeatures = [
     {
@@ -81,7 +82,11 @@ export default function HomeScreen({ navigation }: any) {
       style={styles.gradientBackground}
     >
       <GlobalSafeAreaView>
-        <Header logo={true} showSettingsIcon={true} />
+        <Header
+          logo={true}
+          showSettingsIcon={true}
+          bottomSheetRef={bottomSheetRef}
+        />
 
         <Text style={styles.questionText}>
           Need help sparking the perfect conversation? Start here!
@@ -118,6 +123,10 @@ export default function HomeScreen({ navigation }: any) {
           ))}
         </View>
       </GlobalSafeAreaView>
+      <SettingsBottomSheet
+        bottomSheetRef={bottomSheetRef}
+        navigation={navigation}
+      />
     </LinearGradient>
   );
 }

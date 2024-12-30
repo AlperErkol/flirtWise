@@ -12,14 +12,9 @@ import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/Header";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import { useLocalSearchParams } from "expo-router";
+import { INTEREST_OPTIONS } from "@/constants/Options";
 
 const { height } = Dimensions.get("window");
-
-const INTEREST_OPTIONS = [
-  { id: "male", label: "Men" },
-  { id: "female", label: "Women" },
-  { id: "both", label: "Both" },
-];
 
 export default function Step2Screen({ navigation }: any) {
   const [selectedInterest, setSelectedInterest] = useState("");
