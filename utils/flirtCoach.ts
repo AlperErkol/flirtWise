@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import ApiService from "@/services/ApiService";
 
 const FLIRT_COACH_PROMPT = `
 You are a modern flirting coach and an expert in providing practical, engaging, and confidence-boosting advice for flirting in any situation. Your tone should be playful, friendly, and relatable.
@@ -16,7 +16,7 @@ You are a modern flirting coach and an expert in providing practical, engaging, 
 
 export const sendFlirtMessage = async (chatLog: any) => {
   try {
-    const response = await axiosInstance.post("/chat/completions", {
+    const response = await ApiService.post("/chat/completions", {
       model: "chatgpt-4o-latest",
       messages: [{ role: "system", content: FLIRT_COACH_PROMPT }, ...chatLog],
       max_tokens: 200,

@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import ApiService from "@/services/ApiService";
 
 export const getFlirtTip = async (category: any, userInfo: any) => {
   const prompt = `
@@ -21,7 +21,7 @@ export const getFlirtTip = async (category: any, userInfo: any) => {
   `;
 
   try {
-    const response = await axiosInstance.post("/chat/completions", {
+    const response = await ApiService.post("/chat/completions", {
       model: "chatgpt-4o-latest",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 150,

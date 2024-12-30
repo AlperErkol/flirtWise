@@ -9,16 +9,7 @@ import {
   Linking,
 } from "react-native";
 
-import RevenueCatUI, { PAYWALL_RESULT } from "react-native-purchases-ui";
-
 export default function SettingsScreen({ navigation }: any) {
-  async function presentPaywallIfNeeded() {
-    const paywallResult: PAYWALL_RESULT =
-      await RevenueCatUI.presentPaywallIfNeeded({
-        requiredEntitlementIdentifier: "pro",
-      });
-  }
-
   const handleShareApp = async () => {
     try {
       const result = await Share.share({
@@ -56,7 +47,7 @@ export default function SettingsScreen({ navigation }: any) {
     {
       id: "2",
       title: "Upgrade",
-      screen: presentPaywallIfNeeded,
+      // screen: presentPaywallIfNeeded,
       emoji: "💳",
     },
 

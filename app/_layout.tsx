@@ -9,6 +9,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, Text, StyleSheet } from "react-native";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -24,6 +25,8 @@ import ChatEnhancerScreen from "./screens/ChatEnhancerScreen";
 import FeedbackScreen from "./screens/FeedbackScreen";
 import LanguageScreen from "./screens/LanguageScreen";
 import PreferencesScreen from "./screens/PreferencesScreen";
+import { useNetworkStatus } from "../hooks/useNetworkStatus";
+import useOfflineStore from "../store/offlineStore";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,6 +40,10 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+
+  const isOnline = useOfflineStore((state) => state.isOnline);
+
+  useNetworkStatus();
 
   useEffect(() => {
     if (loaded) {
@@ -61,7 +68,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <>
       <Stack.Navigator
         initialRouteName={isOnboardingCompleted ? "HomeScreen" : "Step1"}
         screenOptions={{ headerShown: false }}
@@ -126,7 +133,26 @@ export default function RootLayout() {
           }}
         />
       </Stack.Navigator>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+      {!isOnline && (
+        <View style={styles.offlineBanner}>
+          <Text style={styles.offlineText}>
+            You are offline. Please check your internet connection.
+          </Text>
+        </View>
+      )}
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  offlineBanner: {
+    backgroundColor: "#FF6347",
+    paddingBottom: 30,
+    paddingTop: 10,
+    alignItems: "center",
+  },
+  offlineText: {
+    color: "white",
+    fontSize: 14,
+  },
+});

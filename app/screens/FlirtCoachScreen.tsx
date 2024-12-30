@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,35 +9,58 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { sendFlirtMessage } from "@/utils/flirtCoach";
 import Theme from "@/constants/Theme";
+import useOfflineStore from "@/store/offlineStore";
+import { LinearGradient } from "expo-linear-gradient";
+import Ionicons from "@expo/vector-icons/Ionicons";
+
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
 
 export default function FlirtCoachScreen() {
-  const [chatLog, setChatLog] = useState([]);
+  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
   const [userInput, setUserInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const isOnline = useOfflineStore((state) => state.isOnline);
 
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     if (!userInput.trim()) return;
 
-    const userMessage = { role: "user", content: userInput };
-    const updatedLog = [...chatLog, userMessage];
-    setChatLog(updatedLog as never);
+    const userMessage: ChatMessage = {
+      role: "user",
+      content: userInput,
+    };
+
+    setChatLog((prev) => [...prev, userMessage]);
     setUserInput("");
     setIsTyping(true);
 
     try {
-      const aiMessage = await sendFlirtMessage(updatedLog);
-      setChatLog((currentLog) => [...currentLog, aiMessage]);
-    } catch (error) {
-      setChatLog((currentLog) => [
-        ...currentLog,
-        { role: "assistant", content: "An error occurred. Please try again." },
+      const aiMessage = await sendFlirtMessage([...chatLog, userMessage]);
+      setChatLog((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: aiMessage.content,
+        },
+      ]);
+    } catch (error: any) {
+      setChatLog((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: error.message.includes("Rate limit")
+            ? "Çok fazla mesaj gönderdiniz. Lütfen biraz bekleyin."
+            : "Bir hata oluştu. Lütfen tekrar deneyin.",
+        },
       ]);
     } finally {
       setIsTyping(false);
     }
-  };
+  }, [userInput, chatLog, isOnline]);
 
   return (
     <KeyboardAvoidingView
@@ -64,11 +87,7 @@ export default function FlirtCoachScreen() {
             </LinearGradient>
           );
         })}
-        {isTyping && (
-          <View style={styles.typingIndicator}>
-            <TypingIndicator />
-          </View>
-        )}
+        {isTyping && <View style={styles.typingIndicator}></View>}
       </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput
@@ -83,7 +102,11 @@ export default function FlirtCoachScreen() {
           disabled={isTyping}
           style={styles.sendButton}
         >
-          <Icon name="send" size={24} color={isTyping ? "#ccc" : "#FF6F61"} />
+          <Ionicons
+            name="send"
+            size={24}
+            color={isTyping ? "#ccc" : "#FF6F61"}
+          />
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
