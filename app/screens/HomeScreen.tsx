@@ -7,35 +7,28 @@ import {
   View,
   Dimensions,
   Button,
+  Alert,
 } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
+import { usePremiumStore } from "@/store/usePremiumStore";
+import { Ionicons } from "@expo/vector-icons";
+import PremiumBadge from "../components/PremiumBadge";
 
 const { width } = Dimensions.get("window");
 
-export default function HomeScreen({ navigation, openSettings }: any) {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+export default function HomeScreen({ navigation }: any) {
+  const { isPremium } = usePremiumStore();
 
-  const handlePresentModalPress = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index);
-  }, []);
   const mainFeatures = [
     {
       id: "4",
       title: "Photo-Based Openers",
       description: "Get clever conversation starters inspired by the photo",
       screen: "PhotoOpenersScreen",
+      isPremium: false,
     },
     {
       id: "5",
@@ -43,6 +36,7 @@ export default function HomeScreen({ navigation, openSettings }: any) {
       description:
         "Breathe new life into your conversations with fresh, engaging messages",
       screen: "ChatEnhancerScreen",
+      isPremium: true,
     },
   ];
 
@@ -52,14 +46,34 @@ export default function HomeScreen({ navigation, openSettings }: any) {
       title: "Flirt Coach",
       screen: "FlirtCoachScreen",
       emoji: "❤️‍🔥",
+      isPremium: false,
     },
     {
       id: "2",
       title: "Get Flirting Tips",
       screen: "TipsScreen",
       emoji: "💡",
+      isPremium: false,
     },
   ];
+
+  const handleFeaturePress = (feature: any) => {
+    if (feature.isPremium && !isPremium) {
+      Alert.alert(
+        "Premium Feature",
+        "Chat Enhancer is available only for Premium+ members.",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Upgrade to Premium+",
+            onPress: () => navigation.navigate("/paywall"),
+          },
+        ]
+      );
+      return;
+    }
+    navigation.navigate(`${feature.screen}`);
+  };
 
   return (
     <LinearGradient
@@ -67,11 +81,7 @@ export default function HomeScreen({ navigation, openSettings }: any) {
       style={styles.gradientBackground}
     >
       <GlobalSafeAreaView>
-        <Header
-          logo={true}
-          showSettingsIcon={true}
-          onSettingsPress={handlePresentModalPress}
-        />
+        <Header logo={true} showSettingsIcon={true} />
 
         <Text style={styles.questionText}>
           Need help sparking the perfect conversation? Start here!
@@ -82,9 +92,12 @@ export default function HomeScreen({ navigation, openSettings }: any) {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.mainCard}
-              onPress={() => navigation.navigate(item.screen)}
+              onPress={() => handleFeaturePress(item)}
             >
-              <Text style={styles.cardTitle}>{item.title}</Text>
+              <View style={styles.titleContainer}>
+                <Text style={styles.cardTitle}>{item.title}</Text>
+                {item.isPremium && !isPremium && <PremiumBadge />}
+              </View>
               <Text style={styles.cardDesc}>{item.description}</Text>
             </TouchableOpacity>
           )}
@@ -188,5 +201,10 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     alignItems: "center",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
 });

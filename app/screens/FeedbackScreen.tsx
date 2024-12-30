@@ -27,7 +27,7 @@ export default function FeedbackScreen() {
   };
 
   return (
-    <GlobalSafeAreaView>
+    <GlobalSafeAreaView bgWhite>
       <TextInput
         style={styles.input}
         placeholder="Adınız"

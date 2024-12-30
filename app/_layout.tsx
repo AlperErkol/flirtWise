@@ -3,7 +3,14 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -22,6 +29,7 @@ import PreferencesScreen from "./screens/PreferencesScreen";
 import { useNetworkStatus } from "../hooks/useNetworkStatus";
 import useOfflineStore from "../store/offlineStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -67,9 +75,9 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={isOnboardingCompleted ? "HomeScreen" : "Step1"}
+        initialRouteName={"Step1"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Step1" component={Step1Screen} />
@@ -157,7 +165,8 @@ export default function RootLayout() {
           </View>
         </TouchableOpacity>
       </Modal>
-    </>
+      <StatusBar />
+    </GestureHandlerRootView>
   );
 }
 

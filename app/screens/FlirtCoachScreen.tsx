@@ -8,12 +8,15 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { sendFlirtMessage } from "@/utils/flirtCoach";
 import Theme from "@/constants/Theme";
 import useOfflineStore from "@/store/offlineStore";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
+import { usePremiumStore } from "@/store/usePremiumStore";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -25,9 +28,26 @@ export default function FlirtCoachScreen() {
   const [userInput, setUserInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const isOnline = useOfflineStore((state) => state.isOnline);
+  const { incrementMessageCount } = usePremiumStore();
 
   const handleSend = useCallback(async () => {
     if (!userInput.trim()) return;
+
+    const canSendMessage = await incrementMessageCount();
+    if (!canSendMessage) {
+      Alert.alert(
+        "Daily Limit Reached",
+        "You've reached your daily message limit. Upgrade to Premium+ for unlimited messaging!",
+        [
+          { text: "Cancel" },
+          {
+            text: "Upgrade to Premium+",
+            onPress: () => router.push("/screens/ChatEnhancerScreen"),
+          },
+        ]
+      );
+      return;
+    }
 
     const userMessage: ChatMessage = {
       role: "user",
@@ -60,7 +80,7 @@ export default function FlirtCoachScreen() {
     } finally {
       setIsTyping(false);
     }
-  }, [userInput, chatLog, isOnline]);
+  }, [userInput, chatLog, isOnline, incrementMessageCount]);
 
   return (
     <KeyboardAvoidingView

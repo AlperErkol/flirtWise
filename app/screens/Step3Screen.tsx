@@ -1,146 +1,249 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { Octicons } from "@expo/vector-icons";
+import {
+  Dimensions,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { PERSONALITY_TRAIT_OPTIONS } from "@/constants/Options";
 import useProfileStore from "@/store/profileStore";
 import { saveUserProfile } from "@/utils/storage";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
+import { FadeInRight, FadeOutLeft } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useLocalSearchParams } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
+import Header from "@/components/Header";
 
-export default function Step3Screen({ navigation, route }: any) {
-  const { gender, ageRange, relationshipGoal } = route.params;
-  const [personalityTrait, setPersonalityTrait] = useState(null);
+const EXPERIENCE_OPTIONS = [
+  { id: "beginner", label: "Beginner", description: "New to flirting" },
+  { id: "intermediate", label: "Intermediate", description: "Some experience" },
+  { id: "advanced", label: "Advanced", description: "Experienced" },
+];
+
+const { width, height } = Dimensions.get("window");
+
+export default function Step3Screen({ navigation }: any) {
+  const [selectedExperience, setSelectedExperience] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { gender, age, interest } = useLocalSearchParams();
   const setUserProfile = useProfileStore((state: any) => state.setUserProfile);
 
   const handleComplete = async () => {
-    if (!personalityTrait) {
-      Alert.alert("Warning", "Please select a personality trait.");
-      return;
+    if (selectedExperience) {
+      setLoading(true);
+      try {
+        const userData = {
+          gender,
+          age,
+          interest,
+          experience: selectedExperience,
+        };
+
+        await saveUserProfile(userData);
+        await AsyncStorage.setItem("onboardingCompleted", "true");
+        setUserProfile(userData);
+        navigation.navigate("HomeScreen");
+      } catch (error) {
+        console.error("Error saving user data:", error);
+      } finally {
+        setLoading(false);
+      }
     }
-
-    const userProfile = {
-      gender,
-      ageRange,
-      relationshipGoal,
-      personalityTrait,
-      createdAt: new Date(),
-    };
-
-    try {
-      await saveUserProfile(userProfile);
-      await AsyncStorage.setItem("onboardingCompleted", "true");
-      setUserProfile(userProfile);
-      navigation.navigate("HomeScreen");
-    } catch (error) {
-      console.error("Error saving profile:", error);
-      Alert.alert("Error", "Failed to save your profile. Please try again.");
-    }
-  };
-
-  const handleBack = () => {
-    navigation.goBack();
   };
 
   return (
-    <GlobalSafeAreaView>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack}>
-          <Octicons name="arrow-left" size={24} color="#333" />
-        </TouchableOpacity>
-
-        <View style={styles.progressBar}>
-          <Octicons
-            name="dot-fill"
-            size={24}
-            color="#FF6347"
-            style={styles.dot}
-          />
-          <Octicons
-            name="dot-fill"
-            size={24}
-            color="#FF6347"
-            style={styles.dot}
-          />
-          <Octicons
-            name="dot-fill"
-            size={24}
-            color="#FF6347"
-            style={styles.dot}
-          />
-        </View>
-      </View>
-
-      <Text style={styles.title}>Select the Trait You Want to Improve</Text>
-
-      {PERSONALITY_TRAIT_OPTIONS.map((option) => (
-        <TouchableOpacity
-          key={option.value}
-          style={[
-            styles.optionButton,
-            personalityTrait === option.value && styles.selectedOption,
-          ]}
-          onPress={() => setPersonalityTrait(option.value as any)}
+    <LinearGradient colors={["#E6E6FA", "#E6E6FA"]} style={styles.container}>
+      <GlobalSafeAreaView>
+        <Header logo={true} showBackButton={true} />
+        <Animated.View
+          entering={FadeInRight}
+          exiting={FadeOutLeft}
+          style={styles.content}
         >
-          <Text style={styles.optionText}>{option.label}</Text>
-        </TouchableOpacity>
-      ))}
+          <View style={styles.formContainer}>
+            <View style={styles.optionsSection}>
+              <Text style={styles.sectionTitle}>
+                My flirting experience is...
+              </Text>
+              <View style={styles.optionsGrid}>
+                {EXPERIENCE_OPTIONS.map((option) => (
+                  <TouchableOpacity
+                    key={option.id}
+                    style={[
+                      styles.optionButton,
+                      selectedExperience === option.id && styles.selectedOption,
+                    ]}
+                    onPress={() => setSelectedExperience(option.id)}
+                  >
+                    <Text
+                      style={[
+                        styles.optionText,
+                        selectedExperience === option.id &&
+                          styles.selectedOptionText,
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.optionDescription,
+                        selectedExperience === option.id &&
+                          styles.selectedDescriptionText,
+                      ]}
+                    >
+                      {option.description}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </View>
 
-      <TouchableOpacity style={styles.completeButton} onPress={handleComplete}>
-        <Text style={styles.completeButtonText}>Complete Onboarding</Text>
-      </TouchableOpacity>
-    </GlobalSafeAreaView>
+          <View style={styles.bottomContainer}>
+            <TouchableOpacity
+              style={[
+                styles.nextButton,
+                (!selectedExperience || loading) && styles.disabledButton,
+              ]}
+              onPress={handleComplete}
+              disabled={!selectedExperience || loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <>
+                  <Text style={styles.buttonText}>Get Started</Text>
+                  <Ionicons name="arrow-forward" size={20} color="#fff" />
+                </>
+              )}
+            </TouchableOpacity>
+
+            <View style={styles.progressContainer}>
+              <View style={[styles.progressDot, styles.inactiveDot]} />
+              <View style={[styles.progressDot, styles.inactiveDot]} />
+              <View style={styles.progressDot} />
+            </View>
+          </View>
+        </Animated.View>
+      </GlobalSafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, paddingHorizontal: 20, backgroundColor: "#fff" },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginVertical: 20,
-  },
-  progressBar: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+  container: {
     flex: 1,
-    marginLeft: 10,
   },
-  dot: {
-    marginHorizontal: 5,
+  content: {
+    flex: 1,
+    paddingVertical: 24,
   },
-  title: {
-    fontSize: 26,
-    fontWeight: "bold",
-    marginBottom: 20,
+  formContainer: {
+    flex: 1,
+    marginTop: height * 0.05,
+    gap: 32,
+  },
+  optionsSection: {
+    gap: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
+  },
+
+  selectedOption: {
+    backgroundColor: "#4F46E5",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  selectedOptionText: {
+    color: "#FFF",
+    fontWeight: "600",
+  },
+  bottomContainer: {
+    gap: 16,
+    marginTop: "auto",
+  },
+  nextButton: {
+    backgroundColor: "#4F46E5",
+    paddingVertical: 16,
+    paddingHorizontal: 32,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  disabledButton: {
+    opacity: 0.7,
+  },
+  buttonText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "600",
+  },
+  progressContainer: {
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
+  },
+  progressDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#4F46E5",
+  },
+  inactiveDot: {
+    opacity: 0.3,
+  },
+
+  optionText: {
+    fontSize: 16,
+    color: "#4F46E5",
+    fontWeight: "600",
+  },
+  optionDescription: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 4,
+  },
+  selectedDescriptionText: {
+    color: "#fff",
+    opacity: 0.9,
+  },
+  backButton: {
+    padding: 8,
+  },
+  optionsGrid: {
+    alignItems: "center", // Butonları yatayda ortalar
   },
   optionButton: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 15,
-    marginBottom: 10,
-    backgroundColor: "#f9f9f9",
-  },
-  selectedOption: {
-    backgroundColor: "#FF6347",
-    borderColor: "#FF6347",
-  },
-  optionText: { fontSize: 15, textAlign: "center", fontWeight: "600" },
-  completeButton: {
-    position: "absolute",
-    bottom: 20,
-    left: 20,
-    right: 20,
-    backgroundColor: "#FF6347",
-    padding: 15,
-    borderRadius: 8,
-  },
-  completeButtonText: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "600",
-    textAlign: "center",
+    width: "100%", // Grid içinde tam genişlik
+    backgroundColor: "rgba(79, 70, 229, 0.1)",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    alignItems: "flex-start", // İçerikteki yazıları sola hizalar
   },
 });
