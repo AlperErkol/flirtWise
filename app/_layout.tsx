@@ -133,7 +133,7 @@ export default function RootLayout() {
           component={FeedbackScreen}
           options={{
             headerShown: true,
-            title: "Preferences",
+            title: "Give Feedback",
             headerTitleAlign: "center",
           }}
         />
