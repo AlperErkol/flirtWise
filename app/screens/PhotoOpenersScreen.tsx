@@ -29,21 +29,21 @@ export default function PhotoOpenersScreen() {
   const { incrementPhotoCount } = usePremiumStore();
 
   const handleImageProcessing = async (imageUri: any) => {
-    const canAnalyzePhoto = await incrementPhotoCount();
-    if (!canAnalyzePhoto) {
-      Alert.alert(
-        "Daily Limit Reached",
-        "You've reached your daily photo analysis limit. Upgrade to Premium+ for unlimited analysis!",
-        [
-          { text: "Cancel" },
-          {
-            text: "Upgrade to Premium+",
-            onPress: () => router.push("/screens/FeedbackScreen"),
-          },
-        ]
-      );
-      return;
-    }
+    // const canAnalyzePhoto = await incrementPhotoCount();
+    // if (!canAnalyzePhoto) {
+    //   Alert.alert(
+    //     "Daily Limit Reached",
+    //     "You've reached your daily photo analysis limit. Upgrade to Premium+ for unlimited analysis!",
+    //     [
+    //       { text: "Cancel" },
+    //       {
+    //         text: "Upgrade to Premium+",
+    //         onPress: () => router.push("/screens/FeedbackScreen"),
+    //       },
+    //     ]
+    //   );
+    //   return;
+    // }
 
     setLoading(true);
     setSuggestions([]);
@@ -80,48 +80,38 @@ export default function PhotoOpenersScreen() {
   };
 
   return (
-    <LinearGradient
-      colors={["#E6E6FA", "#E6E6FA"]}
-      style={styles.gradientBackground}
-    >
-      <GlobalSafeAreaView>
-        <Header logo={true} showBackButton={true} />
-        {!selectedImage && (
-          <View style={styles.heroContainer}>
-            <Image
-              source={require("../../assets/images/photo-based.png")}
-              style={styles.heroImage}
-            />
-          </View>
-        )}
-        {selectedImage && (
-          <Image source={{ uri: selectedImage }} style={styles.imagePreview} />
-        )}
+    <GlobalSafeAreaView>
+      <Header logo={true} showBackButton={true} />
+      {!selectedImage && (
+        <View style={styles.heroContainer}>
+          <Image
+            source={require("../../assets/images/photo-based.png")}
+            style={styles.heroImage}
+          />
+        </View>
+      )}
+      {selectedImage && (
+        <Image source={{ uri: selectedImage }} style={styles.imagePreview} />
+      )}
 
-        {loading && <ActivityIndicator style={styles.indicator} size="small" />}
+      {loading && <ActivityIndicator style={styles.indicator} size="small" />}
 
-        <ScrollView style={{ marginTop: 20 }}>
-          {suggestions.map((sugg, idx) => (
-            <Text key={idx} style={styles.suggestionText}>
-              {sugg}
-            </Text>
-          ))}
-        </ScrollView>
+      <ScrollView style={{ marginTop: 20 }}>
+        {suggestions.map((sugg, idx) => (
+          <Text key={idx} style={styles.suggestionText}>
+            {sugg}
+          </Text>
+        ))}
+      </ScrollView>
 
-        <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
-          <Text style={styles.pickText}>Pick a Photo</Text>
-        </TouchableOpacity>
-      </GlobalSafeAreaView>
-    </LinearGradient>
+      <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
+        <Text style={styles.pickText}>Pick a Photo</Text>
+      </TouchableOpacity>
+    </GlobalSafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  gradientBackground: {
-    flex: 1,
-    width: "100%",
-    justifyContent: "center",
-  },
   heroContainer: {
     marginTop: 150,
     flex: 1,

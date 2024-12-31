@@ -20,12 +20,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import Header from "@/components/Header";
 import { EXPERIENCE_OPTIONS } from "@/constants/Options";
 
-const { width, height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
-export default function Step3Screen({ navigation }: any) {
+export default function Step3Screen({ navigation, route }: any) {
   const [selectedExperience, setSelectedExperience] = useState("");
   const [loading, setLoading] = useState(false);
-  const { gender, age, interest } = useLocalSearchParams();
+  const { gender, age, interest } = route.params;
   const setUserProfile = useProfileStore((state: any) => state.setUserProfile);
 
   const handleComplete = async () => {

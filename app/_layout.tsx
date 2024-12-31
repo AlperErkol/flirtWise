@@ -119,24 +119,8 @@ export default function RootLayout() {
             headerTitleAlign: "center",
           }}
         />
-        <Stack.Screen
-          name="PreferencesScreen"
-          component={PreferencesScreen}
-          options={{
-            headerShown: true,
-            title: "Preferences",
-            headerTitleAlign: "center",
-          }}
-        />
-        <Stack.Screen
-          name="FeedbackScreen"
-          component={FeedbackScreen}
-          options={{
-            headerShown: true,
-            title: "Give Feedback",
-            headerTitleAlign: "center",
-          }}
-        />
+        <Stack.Screen name="PreferencesScreen" component={PreferencesScreen} />
+        <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} />
       </Stack.Navigator>
       <Modal
         animationType="fade"

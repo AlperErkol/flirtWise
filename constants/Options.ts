@@ -14,7 +14,7 @@ const AGE_OPTIONS = [
 const INTEREST_OPTIONS = [
   { label: "Men", value: "male", id: "male" },
   { label: "Women", value: "female", id: "female" },
-  { label: "Non-Binary", value: "nb", id: "nb" },
+  { label: "Both", value: "both", id: "both" },
 ];
 
 const EXPERIENCE_OPTIONS = [

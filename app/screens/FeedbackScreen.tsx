@@ -1,4 +1,5 @@
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
+import Header from "@/components/Header";
 import Theme from "@/constants/Theme";
 import React, { useState } from "react";
 import {
@@ -27,7 +28,8 @@ export default function FeedbackScreen() {
   };
 
   return (
-    <GlobalSafeAreaView bgWhite>
+    <GlobalSafeAreaView>
+      <Header logo={true} showBackButton={true} />
       <Text style={styles.title}>Share Your Feedback</Text>
       <Text style={styles.subtitle}>
         Help us improve our service with your valuable feedback
@@ -36,6 +38,7 @@ export default function FeedbackScreen() {
       <TextInput
         style={styles.input}
         placeholder="Your Name"
+        placeholderTextColor="#9CA3AF"
         value={name}
         onChangeText={(text) => setName(text)}
       />
@@ -43,6 +46,7 @@ export default function FeedbackScreen() {
       <TextInput
         style={[styles.input, styles.textArea]}
         placeholder="Your Feedback"
+        placeholderTextColor="#9CA3AF"
         value={feedback}
         onChangeText={(text) => setFeedback(text)}
         multiline
@@ -57,7 +61,6 @@ export default function FeedbackScreen() {
 }
 
 const styles = StyleSheet.create({
-  // ... existing styles ...
   title: {
     fontSize: 24,
     fontWeight: "700",
@@ -73,13 +76,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   input: {
-    borderWidth: 1,
-    borderColor: Theme.colors.border,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    backgroundColor: Theme.colors.background,
+    backgroundColor: "white",
     fontSize: 16,
+    borderColor: "#D6BDF7",
+    borderWidth: 2,
+    color: "#374151",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   textArea: {
     height: 120,

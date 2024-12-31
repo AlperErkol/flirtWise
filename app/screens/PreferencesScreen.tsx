@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Alert,
-  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useProfileStore from "@/store/profileStore";
@@ -15,11 +15,16 @@ import {
   EXPERIENCE_OPTIONS,
   INTEREST_OPTIONS,
 } from "@/constants/Options";
-import Theme from "@/constants/Theme";
 import { LinearGradient } from "expo-linear-gradient";
+import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  SparklesIcon,
+} from "react-native-heroicons/outline";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
+import Theme from "@/constants/Theme";
 import Header from "@/components/Header";
-import { Ionicons } from "@expo/vector-icons";
 
 type ProfileType = {
   gender: string;
@@ -28,8 +33,97 @@ type ProfileType = {
   experience: string;
 };
 
+type Section = {
+  title: string;
+  options: Array<{ id: string; label: string; description?: string }>;
+  field: keyof ProfileType;
+};
+
+type AccordionSectionProps = {
+  section: Section;
+  selectedValue: string;
+  onChange: (field: keyof ProfileType, value: string) => void;
+  isOpen: boolean;
+  onToggle: () => void;
+};
+
+const AccordionSection = React.memo(
+  ({
+    section,
+    selectedValue,
+    onChange,
+    isOpen,
+    onToggle,
+  }: AccordionSectionProps) => {
+    return (
+      <View style={styles.accordionContainer}>
+        <TouchableOpacity
+          style={[
+            styles.accordionHeader,
+            isOpen && styles.accordionHeaderActive,
+          ]}
+          onPress={onToggle}
+        >
+          <Text style={styles.sectionTitle}>{section.title}</Text>
+          <View style={styles.headerRight}>
+            {selectedValue && (
+              <Text
+                style={[
+                  styles.selectedValueText,
+                  isOpen && styles.selectedValueTextActive,
+                ]}
+              >
+                {section.options.find((opt) => opt.id === selectedValue)?.label}
+              </Text>
+            )}
+            {isOpen ? (
+              <ChevronUpIcon size={20} color={isOpen ? "#4F46E5" : "#6B7280"} />
+            ) : (
+              <ChevronDownIcon
+                size={20}
+                color={isOpen ? "#4F46E5" : "#6B7280"}
+              />
+            )}
+          </View>
+        </TouchableOpacity>
+
+        {isOpen && (
+          <Animated.View
+            entering={FadeInRight.duration(200)}
+            exiting={FadeOutLeft.duration(200)}
+            style={styles.optionsContainer}
+          >
+            <View style={styles.optionsSection}>
+              {section.options.map((option, index) => (
+                <TouchableOpacity
+                  key={option.id}
+                  style={[
+                    styles.optionButton,
+                    index !== section.options.length - 1 && styles.optionBorder,
+                    selectedValue === option.id && styles.selectedOption,
+                  ]}
+                  onPress={() => onChange(section.field, option.id)}
+                >
+                  <Text
+                    style={[
+                      styles.optionText,
+                      selectedValue === option.id && styles.selectedOptionText,
+                    ]}
+                  >
+                    {option.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </Animated.View>
+        )}
+      </View>
+    );
+  }
+);
+
 export default function PreferencesScreen({ navigation }: any) {
-  const { setUserProfile }: any = useProfileStore();
+  const setUserProfile = useProfileStore((state: any) => state.setUserProfile);
   const [localProfile, setLocalProfile] = useState<ProfileType>({
     gender: "",
     age: "",
@@ -37,99 +131,114 @@ export default function PreferencesScreen({ navigation }: any) {
     experience: "",
   });
   const [hasChanges, setHasChanges] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [openSection, setOpenSection] = useState<keyof ProfileType | null>(
+    null
+  );
+
+  const sections: Section[] = [
+    { title: "Gender", options: GENDER_OPTIONS, field: "gender" },
+    { title: "Age Range", options: AGE_OPTIONS, field: "age" },
+    { title: "Interest", options: INTEREST_OPTIONS, field: "interest" },
+    {
+      title: "Flirting Experience",
+      options: EXPERIENCE_OPTIONS,
+      field: "experience",
+    },
+  ];
 
   useEffect(() => {
-    loadUserProfile();
+    let isSubscribed = true;
+
+    const loadProfile = async () => {
+      try {
+        const storedProfile = await AsyncStorage.getItem("userProfile");
+        if (storedProfile && isSubscribed) {
+          setLocalProfile(JSON.parse(storedProfile));
+        }
+      } catch (error) {
+        if (isSubscribed) {
+          Alert.alert("Error", "Failed to load preferences.");
+        }
+      }
+    };
+
+    loadProfile();
+    return () => {
+      isSubscribed = false;
+    };
   }, []);
 
-  const loadUserProfile = async () => {
-    try {
-      const storedProfile = await AsyncStorage.getItem("userProfile");
-      if (storedProfile) {
-        const parsedProfile = JSON.parse(storedProfile);
-        setLocalProfile(parsedProfile);
-      }
-    } catch (error) {
-      Alert.alert("Error", "Failed to load preferences.");
-    }
-  };
+  const handleChange = useCallback(
+    (field: keyof ProfileType, value: string) => {
+      setLocalProfile((prev) => ({ ...prev, [field]: value }));
+      setHasChanges(true);
+    },
+    []
+  );
 
-  const handleChange = (field: any, value: any) => {
-    setLocalProfile({ ...localProfile, [field]: value });
-    setHasChanges(true);
-  };
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
+    setSaving(true);
     try {
-      await AsyncStorage.setItem("userProfile", JSON.stringify(localProfile));
-      setUserProfile(localProfile);
+      await Promise.all([
+        AsyncStorage.setItem("userProfile", JSON.stringify(localProfile)),
+        setUserProfile(localProfile),
+      ]);
       Alert.alert("Success!", "Your preferences have been saved.");
       navigation.goBack();
     } catch (error) {
       Alert.alert("Error", "Failed to save preferences.");
+    } finally {
+      setSaving(false);
     }
-  };
-
-  const renderSection = (
-    title: string,
-    options: Array<{ id: string; label: string }>,
-    field: keyof ProfileType
-  ) => (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <View style={styles.optionsContainer}>
-        {options.map((option: any) => (
-          <TouchableOpacity
-            key={option.id}
-            style={[
-              styles.optionButton,
-              localProfile[field] === option.id && styles.selectedOption,
-            ]}
-            onPress={() => handleChange(field, option.id)}
-          >
-            <Text
-              style={[
-                styles.optionText,
-                localProfile[field] === option.id && styles.selectedOptionText,
-              ]}
-            >
-              {option.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
-  );
+  }, [localProfile, setUserProfile, navigation]);
 
   return (
-    <LinearGradient colors={["#E6E6FA", "#E6E6FA"]} style={styles.container}>
-      <GlobalSafeAreaView>
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollViewContent}
-        >
-          {renderSection("Gender", GENDER_OPTIONS, "gender")}
-          {renderSection("Age Range", AGE_OPTIONS, "age")}
-          {renderSection("Relationship Goal", INTEREST_OPTIONS, "interest")}
-          {renderSection(
-            "Flirting Experience",
-            EXPERIENCE_OPTIONS,
-            "experience"
-          )}
-        </ScrollView>
-
-        <View style={styles.buttonContainer}>
+    <GlobalSafeAreaView>
+      <Header logo={true} showBackButton={true} />
+      <View style={styles.headerContainer}>
+        <View style={styles.titleContainer}>
+          <SparklesIcon size={20} color="#4F46E5" />
+          <Text style={styles.headerTitle}>AI Personalization</Text>
+        </View>
+        <Text style={styles.headerDescription}>
+          Your preferences enable our AI to understand your context better and
+          provide more accurate, personalized responses in conversations.
+        </Text>
+      </View>
+      <View style={styles.contentContainer}>
+        <View>
+          {sections.map((section) => (
+            <AccordionSection
+              key={section.field}
+              section={section}
+              selectedValue={localProfile[section.field]}
+              onChange={handleChange}
+              isOpen={openSection === section.field}
+              onToggle={() =>
+                setOpenSection(
+                  openSection === section.field ? null : section.field
+                )
+              }
+            />
+          ))}
+        </View>
+        <View style={styles.bottomContainer}>
           <TouchableOpacity
-            style={[styles.saveButton, !hasChanges && styles.disabledButton]}
+            style={[
+              styles.saveButton,
+              (!hasChanges || saving) && styles.saveButtonDisabled,
+            ]}
             onPress={handleSave}
-            disabled={!hasChanges}
+            disabled={!hasChanges || saving}
           >
-            <Text style={styles.saveButtonText}>Save Changes</Text>
-            {hasChanges && <Ionicons name="checkmark" size={24} color="#fff" />}
+            <Text style={styles.saveButtonText}>
+              {saving ? "Saving..." : "Save Changes"}
+            </Text>
           </TouchableOpacity>
         </View>
-      </GlobalSafeAreaView>
-    </LinearGradient>
+      </View>
+    </GlobalSafeAreaView>
   );
 }
 
@@ -137,80 +246,137 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  safeArea: {
+  contentContainer: {
+    paddingTop: 20,
     flex: 1,
   },
-  scrollView: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    padding: 20,
-    paddingBottom: 120,
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#333",
-    marginBottom: 12,
-  },
-  optionsContainer: {
-    gap: 10,
-  },
-  optionButton: {
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    padding: 16,
+  accordionContainer: {
+    backgroundColor: "white",
+    marginBottom: 8,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#E5E5E5",
+    overflow: "hidden",
+    borderColor: "#D6BDF7",
+    borderWidth: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
-  selectedOption: {
-    backgroundColor: Theme.colors.primary,
-    borderColor: Theme.colors.primary,
+  accordionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    backgroundColor: "white",
   },
-  optionText: {
-    fontSize: 16,
-    color: "#333",
-    textAlign: "center",
+  accordionHeaderActive: {
+    backgroundColor: "#F9FAFB",
   },
-  selectedOptionText: {
-    color: "#FFF",
-    fontWeight: "600",
-  },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 60,
-    left: 0,
-    right: 0,
-    backgroundColor: "rgba(230, 230, 250, 0.9)", // Hafif saydam arka plan
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  saveButton: {
-    backgroundColor: Theme.colors.primary,
-    padding: 16,
-    borderRadius: 12,
+  headerRight: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
+    gap: 12,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#111827",
+  },
+  selectedValueText: {
+    fontSize: 15,
+    color: "#6B7280",
+  },
+  selectedValueTextActive: {
+    color: "#4F46E5",
+  },
+  optionsContainer: {
+    backgroundColor: "#F9FAFB",
+  },
+  optionsSection: {
+    padding: 12,
+  },
+  optionButton: {
+    width: "100%",
+    backgroundColor: "white",
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 8,
+    flexDirection: "column",
+    alignItems: "flex-start",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.05,
+    shadowRadius: 1,
+    elevation: 1,
   },
-  disabledButton: {
+  optionBorder: {
+    borderBottomWidth: 0,
+  },
+  selectedOption: {
+    backgroundColor: "#4F46E5",
+  },
+  optionText: {
+    fontSize: 15,
+    color: "#374151",
+  },
+  selectedOptionText: {
+    color: "#FFFFFF",
+    fontWeight: "500",
+  },
+  optionDescription: {
+    fontSize: 13,
+    color: "#6B7280",
+    marginTop: 4,
+  },
+  selectedDescriptionText: {
+    color: "#FFFFFF",
+    opacity: 0.9,
+  },
+  saveButton: {
+    backgroundColor: Theme.colors.primary,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  saveButtonDisabled: {
+    backgroundColor: "#9CA3AF",
     opacity: 0.5,
   },
   saveButtonText: {
-    color: "#FFF",
+    color: "white",
     fontSize: 16,
     fontWeight: "600",
+  },
+  bottomContainer: {
+    padding: 16,
+    borderRadius: 10,
+    position: "absolute",
+    bottom: 0,
+    alignSelf: "center",
+    width: "100%",
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#111827",
+    marginBottom: 8,
+  },
+  headerDescription: {
+    fontSize: 14,
+    lineHeight: 17,
+    color: "#6B7280",
+    letterSpacing: 0.2,
+  },
+  headerContainer: {
+    paddingVertical: 16,
+  },
+  titleContainer: {
+    flexDirection: "row",
+    gap: 8,
   },
 });

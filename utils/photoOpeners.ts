@@ -1,6 +1,7 @@
 import ApiService from "@/services/ApiService";
 
 export const generatePhotoOpeners = async (imageUrl: any, userInfo: any) => {
+  console.log("userInfo", userInfo);
   try {
     const response = await ApiService.post("/chat/completions", {
       model: "chatgpt-4o-latest",

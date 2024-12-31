@@ -71,7 +71,7 @@ export default function ChatEnhancerScreen() {
       style={styles.gradientBackground}
     >
       <GlobalSafeAreaView>
-        <Header logo={true} centered={true} showBackButton={true} />
+        <Header logo={true} showBackButton={true} />
         {!selectedImage && (
           <View style={styles.heroContainer}>
             <Image

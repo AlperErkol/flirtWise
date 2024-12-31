@@ -16,9 +16,9 @@ import { INTEREST_OPTIONS } from "@/constants/Options";
 
 const { height } = Dimensions.get("window");
 
-export default function Step2Screen({ navigation }: any) {
+export default function Step2Screen({ navigation, route }: any) {
   const [selectedInterest, setSelectedInterest] = useState("");
-  const { gender, age } = useLocalSearchParams();
+  const { age, gender } = route.params;
 
   const handleNext = () => {
     if (selectedInterest) {

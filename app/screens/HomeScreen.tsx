@@ -77,57 +77,52 @@ export default function HomeScreen({ navigation }: any) {
   };
 
   return (
-    <LinearGradient
-      colors={["#E6E6FA", "#E6E6FA"]}
-      style={styles.gradientBackground}
-    >
-      <GlobalSafeAreaView>
-        <Header
-          logo={true}
-          showSettingsIcon={true}
-          bottomSheetRef={bottomSheetRef}
-        />
+    <GlobalSafeAreaView>
+      <Header
+        logo={true}
+        showSettingsIcon={true}
+        bottomSheetRef={bottomSheetRef}
+      />
 
-        <Text style={styles.questionText}>
-          Need help sparking the perfect conversation? Start here!
-        </Text>
+      <Text style={styles.questionText}>
+        Need help sparking the perfect conversation? Start here!
+      </Text>
 
-        <FlatList
-          data={mainFeatures}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.mainCard}
-              onPress={() => handleFeaturePress(item)}
-            >
-              <View style={styles.titleContainer}>
-                <Text style={styles.cardTitle}>{item.title}</Text>
-                {item.isPremium && !isPremium && <PremiumBadge />}
-              </View>
-              <Text style={styles.cardDesc}>{item.description}</Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.mainFeatureContainer}
-        />
+      <FlatList
+        data={mainFeatures}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.mainCard}
+            onPress={() => handleFeaturePress(item)}
+          >
+            <View style={styles.titleContainer}>
+              <Text style={styles.cardTitle}>{item.title}</Text>
+              {item.isPremium && !isPremium && <PremiumBadge />}
+            </View>
+            <Text style={styles.cardDesc}>{item.description}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.mainFeatureContainer}
+      />
 
-        <View style={styles.secondaryFeatureContainer}>
-          {secondaryFeatures.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.secondaryCard}
-              onPress={() => navigation.navigate(item.screen)}
-            >
-              <Text style={styles.emoji}>{item.emoji}</Text>
-              <Text style={styles.secondaryCardTitle}>{item.title}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </GlobalSafeAreaView>
+      <View style={styles.secondaryFeatureContainer}>
+        {secondaryFeatures.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            style={styles.secondaryCard}
+            onPress={() => navigation.navigate(item.screen)}
+          >
+            <Text style={styles.emoji}>{item.emoji}</Text>
+            <Text style={styles.secondaryCardTitle}>{item.title}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
       <SettingsBottomSheet
         bottomSheetRef={bottomSheetRef}
         navigation={navigation}
       />
-    </LinearGradient>
+    </GlobalSafeAreaView>
   );
 }
 
