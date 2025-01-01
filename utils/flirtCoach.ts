@@ -1,4 +1,4 @@
-import ApiService from "@/services/ApiService";
+import ApiService from "../services/ApiService";
 
 const FLIRT_COACH_PROMPT = `
 You are a modern flirting coach and an expert in providing practical, engaging, and confidence-boosting advice for flirting in any situation. Your tone should be playful, friendly, and relatable.
