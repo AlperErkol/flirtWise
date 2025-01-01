@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
+import Purchases from 'react-native-purchases';
+
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Step1Screen from "./screens/Step1Screen";
@@ -29,7 +31,6 @@ import { useNetworkStatus } from "../hooks/useNetworkStatus";
 import useOfflineStore from "../store/offlineStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -44,7 +45,6 @@ export default function RootLayout() {
   });
 
   const isOnline = useOfflineStore((state) => state.isOnline);
-
   useNetworkStatus();
 
   useEffect(() => {
@@ -56,6 +56,21 @@ export default function RootLayout() {
   useEffect(() => {
     setModalVisible(!isOnline);
   }, [isOnline]);
+
+  useEffect(() => {
+    const initPurchases = async () => {
+      try {
+        await Purchases.configure({
+          apiKey: 'appl_TvvyCFvFSroRvVfDHICvelkQChX',
+        });
+        console.log('RevenueCat başarıyla yapılandırıldı');
+      } catch (error) {
+        console.error('RevenueCat yapılandırma hatası:', error);
+      }
+    };
+  
+    initPurchases();
+  }, []);
 
   const checkOnboardingStatus = async () => {
     const onboardingCompleted = await AsyncStorage.getItem(
@@ -76,7 +91,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={"Step1"}
+        initialRouteName={isOnboardingCompleted ? "HomeScreen" : "Step1"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Step1" component={Step1Screen} />

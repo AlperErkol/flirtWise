@@ -9,17 +9,18 @@ import {
   Alert,
 } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { usePremiumStore } from "@/store/usePremiumStore";
 import PremiumBadge from "../../components/PremiumBadge";
 import BottomSheet from "@gorhom/bottom-sheet";
 import SettingsBottomSheet from "@/components/SettingsBottomSheet";
+import { usePaywall } from "@/hooks/usePaywall";
 
 const { width } = Dimensions.get("window");
 
 export default function HomeScreen({ navigation }: any) {
+  const { showPaywall } = usePaywall();
   const { isPremium } = usePremiumStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -58,19 +59,12 @@ export default function HomeScreen({ navigation }: any) {
     },
   ];
 
-  const handleFeaturePress = (feature: any) => {
+  const handleFeaturePress = async (feature: any) => {
     if (feature.isPremium && !isPremium) {
-      Alert.alert(
-        "Premium Feature",
-        "Chat Enhancer is available only for Premium+ members.",
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Upgrade to Premium+",
-            onPress: () => navigation.navigate("/paywall"),
-          },
-        ]
-      );
+      const purchased = await showPaywall();
+      if (purchased) {
+        navigation.navigate(`${feature.screen}`);
+      }
       return;
     }
     navigation.navigate(`${feature.screen}`);

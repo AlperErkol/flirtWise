@@ -19,8 +19,10 @@ import { generatePhotoOpeners } from "@/utils/photoOpeners";
 import Theme from "@/constants/Theme";
 import { useRouter } from "expo-router";
 import { usePremiumStore } from "@/store/usePremiumStore";
+import { usePaywall } from "@/hooks/usePaywall";
 
 export default function PhotoOpenersScreen() {
+  const { showPaywall } = usePaywall();
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
@@ -28,22 +30,19 @@ export default function PhotoOpenersScreen() {
   const router = useRouter();
   const { incrementPhotoCount } = usePremiumStore();
 
-  const handleImageProcessing = async (imageUri: any) => {
-    // const canAnalyzePhoto = await incrementPhotoCount();
-    // if (!canAnalyzePhoto) {
-    //   Alert.alert(
-    //     "Daily Limit Reached",
-    //     "You've reached your daily photo analysis limit. Upgrade to Premium+ for unlimited analysis!",
-    //     [
-    //       { text: "Cancel" },
-    //       {
-    //         text: "Upgrade to Premium+",
-    //         onPress: () => router.push("/screens/FeedbackScreen"),
-    //       },
-    //     ]
-    //   );
-    //   return;
-    // }
+  const handleImageProcessing = async (imageUri: string) => {
+    const { isPremium } = usePremiumStore.getState();
+    
+    if (!isPremium) {
+      const canAnalyzePhoto = await incrementPhotoCount();
+      if (!canAnalyzePhoto) {
+        const purchased = await showPaywall();
+        if (!purchased) {
+          setSelectedImage(null);
+          return;
+        }
+      }
+    }
 
     setLoading(true);
     setSuggestions([]);

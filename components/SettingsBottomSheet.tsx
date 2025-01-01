@@ -13,11 +13,14 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
+import { usePaywall } from "@/hooks/usePaywall";
 
 export default function SettingsBottomSheet({
   bottomSheetRef,
   navigation,
 }: any) {
+  const { showPaywall } = usePaywall();
+
   const handleShareApp = async () => {
     try {
       await Share.share({
@@ -32,6 +35,11 @@ export default function SettingsBottomSheet({
     Linking.openURL(url);
   };
 
+  const handleUpgrade = async () => {
+    await showPaywall();
+    
+  };
+
   const menuItems = [
     {
       id: "1",
@@ -42,6 +50,7 @@ export default function SettingsBottomSheet({
     {
       id: "2",
       title: "Upgrade",
+      action: handleUpgrade,
       emoji: "💳",
     },
     {
@@ -206,6 +215,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#E5E5E5",
     paddingVertical: 15,
+    paddingHorizontal: 16,
   },
   footer: {
     alignItems: "center",

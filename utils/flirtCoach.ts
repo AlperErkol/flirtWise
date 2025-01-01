@@ -23,7 +23,7 @@ export const sendFlirtMessage = async (chatLog: any) => {
       temperature: 0.7,
     });
 
-    return response.data.choices[0].message;
+    return response.choices[0].message;
   } catch (error) {
     console.error("Error in sendFlirtMessage:", error);
     throw error;

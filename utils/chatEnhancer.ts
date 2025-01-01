@@ -46,7 +46,7 @@ Output only the three responses as a numbered list.
       temperature: 0.8,
     });
 
-    const aiText = response.data.choices[0].message.content;
+    const aiText = response.choices[0].message.content;
     const hints = aiText
       .split("\n")
       .map((line: any) => line.trim())

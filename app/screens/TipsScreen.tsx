@@ -18,6 +18,7 @@ import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import useProfileStore from "@/store/profileStore";
 import PremiumBadge from "../../components/PremiumBadge";
 import * as Clipboard from "expo-clipboard";
+import { usePaywall } from "@/hooks/usePaywall";
 
 const FREE_CATEGORIES = [
   {
@@ -68,6 +69,7 @@ const PREMIUM_CATEGORIES = [
 ];
 
 export default function TipsScreen() {
+  const { showPaywall } = usePaywall();
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentTip, setCurrentTip] = useState<string>("");
@@ -81,17 +83,10 @@ export default function TipsScreen() {
     );
 
     if (isPremiumCategory && !isPremium) {
-      Alert.alert(
-        "Premium Feature",
-        "This category is available only for Premium+ members.",
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Upgrade to Premium+",
-            onPress: () => router.push("/screens/HomeScreen"),
-          },
-        ]
-      );
+      const purchased = await showPaywall();
+      if (purchased) {
+        handleCategorySelect(category);
+      }
       return;
     }
 
@@ -148,7 +143,7 @@ export default function TipsScreen() {
 
   return (
     <LinearGradient colors={["#E6E6FA", "#E6E6FA"]} style={styles.gradient}>
-      <GlobalSafeAreaView style={styles.container}>
+      <GlobalSafeAreaView>
         <Header logo={true} showBackButton={true} />
         <View style={styles.content}>
           <View style={styles.categoriesContainer}>

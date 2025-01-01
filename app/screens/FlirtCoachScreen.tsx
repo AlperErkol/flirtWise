@@ -17,6 +17,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { usePremiumStore } from "@/store/usePremiumStore";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { usePaywall } from "@/hooks/usePaywall";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -24,6 +26,9 @@ interface ChatMessage {
 }
 
 export default function FlirtCoachScreen() {
+  const { showPaywall } = usePaywall();
+
+
   const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
   const [userInput, setUserInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -35,17 +40,10 @@ export default function FlirtCoachScreen() {
 
     const canSendMessage = await incrementMessageCount();
     if (!canSendMessage) {
-      Alert.alert(
-        "Daily Limit Reached",
-        "You've reached your daily message limit. Upgrade to Premium+ for unlimited messaging!",
-        [
-          { text: "Cancel" },
-          {
-            text: "Upgrade to Premium+",
-            onPress: () => router.push("/screens/ChatEnhancerScreen"),
-          },
-        ]
-      );
+      const purchased = await showPaywall();
+      if (purchased) {
+        handleSend();
+      }
       return;
     }
 

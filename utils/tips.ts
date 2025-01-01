@@ -28,7 +28,7 @@ export const getFlirtTip = async (category: any, userInfo: any) => {
       temperature: 0.8,
     });
 
-    return response.data.choices[0].message.content.trim();
+    return response.choices[0].message.content.trim();
   } catch (error: any) {
     console.error(
       "Error generating flirt tip:",

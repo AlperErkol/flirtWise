@@ -1,6 +1,7 @@
 import ApiService from "@/services/ApiService";
 
 export const generatePhotoOpeners = async (imageUrl: any, userInfo: any) => {
+  console.log("imageUrl", imageUrl);
   console.log("userInfo", userInfo);
   try {
     const response = await ApiService.post("/chat/completions", {
@@ -42,8 +43,8 @@ Output only the three hints as a numbered list.`,
       ],
       temperature: 0.8,
     });
-
-    const aiText = response.data.choices[0].message.content;
+    console.log("response", response.message);
+    const aiText = response.choices[0].message.content;
     const hints = aiText
       .split("\n")
       .map((line: any) => line.trim())
