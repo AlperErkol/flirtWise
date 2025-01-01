@@ -1,5 +1,4 @@
 import ApiService from "@/services/ApiService";
-
 export const enhanceChat = async (imageUrl: any, userInfo: any) => {
   try {
     const response = await ApiService.post("/chat/completions", {

@@ -1,5 +1,4 @@
-import ApiService from "@/services/ApiService";
-
+import ApiService from "../services/ApiService";
 export const generatePhotoOpeners = async (imageUrl: any, userInfo: any) => {
   console.log("imageUrl", imageUrl);
   console.log("userInfo", userInfo);

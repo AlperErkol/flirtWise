@@ -23,24 +23,35 @@ import { usePaywall } from "@/hooks/usePaywall";
 
 export default function PhotoOpenersScreen() {
   const { showPaywall } = usePaywall();
+  const { isPremium, incrementPhotoCount } = usePremiumStore();
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const { incrementPhotoCount } = usePremiumStore();
 
   const handleImageProcessing = async (imageUri: string) => {
-    const { isPremium } = usePremiumStore.getState();
-    
     if (!isPremium) {
       const canAnalyzePhoto = await incrementPhotoCount();
+      console.log("canAnalyzePhoto", canAnalyzePhoto);
       if (!canAnalyzePhoto) {
-        const purchased = await showPaywall();
-        if (!purchased) {
-          setSelectedImage(null);
-          return;
-        }
+        Alert.alert(
+          "Photo Analysis Limit Reached",
+          "You've reached your free photo analysis limit. Upgrade to Premium+ for unlimited photo analyses!",
+          [
+            { text: "Cancel", style: "cancel" },
+            { 
+              text: "Upgrade to Premium+", 
+              onPress: async () => {
+                const purchased = await showPaywall();
+                if (purchased) {
+                  handleImageProcessing(imageUri);
+                }
+              }
+            }
+          ]
+        );
+        setSelectedImage(null);
+        return;
       }
     }
 
