@@ -1,50 +1,108 @@
-# Welcome to your Expo app 👋
+# FlirtWise - Your Personal Flirting Coach 📱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Current Features 🌟
 
-## Get started
+### Core Features
 
-1. Install dependencies
+1. **Photo-Based Openers**
 
-   ```bash
-   npm install
-   ```
+   - Analyzes profile photos
+   - Generates contextual conversation starters
+   - Limited free uses per day
 
-2. Start the app
+2. **Chat Enhancer (Premium)**
 
-   ```bash
-    npx expo start
-   ```
+   - Revives stalled conversations
+   - Provides multiple response options
+   - Helps maintain engaging dialogues
 
-In the output, you'll find options to open the app in a
+3. **Flirt Coach**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   - Personalized flirting advice
+   - Real-time conversation guidance
+   - Situation-specific suggestions
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+4. **Tips Library**
+   - Basic flirting tips (Free)
+   - Advanced strategies (Premium)
+   - Copyable text suggestions
 
-## Get a fresh project
+## Upcoming Features & Improvements 🚀
 
-When you're ready, run:
+### 1. Urgent Priority (User Experience)
 
-```bash
-npm run reset-project
-```
+- **Basic UX Improvements**
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+  - Bottom sheet implementation for responses
+  - Copy function for suggestions
+  - Analysis animation
+  - Feedback system
 
-## Learn more
+- **Input Enhancements**
+  - Additional input fields for target person info
+  - Photo upload optimization
 
-To learn more about developing your project with Expo, look at the following resources:
+### 2. High Priority (Core Features)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- **Onboarding Enhancement**
 
-## Join the community
+  - New user flow
+  - Flirting style selection
+  - Interest areas
+  - Communication preferences
 
-Join our community of developers creating universal apps.
+- **Cost Optimization**
+  - Cloudinary cleanup system
+  - Photo analysis optimization
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### 3. Medium Priority (Feature Enhancement)
+
+- **Flirt Tips Enhancement**
+
+  - New categories
+  - Premium content
+  - Interaction system
+
+- **Flirt Coach Enhancement**
+  - AI persona system
+  - Structured chat modes
+  - Premium features
+
+### 4. Low Priority (Expansion)
+
+- **Language Support**
+  - Turkish
+  - Spanish
+  - German
+
+## Business Model 💰
+
+### Freemium Structure
+
+- **Free Tier**
+
+  - Limited photo analyses (3/day)
+  - Basic flirting tips
+  - Basic Flirt Coach access
+
+- **Premium+ Subscription**
+  - Unlimited photo analyses
+  - Chat enhancement feature
+  - Advanced tips library
+  - Priority support
+
+## Technical Stack 🛠
+
+[Mevcut teknik stack bilgileri buraya eklenecek]
+
+## Getting Started 🚀
+
+[Kurulum ve başlangıç bilgileri buraya eklenecek]
+
+## Contributing 🤝
+
+[Katkı sağlama bilgileri buraya eklenecek]
+
+## License 📝
+
+[Lisans bilgileri buraya eklenecek]

@@ -95,7 +95,7 @@ export default function TipsScreen() {
     try {
       const tip = await getFlirtTip(category.title, userProfile);
       setCurrentTip(tip);
-      bottomSheetRef.current?.snapToIndex(0);
+      bottomSheetRef.current?.expand();
     } catch (error) {
       setCurrentTip("Failed to load tip. Please try again.");
     } finally {
