@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import {
   View,
   Text,
@@ -25,15 +25,31 @@ interface ChatMessage {
   content: string;
 }
 
-export default function FlirtCoachScreen() {
-  const { showPaywall } = usePaywall();
+const ChatMessage = ({ message }: { message: ChatMessage }) => (
+  <View style={message.role === "user" ? styles.userMessage : styles.aiMessage}>
+    <Text>{message.content}</Text>
+  </View>
+);
 
+const TypingIndicator = () => (
+  <View style={styles.aiMessage}>
+    <Text>Typing...</Text>
+  </View>
+);
+
+export default function FlirtCoachScreen() {
+  const scrollViewRef = useRef<ScrollView>(null);
+  const { showPaywall } = usePaywall();
 
   const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
   const [userInput, setUserInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const isOnline = useOfflineStore((state) => state.isOnline);
   const { incrementMessageCount } = usePremiumStore();
+
+  const onChangeText = useCallback((text: string) => {
+    setUserInput(text);
+  }, []);
 
   const handleSend = useCallback(async () => {
     if (!userInput.trim()) return;
@@ -71,8 +87,8 @@ export default function FlirtCoachScreen() {
         {
           role: "assistant",
           content: error.message.includes("Rate limit")
-            ? "Çok fazla mesaj gönderdiniz. Lütfen biraz bekleyin."
-            : "Bir hata oluştu. Lütfen tekrar deneyin.",
+            ? "You've sent too many messages. Please wait a moment."
+            : "An error occurred. Please try again.",
         },
       ]);
     } finally {
@@ -82,49 +98,34 @@ export default function FlirtCoachScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.keyboardAvoidingView}
+      behavior="height"
       keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
     >
       <ScrollView
-        style={styles.chatContainer}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        ref={scrollViewRef}
+        style={styles.messagesContainer}
+        contentContainerStyle={styles.messagesContent}
+        keyboardShouldPersistTaps="handled"
       >
-        {chatLog.map((msg: any, index) => {
-          const isUser = msg.role === "user";
-          return (
-            <LinearGradient
-              key={index}
-              colors={isUser ? ["#FF9A8B", "#FF6F61"] : ["#E6E6FA", "#E6E6FA"]}
-              style={[
-                styles.messageBubble,
-                isUser ? styles.userBubble : styles.aiBubble,
-              ]}
-            >
-              <Text style={styles.messageText}>{msg.content}</Text>
-            </LinearGradient>
-          );
-        })}
-        {isTyping && <View style={styles.typingIndicator}></View>}
+        {chatLog.map((message, index) => (
+          <ChatMessage key={index} message={message} />
+        ))}
+        {isTyping && <TypingIndicator />}
       </ScrollView>
+
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.textInput}
-          placeholder="What’s your question? Let’s make it fun!"
-          placeholderTextColor="#999"
+          style={styles.input}
           value={userInput}
-          onChangeText={setUserInput}
+          placeholder="Ask anything about flirting..."
+          placeholderTextColor="#666"
+          multiline
+          scrollEnabled
+          onChangeText={onChangeText}
         />
-        <TouchableOpacity
-          onPress={handleSend}
-          disabled={isTyping}
-          style={styles.sendButton}
-        >
-          <Ionicons
-            name="send"
-            size={24}
-            color={isTyping ? "#ccc" : "#FF6F61"}
-          />
+        <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
+          <Ionicons name="send" size={24} color="#FF6347" />
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -136,74 +137,56 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Theme.colors.background,
   },
-  header: {
-    alignItems: "center",
-    paddingVertical: 20,
-    backgroundColor: "transparent",
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  chatContainer: {
+  keyboardAvoidingView: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
   },
-  messageBubble: {
-    padding: 12,
-    borderRadius: 20,
-    marginVertical: 5,
-    maxWidth: "80%",
-    alignSelf: "flex-start",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
+  messagesContainer: {
+    flex: 1,
   },
-  userBubble: {
-    alignSelf: "flex-end",
-  },
-  aiBubble: {
-    alignSelf: "flex-start",
-  },
-  messageText: {
-    fontSize: 16,
-    color: "#333",
-  },
-  typingIndicator: {
-    alignSelf: "flex-start",
-    padding: 10,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 10,
-    marginVertical: 5,
-    maxWidth: "80%",
+  messagesContent: {
+    padding: 16,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
-    paddingTop: 10,
-    paddingBottom: 30,
+    paddingTop: 16,
+    paddingBottom: 40,
     borderTopWidth: 1,
     borderColor: "#ddd",
     backgroundColor: "#fff",
   },
-  textInput: {
+  input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    borderRadius: 8,
+    minHeight: 40,
+    maxHeight: 100,
+    backgroundColor: "#f5f5f5",
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginRight: 8,
     fontSize: 16,
-    color: "#333",
   },
   sendButton: {
-    marginLeft: 10,
+    width: 40,
+    height: 40,
     justifyContent: "center",
     alignItems: "center",
-    padding: 10,
+  },
+  userMessage: {
+    alignSelf: "flex-end",
+    backgroundColor: "#FF6347",
+    padding: 12,
+    borderRadius: 16,
+    marginVertical: 4,
+    maxWidth: "80%",
+  },
+  aiMessage: {
+    alignSelf: "flex-start",
+    backgroundColor: "#f5f5f5",
+    padding: 12,
+    borderRadius: 16,
+    marginVertical: 4,
+    maxWidth: "80%",
   },
 });
