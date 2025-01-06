@@ -70,7 +70,7 @@ export default function Header({
               onPress={handleSettingsPress}
               style={styles.settingsButton}
             >
-              <Ionicons name="settings-outline" size={24} color="#FF6347" />
+              <Ionicons name="menu" size={34} color="#FF6347" />
             </TouchableOpacity>
           )}
         </View>

@@ -1,50 +1,80 @@
-import ApiService from "../services/ApiService";
+import ApiService from "@/services/ApiService";
 
-export const getFlirtTip = async (category: any, userInfo: any) => {
-  const prompt = `
-  You are a modern flirting coach specializing in fun, trendy, and actionable flirting tips tailored for social-media-savvy conversations.
+export const getFlirtTip = async (
+  category: string,
+  subCategory: string,
+  userInfo: any,
+  isPremium: boolean
+) => {
+  let prompt = `You are a modern flirting coach specializing in creating engaging, practical, and effective flirting tips.
 
-1. User Details:
-   - Category: ${category}
-   - Gender: ${userInfo.gender}
-   - Age Range: ${userInfo.ageRange}
-   - Relationship Goal: ${userInfo.relationshipGoal}
-   - Personality Trait to Improve: ${userInfo.personalityTrait}
-
-2. Based on the selected category, create a flirting tip that:
-   - Uses casual, playful, and social-media-friendly language (e.g., witty, light-hearted, and confident).
-   - Is short, trendy, and fits the tone of modern platforms like Instagram or dating apps.
-   - Aligns with the user's relationship goal and personality improvement area.
-   - Is less than 150 characters to keep it snappy and scroll-worthy.
-
-3. The tip should feel relatable and actionable while sparking curiosity or a smile.
-  `;
+  Generate a flirting tip for category "${category}" and sub-category "${subCategory}". 
+  Format the response as a valid JSON object with the following structure:
+  {
+    "mainTip": "Main tip text (max 125 chars)",
+    "explanation": "Detailed but concise explanation",
+    "successRate": "Calculate and provide a realistic success rate based on the tip's effectiveness and ease of implementation",
+    "examples": [
+      "Example 1",
+      "Example 2",
+      "Example 3"
+    ],
+    "doAndDonts": {
+      "do": [
+        "Do 1",
+        "Do 2",
+        "Do 3"
+      ],
+      "dont": [
+        "Don't 1",
+        "Don't 2",
+        "Don't 3"
+      ]
+    }${
+      isPremium
+        ? `,
+    "premiumContent": {
+      "situationalVariations": {
+        "casual": "Casual situation tip",
+        "romantic": "Romantic situation tip",
+        "recovery": "Recovery situation tip"
+      },
+      "psychologyInsight": "Deeper psychological explanation",
+      "expertNotes": "Expert additional tips",
+      "successRate": "Calculate and provide a higher success rate"
+    }`
+        : ""
+    }`;
 
   try {
     const response = await ApiService.post("/chat/completions", {
-      model: "chatgpt-4o-latest",
+      model: "gpt-4-turbo",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 150,
-      temperature: 0.8,
+      temperature: 0.7,
+      max_tokens: 500,
     });
 
-    return response.choices[0].message.content.trim();
+    const content = response.choices[0].message.content.trim();
+    console.log("content", content);
+    const cleanedContent = content
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .replace(/\n/g, " ")
+      .trim();
+
+    const tipContent = JSON.parse(cleanedContent);
+
+    return {
+      ...tipContent,
+      category,
+      subCategory,
+      createdAt: new Date(),
+    };
   } catch (error: any) {
-    console.error(
-      "Error generating flirt tip:",
-      error?.response?.data || error.message
-    );
-
-    if (error.response) {
-      if (error.response.status === 401) {
-        return "Authorization error. Please check your API key.";
-      } else if (error.response.status === 429) {
-        return "Rate limit exceeded. Please try again later.";
-      } else if (error.response.status >= 500) {
-        return "Server error. Please try again later.";
-      }
+    console.error("Error generating flirt tip:", error);
+    if (error.message.includes("timed out")) {
+      throw new Error("Request took too long. Please try again.");
     }
-
-    return "Unable to fetch a flirting tip right now. Please try again later.";
+    throw new Error("Failed to generate flirting tip. Please try again.");
   }
 };

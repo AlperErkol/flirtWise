@@ -1,240 +1,485 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
+  ScrollView,
+  Clipboard,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { usePremiumStore } from "@/store/usePremiumStore";
 import { Ionicons } from "@expo/vector-icons";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
+import PremiumBadge from "@/components/PremiumBadge";
+import {
+  FREE_CATEGORIES,
+  PREMIUM_CATEGORIES,
+} from "../constants/tipCategories";
 import { getFlirtTip } from "@/utils/tips";
-import { router } from "expo-router";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import useProfileStore from "@/store/profileStore";
-import PremiumBadge from "../../components/PremiumBadge";
-import * as Clipboard from "expo-clipboard";
 import { usePaywall } from "@/hooks/usePaywall";
+import Theme from "@/constants/Theme";
+import useProfileStore from "@/store/profileStore";
 
-const FREE_CATEGORIES = [
-  {
-    id: "first_impressions",
-    title: "First Impressions",
-    icon: "👋",
-    gradient: ["#FF9A8B", "#FF6B6B"],
-  },
-  {
-    id: "conversation_starters",
-    title: "Starting a Conversation",
-    icon: "💭",
-    gradient: ["#4FACFE", "#00F2FE"],
-  },
-  {
-    id: "basic_texting",
-    title: "Basic Texting Tips",
-    icon: "📱",
-    gradient: ["#43E97B", "#38F9D7"],
-  },
-];
+interface Category {
+  id: string;
+  title: string;
+  icon: string;
+  gradient: string[];
+  subCategories: SubCategory[];
+}
 
-const PREMIUM_CATEGORIES = [
-  {
-    id: "date_strategies",
-    title: "Date Strategies",
-    icon: "🎯",
-    gradient: ["#FA709A", "#FEE140"],
-  },
-  {
-    id: "humor",
-    title: "Humor & Playfulness",
-    icon: "😊",
-    gradient: ["#FF3CAC", "#784BA0"],
-  },
-  {
-    id: "advanced_texting",
-    title: "Advanced Texting",
-    icon: "✨",
-    gradient: ["#F6D242", "#FF52E5"],
-  },
-  {
-    id: "body_language",
-    title: "Body Language",
-    icon: "🤝",
-    gradient: ["#13547A", "#80D0C7"],
-  },
-];
+interface SubCategory {
+  id: string;
+  title: string;
+  description: string;
+  tips?: string[];
+  successRate?: string;
+}
 
 export default function TipsScreen() {
-  const { showPaywall } = usePaywall();
-  const userProfile = useProfileStore((state: any) => state.userProfile);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [currentTip, setCurrentTip] = useState<string>("");
-  const [loading, setLoading] = useState(false);
-  const { isPremium } = usePremiumStore();
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
+  const [selectedSubCategory, setSelectedSubCategory] =
+    useState<SubCategory | null>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const { isPremium } = usePremiumStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const userProfile = useProfileStore((state: any) => state.userProfile);
+  const { showPaywall } = usePaywall();
 
-  const handleCategorySelect = async (category: any) => {
-    const isPremiumCategory = PREMIUM_CATEGORIES.find(
-      (c) => c.id === category.id
-    );
+  const snapPoints = useMemo(() => {
+    if (selectedSubCategory) {
+      return ["80%"];
+    }
+    return ["50%"];
+  }, [selectedSubCategory]);
 
-    if (isPremiumCategory && !isPremium) {
-      const purchased = await showPaywall();
-      if (purchased) {
-        handleCategorySelect(category);
-      }
+  useEffect(() => {
+    if (selectedCategory) {
+      bottomSheetRef.current?.expand();
+    }
+  }, [selectedCategory]);
+
+  const tabs = [
+    { id: 0, title: "Overview" },
+    { id: 1, title: "Examples" },
+    { id: 2, title: "Strategy" },
+    { id: 3, title: "Premium+" },
+  ];
+
+  const handleCategoryPress = (category: Category) => {
+    if (category.id.includes("premium") && !isPremium) {
+      showPaywall();
       return;
     }
+    setSelectedCategory(category);
+  };
 
-    setSelectedCategory(category.id);
-    setLoading(true);
+  const handleSubCategoryPress = async (subCategory: SubCategory) => {
     try {
-      const tip = await getFlirtTip(category.title, userProfile);
-      setCurrentTip(tip);
-      bottomSheetRef.current?.expand();
+      setIsLoading(true);
+      setSelectedSubCategory(subCategory);
+
+      const tip = await getFlirtTip(
+        selectedCategory?.title || "",
+        subCategory.title,
+        userProfile,
+        isPremium
+      );
+
+      const formattedTips = [
+        tip.mainTip,
+        tip.explanation,
+        ...tip.examples,
+        ...tip.doAndDonts.do.map((item: string) => `✅ ${item}`),
+        ...tip.doAndDonts.dont.map((item: string) => `❌ ${item}`),
+      ];
+
+      if (isPremium && tip.premiumContent) {
+        formattedTips.push(
+          tip.premiumContent.situationalVariations.casual,
+          tip.premiumContent.situationalVariations.romantic,
+          tip.premiumContent.situationalVariations.recovery,
+          tip.premiumContent.psychologyInsight,
+          tip.premiumContent.expertNotes
+        );
+      }
+
+      setSelectedSubCategory({
+        ...subCategory,
+        tips: formattedTips,
+        successRate: tip.successRate,
+      });
     } catch (error) {
-      setCurrentTip("Failed to load tip. Please try again.");
+      Alert.alert(
+        "Error",
+        "Failed to generate flirting tip. Please try again."
+      );
+      setSelectedSubCategory(null);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const renderCategory = (category: any) => {
-    const isPremiumCategory = PREMIUM_CATEGORIES.find(
-      (c) => c.id === category.id
-    );
-    const isLocked = isPremiumCategory && !isPremium;
+  const renderBackdrop = useMemo(
+    () => (props: any) =>
+      (
+        <BottomSheetBackdrop
+          {...props}
+          disappearsOnIndex={-1}
+          appearsOnIndex={0}
+          opacity={0.6}
+        />
+      ),
+    []
+  );
 
-    return (
-      <TouchableOpacity
-        key={category.id}
-        onPress={() => handleCategorySelect(category)}
-        style={styles.categoryContainer}
+  const renderCategory = (category: Category, isPremiumCategory: boolean) => (
+    <TouchableOpacity
+      key={category.id}
+      style={styles.categoryContainer}
+      onPress={() => handleCategoryPress(category)}
+    >
+      <LinearGradient
+        colors={category.gradient as any}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.categoryCard}
       >
-        <LinearGradient
-          colors={category.gradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={[
-            styles.categoryCard,
-            selectedCategory === category.id && styles.selectedCategory,
-          ]}
-        >
-          <Text style={styles.categoryIcon}>{category.icon}</Text>
-          <Text style={styles.categoryTitle}>{category.title}</Text>
-          {isLocked && (
-            <View style={styles.premiumBadgeContainer}>
-              <PremiumBadge />
-            </View>
-          )}
-        </LinearGradient>
-      </TouchableOpacity>
-    );
-  };
-
-  const copyToClipboard = async (text: string) => {
-    await Clipboard.setStringAsync(text);
-    Alert.alert("Success", "Tip copied to clipboard!");
-  };
-
-  return (
-    <LinearGradient colors={["#E6E6FA", "#E6E6FA"]} style={styles.gradient}>
-      <GlobalSafeAreaView>
-        <Header logo={true} showBackButton={true} />
-        <View style={styles.content}>
-          <View style={styles.categoriesContainer}>
-            <Text style={styles.sectionTitle}>Basic Tips</Text>
-            <View style={styles.categoryGrid}>
-              {FREE_CATEGORIES.map(renderCategory)}
-            </View>
-
-            <Text style={styles.sectionTitle}>Advanced Tips</Text>
-            <View style={styles.categoryGrid}>
-              {PREMIUM_CATEGORIES.map(renderCategory)}
-            </View>
+        <Text style={styles.categoryIcon}>{category.icon}</Text>
+        <Text style={styles.categoryTitle}>{category.title}</Text>
+        {isPremiumCategory && !isPremium && (
+          <View style={styles.premiumBadgeContainer}>
+            <PremiumBadge />
           </View>
-        </View>
+        )}
+      </LinearGradient>
+    </TouchableOpacity>
+  );
 
-        <BottomSheet
-          ref={bottomSheetRef}
-          index={-1}
-          snapPoints={["60%"]}
-          enablePanDownToClose
-          backgroundStyle={styles.bottomSheetBackground}
-          handleIndicatorStyle={styles.bottomSheetIndicator}
-        >
-          <BottomSheetView style={styles.bottomSheetContent}>
-            {loading ? (
-              <ActivityIndicator size="large" color="#FF6347" />
-            ) : (
-              <>
-                <View style={styles.bottomSheetHeader}>
-                  <View style={styles.titleContainer}>
-                    <Ionicons name="sparkles" size={24} color="#FFD700" />
-                    <Text style={styles.bottomSheetTitle}>
-                      Your Flirting Tip
+  const renderBottomSheetContent = () => {
+    if (selectedSubCategory) {
+      return (
+        <BottomSheetView style={styles.bottomSheetContent}>
+          <View style={styles.bottomSheetHeader}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => setSelectedSubCategory(null)}
+            >
+              <Ionicons name="arrow-back" size={24} color="#333" />
+            </TouchableOpacity>
+            <Text style={styles.bottomSheetTitle}>
+              {selectedSubCategory.title}
+            </Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => {
+                setSelectedCategory(null);
+                setSelectedSubCategory(null);
+                bottomSheetRef.current?.close();
+              }}
+            >
+              <Ionicons name="close" size={24} color="#333" />
+            </TouchableOpacity>
+          </View>
+
+          {isLoading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={Theme.colors.primary} />
+              <Text style={styles.loadingText}>
+                Generating your personalized tip...
+              </Text>
+            </View>
+          ) : (
+            <ScrollView style={styles.tipsContainer}>
+              <View style={styles.successRateContainer}>
+                <View style={styles.successRateRow}>
+                  <View style={styles.successRateInfo}>
+                    <Text style={styles.successRateLabel}>
+                      Success Rate for this Tip
+                    </Text>
+                    <Text style={styles.successRateText}>
+                      {selectedSubCategory.successRate}
+                    </Text>
+                  </View>
+                  {!isPremium && (
+                    <TouchableOpacity
+                      style={styles.upgradePill}
+                      onPress={showPaywall}
+                    >
+                      <Ionicons name="star" size={16} color="#FFD700" />
+                      <Text style={styles.upgradePillText}>
+                        +15% with Premium+ ✨
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+              <View style={styles.tabContainer}>
+                {tabs.map((tab, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.tabButton,
+                      activeTab === index && styles.activeTabButton,
+                    ]}
+                    onPress={() => setActiveTab(index)}
+                  >
+                    <Text
+                      style={[
+                        styles.tabText,
+                        activeTab === index && styles.activeTabText,
+                      ]}
+                    >
+                      {tab.title}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {activeTab === 0 && (
+                <View style={styles.mainTipCard}>
+                  <Text style={styles.mainTipText}>
+                    {selectedSubCategory.tips?.[0]}
+                  </Text>
+                  <Text style={styles.explanationText}>
+                    {selectedSubCategory.tips?.[1]}
+                  </Text>
+                </View>
+              )}
+
+              {activeTab === 1 && (
+                <View style={styles.sectionContainer}>
+                  {selectedSubCategory.tips
+                    ?.slice(2, 5)
+                    .map((example, index) => (
+                      <View key={index} style={{ marginBottom: 12 }}>
+                        <Text style={styles.hintTitle}>
+                          Example {index + 1}
+                        </Text>
+                        <View style={styles.exampleCard}>
+                          <Text style={styles.exampleText}>{example}</Text>
+                        </View>
+                      </View>
+                    ))}
+                </View>
+              )}
+
+              {activeTab === 2 && (
+                <View style={styles.dosDontsContainer}>
+                  <Text style={styles.dosDontsTitle}>Do's</Text>
+                  <View style={styles.tipsGrid}>
+                    {selectedSubCategory.tips
+                      ?.slice(5, 8)
+                      .map((item, index) => (
+                        <View key={index} style={styles.tipItem}>
+                          <Ionicons
+                            name="checkmark-circle"
+                            size={24}
+                            color="#4CAF50"
+                            style={styles.tipIcon}
+                          />
+                          <Text style={styles.tipItemText}>
+                            {item.replace("✅ ", "")}
+                          </Text>
+                        </View>
+                      ))}
+                  </View>
+                  <Text style={styles.dosDontsTitle}>Don'ts</Text>
+                  <View style={styles.tipsGrid}>
+                    {selectedSubCategory.tips
+                      ?.slice(8, 11)
+                      .map((item, index) => (
+                        <View key={index} style={styles.tipItem}>
+                          <Ionicons
+                            name="alert-circle"
+                            size={24}
+                            color="#FF5252"
+                            style={styles.tipIcon}
+                          />
+                          <Text style={styles.tipItemText}>
+                            {item.replace("❌ ", "")}
+                          </Text>
+                        </View>
+                      ))}
+                  </View>
+                </View>
+              )}
+
+              {activeTab === 3 &&
+                isPremium &&
+                selectedSubCategory?.tips &&
+                renderPremiumContent()}
+
+              {activeTab === 3 && !isPremium && (
+                <View style={styles.premiumUpsellContainer}>
+                  <Text style={styles.premiumUpsellTitle}>
+                    Unlock Premium Features 🌟
+                  </Text>
+                  <View style={styles.premiumFeatureList}>
+                    <Text style={styles.premiumFeatureText}>
+                      • Situational Variations for Different Scenarios
+                    </Text>
+                    <Text style={styles.premiumFeatureText}>
+                      • Deep Psychological Insights
+                    </Text>
+                    <Text style={styles.premiumFeatureText}>
+                      • Expert Additional Notes
+                    </Text>
+                    <Text style={styles.premiumFeatureText}>
+                      • Higher Success Rate with Premium Tips
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={() => bottomSheetRef.current?.close()}
-                    style={styles.closeButton}
+                    style={styles.getPremiumButton}
+                    onPress={showPaywall}
                   >
-                    <Ionicons name="close" size={24} color="#666" />
+                    <Text style={styles.getPremiumButtonText}>
+                      Get Premium+
+                    </Text>
                   </TouchableOpacity>
                 </View>
+              )}
+            </ScrollView>
+          )}
+        </BottomSheetView>
+      );
+    }
 
-                <View style={styles.tipContainer}>
-                  <Text style={styles.tipText}>{currentTip}</Text>
-                  <TouchableOpacity
-                    style={styles.copyIcon}
-                    onPress={() => copyToClipboard(currentTip)}
-                  >
-                    <Ionicons name="copy-outline" size={24} color="#666" />
-                  </TouchableOpacity>
-                </View>
+    return (
+      <BottomSheetView style={styles.bottomSheetContent}>
+        <View style={styles.bottomSheetHeader}>
+          <Text style={styles.bottomSheetTitle}>{selectedCategory?.title}</Text>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => {
+              setSelectedCategory(null);
+              bottomSheetRef.current?.close();
+            }}
+          >
+            <Ionicons name="close" size={24} color="#333" />
+          </TouchableOpacity>
+        </View>
 
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => handleCategorySelect({ id: selectedCategory })}
-                >
-                  <Ionicons name="refresh" size={20} color="#FFF" />
-                  <Text style={styles.actionButtonText}>New Tip</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </BottomSheetView>
-        </BottomSheet>
-      </GlobalSafeAreaView>
-    </LinearGradient>
+        <View style={styles.instructionContainer}>
+          <Ionicons name="hand-left" size={24} color={Theme.colors.primary} />
+          <Text style={styles.instructionText}>
+            Please select one of the options below
+          </Text>
+        </View>
+
+        <ScrollView>
+          {selectedCategory?.subCategories.map((subCategory) => (
+            <TouchableOpacity
+              key={subCategory.id}
+              style={styles.subCategoryCard}
+              onPress={() => handleSubCategoryPress(subCategory)}
+            >
+              <Text style={styles.subCategoryTitle}>{subCategory.title}</Text>
+              <Text style={styles.subCategoryDescription}>
+                {subCategory.description}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </BottomSheetView>
+    );
+  };
+
+  const renderPremiumContent = () => {
+    if (!isPremium || !selectedSubCategory?.tips) return null;
+
+    const premiumTips = selectedSubCategory.tips.slice(-5);
+    return (
+      <View>
+        <Text style={styles.premiumSectionTitle}>
+          🌟 Situational Variations
+        </Text>
+        <View style={styles.tipItem}>
+          <Text style={styles.tipItemText}>Casual: {premiumTips[0]}</Text>
+        </View>
+        <View style={styles.tipItem}>
+          <Text style={styles.tipItemText}>Romantic: {premiumTips[1]}</Text>
+        </View>
+        <View style={styles.tipItem}>
+          <Text style={styles.tipItemText}>Recovery: {premiumTips[2]}</Text>
+        </View>
+
+        <Text style={styles.premiumSectionTitle}>🧠 Psychology Insight</Text>
+        <View style={styles.tipItem}>
+          <Text style={styles.tipItemText}>{premiumTips[3]}</Text>
+        </View>
+
+        <Text style={styles.premiumSectionTitle}>👨‍🏫 Expert Notes</Text>
+        <View style={styles.tipItem}>
+          <Text style={styles.tipItemText}>{premiumTips[4]}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <GlobalSafeAreaView>
+      <Header logo showBackButton />
+      <ScrollView style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.categoriesContainer}>
+            <Text style={styles.sectionTitle}>Basic Categories</Text>
+            <View style={styles.categoryGrid}>
+              {FREE_CATEGORIES.map((category) =>
+                renderCategory(category, false)
+              )}
+            </View>
+
+            <Text style={styles.sectionTitle}>Premium Categories</Text>
+            <View style={styles.categoryGrid}>
+              {PREMIUM_CATEGORIES.map((category) =>
+                renderCategory(category, true)
+              )}
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose
+        index={-1}
+        backdropComponent={renderBackdrop}
+        handleIndicatorStyle={styles.bottomSheetIndicator}
+        backgroundStyle={styles.bottomSheetBackground}
+      >
+        {renderBottomSheetContent()}
+      </BottomSheet>
+    </GlobalSafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
   container: {
     flex: 1,
-    backgroundColor: "transparent",
   },
   content: {
     flex: 1,
   },
   categoriesContainer: {
-    padding: 16,
+    paddingVertical: 16,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 16,
+    fontSize: 16,
+    fontFamily: "Inter_600SemiBold",
     color: "#333",
-    textShadowColor: "rgba(0, 0, 0, 0.1)",
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
+    marginBottom: 12,
   },
   categoryGrid: {
     flexDirection: "row",
@@ -251,13 +496,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     minHeight: 120,
-    backgroundColor: "rgba(255, 255, 255, 0.15)",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.2)",
-  },
-  selectedCategory: {
-    transform: [{ scale: 0.98 }],
-    borderColor: "rgba(255, 255, 255, 0.4)",
   },
   categoryIcon: {
     fontSize: 32,
@@ -266,22 +504,11 @@ const styles = StyleSheet.create({
   categoryTitle: {
     color: "#FFF",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Inter_600SemiBold",
     textAlign: "center",
-    textShadowColor: "rgba(0, 0, 0, 0.1)",
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
-  },
-  lockContainer: {
-    position: "absolute",
-    top: 8,
-    right: 8,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-    borderRadius: 12,
-    padding: 4,
   },
   bottomSheetBackground: {
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    backgroundColor: "#FFF",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
@@ -290,7 +517,6 @@ const styles = StyleSheet.create({
     width: 40,
   },
   bottomSheetContent: {
-    flex: 1,
     padding: 20,
   },
   bottomSheetHeader: {
@@ -306,54 +532,411 @@ const styles = StyleSheet.create({
   },
   bottomSheetTitle: {
     fontSize: 20,
-    fontWeight: "700",
+    fontFamily: "Inter_700Bold",
     color: "#333",
   },
   closeButton: {
     padding: 4,
   },
-  tipContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    marginBottom: 24,
-    gap: 12,
-  },
-  tipText: {
-    flex: 1,
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#333",
-  },
-  copyIcon: {
-    padding: 4,
-  },
-  actionButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#FF6347",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    gap: 8,
+  subCategoryCard: {
+    padding: 16,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    marginBottom: 12,
+    borderColor: "#D6BDF7",
+    borderWidth: 2,
+    overflow: "hidden",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowRadius: 3,
+    elevation: 3,
   },
-  actionButtonText: {
-    color: "#FFF",
+  subCategoryTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Inter_600SemiBold",
+    color: "#333",
+    marginBottom: 4,
+  },
+  subCategoryDescription: {
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    color: "#666",
   },
   premiumBadgeContainer: {
     position: "absolute",
     top: 8,
     right: 8,
+  },
+  backButton: {
+    padding: 4,
+  },
+  tipCard: {
+    backgroundColor: "#F5F5F5",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  tipText: {
+    fontSize: 16,
+    fontFamily: "Inter_400Regular",
+    color: "#333",
+    lineHeight: 24,
+  },
+  copyButton: {
+    padding: 4,
+  },
+  tipsContainer: {
+    paddingBottom: 20,
+  },
+  mainTipCard: {
+    backgroundColor: "#F8FAFC",
+    padding: 24,
+    borderRadius: 20,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  mainTipHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 12,
+  },
+  mainTipIconContainer: {
+    padding: 4,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+  },
+  mainTipIcon: {
+    fontSize: 24,
+    color: "#FFF",
+  },
+  categoryLabel: {
+    fontSize: 16,
+    fontFamily: "Inter_600SemiBold",
+    color: "#FFF",
+  },
+  mainTipText: {
+    color: "#1E293B",
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    marginBottom: 16,
+    lineHeight: 28,
+  },
+  explanationText: {
+    color: "#475569",
+    fontSize: 16,
+    fontFamily: "Inter_500Medium",
+    lineHeight: 24,
+  },
+  sectionContainer: {
+    marginBottom: 20,
+  },
+  exampleCard: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    backgroundColor: "#FFFFFF",
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  exampleText: {
+    flex: 1,
+    fontSize: 15,
+    fontFamily: "Inter_500Medium",
+    color: "#374151",
+    lineHeight: 22,
+  },
+  dosDontsContainer: {
+    marginBottom: 16,
+  },
+  dosContainer: {
+    flex: 1,
+  },
+  doItem: {
+    backgroundColor: "#E8F5E9",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  doText: {
+    fontSize: 16,
+    fontFamily: "Inter_400Regular",
+    color: "#333",
+  },
+  dontsContainer: {
+    flex: 1,
+  },
+  dontItem: {
+    backgroundColor: "#FFEBEE",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  dontText: {
+    fontSize: 16,
+    fontFamily: "Inter_400Regular",
+    color: "#333",
+  },
+  premiumCard: {
+    backgroundColor: "#F3E5F5",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: "#CE93D8",
+  },
+  premiumText: {
+    fontSize: 16,
+    fontFamily: "Inter_400Regular",
+    color: "#333",
+  },
+  hintTitle: {
+    fontSize: 16,
+    fontFamily: "Inter_600SemiBold",
+    color: "#333",
+    marginBottom: 8,
+    textAlign: "left",
+  },
+  tipsGrid: {
+    marginTop: 8,
+    marginBottom: 12,
+  },
+  tipItem: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    backgroundColor: "#FFFFFF",
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: "#E5E5E5",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  tipIcon: {
+    marginRight: 12,
+    marginTop: 2,
+  },
+  tipItemText: {
+    flex: 1,
+    fontSize: 15,
+    fontFamily: "Inter_500Medium",
+    color: "#374151",
+    lineHeight: 22,
+  },
+  successRateContainer: {
+    backgroundColor: "#1E293B",
+    borderRadius: 16,
+    padding: 20,
+  },
+  successRateWrapper: {
+    height: 6,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 3,
+    marginBottom: 8,
+    overflow: "hidden",
+  },
+  successRateBar: {
+    height: "100%",
+    backgroundColor: "#FFF",
+    borderRadius: 3,
+  },
+  successRateText: {
+    color: "#FFF",
+    fontSize: 28,
+    fontFamily: "Inter_700Bold",
+  },
+  premiumBadgeSmall: {
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  premiumBadgeText: {
+    color: "#FFF",
+    fontSize: 12,
+    fontFamily: "Inter_600SemiBold",
+  },
+  upgradeBadge: {
+    backgroundColor: "#FFD700",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  upgradeBadgeText: {
+    color: "#333",
+    fontSize: 12,
+    fontFamily: "Inter_600SemiBold",
+  },
+  premiumUpsellContainer: {
+    backgroundColor: "#F3E5F5",
+    padding: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#CE93D8",
+  },
+  premiumUpsellTitle: {
+    fontSize: 18,
+    fontFamily: "Inter_600SemiBold",
+    color: "#7B1FA2",
+    marginBottom: 12,
+  },
+  premiumFeatureList: {
+    marginBottom: 16,
+  },
+  premiumFeatureText: {
+    fontSize: 15,
+    fontFamily: "Inter_400Regular",
+    color: "#4A148C",
+    marginBottom: 8,
+  },
+  getPremiumButton: {
+    backgroundColor: "#7B1FA2",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  getPremiumButtonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontFamily: "Inter_600SemiBold",
+  },
+  successRateRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  upgradeGradient: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  tabContainer: {
+    flexDirection: "row",
+    backgroundColor: "#F5F5F5",
+    borderRadius: 12,
+    padding: 4,
+    marginVertical: 16,
+    width: "auto",
+  },
+  tabButton: {
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    alignItems: "center",
+    borderRadius: 8,
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 4,
+  },
+  activeTabButton: {
+    backgroundColor: Theme.colors.primary,
+  },
+  tabText: {
+    fontSize: 13,
+    fontFamily: "Inter_500Medium",
+    color: "#666",
+    textAlign: "center",
+  },
+  activeTabText: {
+    color: "#FFF",
+    fontFamily: "Inter_600SemiBold",
+  },
+  tabIcon: {
+    width: 16,
+    height: 16,
+  },
+  activeTabIcon: {
+    opacity: 1,
+  },
+  successRateInfo: {
+    flex: 1,
+  },
+  upgradePill: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#4F46E5",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
+    shadowColor: "#4F46E5",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
+  },
+  upgradePillText: {
+    color: "#FFF",
+    fontSize: 13,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: 0.3,
+  },
+  dosDontsTitle: {
+    fontSize: 18,
+    fontFamily: "Inter_700Bold",
+    color: "#111827",
+  },
+  successRateLabel: {
+    color: "#94A3B8",
+    fontSize: 14,
+    fontFamily: "Inter_500Medium",
+    marginBottom: 4,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    fontFamily: "Inter_500Medium",
+    color: "red",
+    textAlign: "center",
+  },
+  instructionContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F8FAFC",
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  instructionText: {
+    marginLeft: 8,
+    fontSize: 15,
+    fontFamily: "Inter_500Medium",
+    color: "#475569",
+  },
+  premiumSectionTitle: {
+    fontSize: 18,
+    fontFamily: "Inter_600SemiBold",
+    color: "#1E293B",
+    marginBottom: 12,
   },
 });

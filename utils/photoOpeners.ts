@@ -1,7 +1,5 @@
 import ApiService from "../services/ApiService";
 export const generatePhotoOpeners = async (imageUrl: any, userInfo: any) => {
-  console.log("imageUrl", imageUrl);
-  console.log("userInfo", userInfo);
   try {
     const response = await ApiService.post("/chat/completions", {
       model: "chatgpt-4o-latest",
@@ -29,7 +27,14 @@ export const generatePhotoOpeners = async (imageUrl: any, userInfo: any) => {
 
 4. If the image lacks clear details, create general, fun openers relevant to the user's preferences.
 
-Output only the three hints as a numbered list.`,
+IMPORTANT: Your response must be in the following format:
+[
+  "First opener message here",
+  "Second opener message here",
+  "Third opener message here"
+]
+
+Do not include any additional text, numbers, or formatting. Only output the array of three messages.`,
             },
             {
               type: "image_url",
@@ -42,20 +47,35 @@ Output only the three hints as a numbered list.`,
       ],
       temperature: 0.8,
     });
-    console.log("response", response.message);
+
     const aiText = response.choices[0].message.content;
-    const hints = aiText
-      .split("\n")
-      .map((line: any) => line.trim())
-      .filter((line: any) => /^\d+\.\s/.test(line))
-      .map((line: any) => line.replace(/^\d+\.\s/, ""));
 
-    if (hints.length === 0) {
-      console.warn("No valid hints found in AI response.");
-      throw new Error("The AI response did not contain valid hints.");
+    try {
+      // AI yanıtını JSON array olarak parse et
+      const hints = JSON.parse(aiText);
+
+      // Yanıtın array olduğunu ve en az 1 eleman içerdiğini kontrol et
+      if (!Array.isArray(hints) || hints.length === 0) {
+        throw new Error("Invalid response format");
+      }
+
+      return hints;
+    } catch (parseError) {
+      console.error("AI response parsing error:", parseError);
+
+      // Eğer JSON parse edilemezse, eski yöntemi dene
+      const fallbackHints = aiText
+        .split("\n")
+        .map((line: any) => line.trim())
+        .filter((line: any) => /^\d+\.\s/.test(line))
+        .map((line: any) => line.replace(/^\d+\.\s/, ""));
+
+      if (fallbackHints.length === 0) {
+        throw new Error("Could not extract valid hints from AI response");
+      }
+
+      return fallbackHints;
     }
-
-    return hints;
   } catch (error: any) {
     console.error(
       "Error generating photo openers:",

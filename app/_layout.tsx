@@ -1,4 +1,10 @@
-import { useFonts } from "expo-font";
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  useFonts,
+} from "@expo-google-fonts/inter";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
@@ -11,8 +17,7 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
-import Purchases from 'react-native-purchases';
-
+import Purchases from "react-native-purchases";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Step1Screen from "./screens/Step1Screen";
@@ -31,6 +36,7 @@ import { useNetworkStatus } from "../hooks/useNetworkStatus";
 import useOfflineStore from "../store/offlineStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Step4Screen from "./screens/Step4Screen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,7 +47,10 @@ export default function RootLayout() {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
   });
 
   const isOnline = useOfflineStore((state) => state.isOnline);
@@ -61,14 +70,14 @@ export default function RootLayout() {
     const initPurchases = async () => {
       try {
         await Purchases.configure({
-          apiKey: 'appl_TvvyCFvFSroRvVfDHICvelkQChX',
+          apiKey: "appl_TvvyCFvFSroRvVfDHICvelkQChX",
         });
-        console.log('RevenueCat başarıyla yapılandırıldı');
+        console.log("RevenueCat başarıyla yapılandırıldı");
       } catch (error) {
-        console.error('RevenueCat yapılandırma hatası:', error);
+        console.error("RevenueCat yapılandırma hatası:", error);
       }
     };
-  
+
     initPurchases();
   }, []);
 
@@ -91,12 +100,13 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={isOnboardingCompleted ? "HomeScreen" : "Step1"}
+        initialRouteName={"Step1"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Step1" component={Step1Screen} />
         <Stack.Screen name="Step2" component={Step2Screen} />
         <Stack.Screen name="Step3" component={Step3Screen} />
+        <Stack.Screen name="Step4" component={Step4Screen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen
           name="SettingsScreen"

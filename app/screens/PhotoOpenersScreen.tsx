@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   View,
   Text,
@@ -34,11 +34,17 @@ export default function PhotoOpenersScreen() {
   const { isPremium, incrementPhotoCount } = usePremiumStore();
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [additionalInfo, setAdditionalInfo] = useState("");
-  const [showResults, setShowResults] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  useEffect(() => {
+    console.log("Suggestions updated:", suggestions);
+    if (suggestions.length > 0) {
+      bottomSheetRef.current?.expand();
+    }
+  }, [suggestions]);
 
   const handleImageProcessing = async (imageUri: string) => {
     if (!isPremium) {
@@ -66,17 +72,23 @@ export default function PhotoOpenersScreen() {
       }
     }
 
-    setLoading(true);
-    setSuggestions([]);
-
     try {
       const cloudinaryImage: any = await uploadImageToCloudinary(imageUri);
       const imageUrl = cloudinaryImage.secure_url;
+      console.log("Generating openers for image:", imageUrl);
+
       const newSuggestions = await generatePhotoOpeners(imageUrl, userProfile);
-      setSuggestions(newSuggestions);
-      bottomSheetRef.current?.expand();
+      console.log("Generated suggestions:", newSuggestions);
+
+      if (Array.isArray(newSuggestions) && newSuggestions.length > 0) {
+        setSuggestions(newSuggestions);
+      } else {
+        console.error("Invalid suggestions format:", newSuggestions);
+        setSuggestions(["No valid suggestions generated. Please try again."]);
+      }
     } catch (error) {
-      setSuggestions(["An error occurred, please try again."] as any);
+      console.error("Error in handleImageProcessing:", error);
+      setSuggestions(["An error occurred, please try again."]);
     } finally {
       setLoading(false);
     }
@@ -97,19 +109,13 @@ export default function PhotoOpenersScreen() {
     if (!pickerResult.canceled) {
       const imageUri = pickerResult.assets[0].uri;
       setSelectedImage(imageUri as any);
-      setShowResults(false);
     }
   };
 
   const startAnalysis = async () => {
     setLoading(true);
+    setSuggestions([]);
     await handleImageProcessing(selectedImage as any);
-    bottomSheetRef.current?.snapToIndex(0);
-  };
-
-  const copyToClipboard = async (text: string) => {
-    await Clipboard.setString(text);
-    Alert.alert("Success", "Tip copied to clipboard!");
   };
 
   const renderBackdrop = useMemo(
@@ -190,7 +196,7 @@ export default function PhotoOpenersScreen() {
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
-        snapPoints={["60%"]}
+        snapPoints={["70%"]}
         backgroundStyle={styles.bottomSheetBackground}
         handleIndicatorStyle={styles.bottomSheetIndicator}
         backdropComponent={renderBackdrop}
@@ -209,17 +215,26 @@ export default function PhotoOpenersScreen() {
             </TouchableOpacity>
           </View>
 
-          {suggestions.map((suggestion, index) => (
-            <View key={index} style={styles.suggestionContainer}>
-              <Text style={styles.suggestionText}>{suggestion}</Text>
-              <TouchableOpacity
-                style={styles.copyIcon}
-                onPress={() => Clipboard.setString(suggestion)}
-              >
-                <Ionicons name="copy-outline" size={24} color="#666" />
-              </TouchableOpacity>
-            </View>
-          ))}
+          {suggestions.length > 0 ? (
+            suggestions.map((suggestion, index) => (
+              <View key={index} style={styles.suggestionContainer}>
+                <Text style={styles.suggestionText}>{suggestion}</Text>
+                <View style={styles.suggestionActions}>
+                  <TouchableOpacity
+                    style={styles.copyButton}
+                    onPress={() => Clipboard.setString(suggestion)}
+                  >
+                    <Ionicons name="copy-outline" size={20} color="#666" />
+                    <Text style={styles.copyText}>Copy</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noSuggestionsText}>
+              No suggestions available
+            </Text>
+          )}
         </BottomSheetView>
       </BottomSheet>
     </GlobalSafeAreaView>
@@ -274,10 +289,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   suggestionText: {
-    flex: 1,
+    color: "#333",
     fontSize: 16,
     lineHeight: 24,
-    color: "#333",
+    marginBottom: 12,
   },
   indicator: {
     marginTop: 10,
@@ -365,13 +380,17 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   suggestionContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    marginBottom: 16,
-    padding: 12,
     backgroundColor: "#f5f5f5",
     borderRadius: 12,
+    marginBottom: 16,
+    borderColor: "#D6BDF7",
+    borderWidth: 2,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   copyIcon: {
     padding: 4,
@@ -388,5 +407,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     fontWeight: "600",
+  },
+  suggestionActions: {
+    borderTopWidth: 1,
+    borderTopColor: "#e5e5e5",
+    paddingTop: 12,
+  },
+  copyButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    alignSelf: "flex-end",
+  },
+  copyText: {
+    color: "#666",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  noSuggestionsText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
+    marginTop: 20,
   },
 });

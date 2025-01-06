@@ -33,13 +33,13 @@
 
 - **Basic UX Improvements**
 
-  - Bottom sheet implementation for responses
-  - Copy function for suggestions
+  - Bottom sheet implementation for responses \*\*
+  - Copy function for suggestions \*\*
   - Analysis animation
   - Feedback system
 
 - **Input Enhancements**
-  - Additional input fields for target person info
+  - Additional input fields for target person info \*\*
   - Photo upload optimization
 
 ### 2. High Priority (Core Features)
@@ -71,9 +71,12 @@
 ### 4. Low Priority (Expansion)
 
 - **Language Support**
+
   - Turkish
   - Spanish
   - German
+
+- **Dark Mode**
 
 ## Business Model 💰
 

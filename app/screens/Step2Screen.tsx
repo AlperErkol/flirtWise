@@ -12,9 +12,14 @@ import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/Header";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import { useLocalSearchParams } from "expo-router";
-import { INTEREST_OPTIONS } from "@/constants/Options";
 
 const { height } = Dimensions.get("window");
+
+const INTEREST_OPTIONS = [
+  { id: "men", label: "Men", emoji: "👨" },
+  { id: "women", label: "Women", emoji: "👩" },
+  { id: "both", label: "Both", emoji: "👥" },
+];
 
 export default function Step2Screen({ navigation, route }: any) {
   const [selectedInterest, setSelectedInterest] = useState("");
@@ -34,11 +39,27 @@ export default function Step2Screen({ navigation, route }: any) {
     <LinearGradient colors={["#E6E6FA", "#E6E6FA"]} style={styles.container}>
       <GlobalSafeAreaView>
         <Header logo={true} showBackButton={true} />
+
+        <View style={styles.progressContainer}>
+          <View style={[styles.progressLine]} />
+          <View style={[styles.progressLine]} />
+          <View style={[styles.progressLine, styles.inactiveLine]} />
+          <View style={[styles.progressLine, styles.inactiveLine]} />
+        </View>
+
         <Animated.View
           entering={FadeInRight}
           exiting={FadeOutLeft}
           style={styles.content}
         >
+          <View style={styles.titleContainer}>
+            <Text style={styles.emoji}>💝</Text>
+            <Text style={styles.title}>Perfect Match</Text>
+            <Text style={styles.subtitle}>
+              Let us know who catches your eye
+            </Text>
+          </View>
+
           <View style={styles.formContainer}>
             <View style={styles.optionsSection}>
               <Text style={styles.sectionTitle}>I'm interested in...</Text>
@@ -52,15 +73,18 @@ export default function Step2Screen({ navigation, route }: any) {
                     ]}
                     onPress={() => setSelectedInterest(option.id)}
                   >
-                    <Text
-                      style={[
-                        styles.optionText,
-                        selectedInterest === option.id &&
-                          styles.selectedOptionText,
-                      ]}
-                    >
-                      {option.label}
-                    </Text>
+                    <View style={styles.optionContent}>
+                      <Text style={styles.optionEmoji}>{option.emoji}</Text>
+                      <Text
+                        style={[
+                          styles.optionText,
+                          selectedInterest === option.id &&
+                            styles.selectedOptionText,
+                        ]}
+                      >
+                        {option.label}
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -79,12 +103,6 @@ export default function Step2Screen({ navigation, route }: any) {
               <Text style={styles.buttonText}>Continue</Text>
               <Ionicons name="arrow-forward" size={20} color="#fff" />
             </TouchableOpacity>
-
-            <View style={styles.progressContainer}>
-              <View style={[styles.progressDot, styles.inactiveDot]} />
-              <View style={styles.progressDot} />
-              <View style={[styles.progressDot, styles.inactiveDot]} />
-            </View>
           </View>
         </Animated.View>
       </GlobalSafeAreaView>
@@ -177,16 +195,43 @@ const styles = StyleSheet.create({
   },
   progressContainer: {
     flexDirection: "row",
-    gap: 8,
     justifyContent: "center",
+    gap: 8,
+    paddingVertical: 16,
   },
-  progressDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  progressLine: {
+    flex: 1,
+    height: 4,
     backgroundColor: "#4F46E5",
+    borderRadius: 2,
   },
-  inactiveDot: {
+  inactiveLine: {
     opacity: 0.3,
+  },
+  titleContainer: {
+    alignItems: "center",
+    gap: 8,
+  },
+  emoji: {
+    fontSize: 48,
+    color: "#4F46E5",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: "#333",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#666",
+  },
+  optionContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  optionEmoji: {
+    fontSize: 24,
+    color: "#4F46E5",
   },
 });
