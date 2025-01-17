@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,14 +17,14 @@ import useProfileStore from "../../store/profileStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import Theme from "@/constants/Theme";
-import { uploadImageToCloudinary } from "@/utils/cloudinary";
-import { enhanceChat } from "@/utils/chatEnhancer";
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
+import { uploadImageToCloudinary } from "@/services/cloudinary";
+import { enhanceChat } from "@/services/chat/enhancer";
 
 export default function ChatEnhancerScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
@@ -33,6 +33,13 @@ export default function ChatEnhancerScreen() {
   const [loading, setLoading] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [additionalInfo, setAdditionalInfo] = useState("");
+
+  useEffect(() => {
+    console.log("suggestions", suggestions);
+    if (suggestions.length > 0) {
+      bottomSheetRef.current?.expand();
+    }
+  }, [suggestions]);
 
   const pickImage = async () => {
     const permissionResult =

@@ -1,14 +1,5 @@
 import React, { useRef } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  View,
-  Dimensions,
-  Alert,
-  Image,
-} from "react-native";
+import { Text, TouchableOpacity, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
@@ -18,56 +9,12 @@ import PremiumBadge from "../../components/PremiumBadge";
 import BottomSheet from "@gorhom/bottom-sheet";
 import SettingsBottomSheet from "@/components/SettingsBottomSheet";
 import { usePaywall } from "@/hooks/usePaywall";
-
-const { width } = Dimensions.get("window");
+import { mainFeatures, secondaryFeatures } from "@/constants/home/features";
 
 export default function HomeScreen({ navigation }: any) {
   const { showPaywall } = usePaywall();
   const { isPremium } = usePremiumStore();
   const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const mainFeatures = [
-    {
-      id: "4",
-      title: "Photo-Based Openers",
-      description: "Get clever conversation starters inspired by the photo",
-      screen: "PhotoOpenersScreen",
-      isPremium: false,
-      backgroundColor: "#4F46E5",
-      icon: "📸",
-    },
-    {
-      id: "5",
-      title: "Chat Enhancer",
-      description:
-        "Breathe new life into your conversations with fresh, engaging messages",
-      screen: "ChatEnhancerScreen",
-      isPremium: true,
-      backgroundColor: "#7C3AED",
-      icon: "💬",
-    },
-  ];
-
-  const secondaryFeatures = [
-    {
-      id: "1",
-      title: "Flirt Coach",
-      description: "Get personalized flirting advice",
-      screen: "FlirtCoachScreen",
-      gradient: ["#FF6B6B", "#FF9A8B"],
-      emoji: "❤️‍🔥",
-      isPremium: false,
-    },
-    {
-      id: "2",
-      title: "Get Flirting Tips",
-      description: "Learn proven techniques",
-      screen: "TipsScreen",
-      gradient: ["#4FACFE", "#00F2FE"],
-      emoji: "💡",
-      isPremium: false,
-    },
-  ];
 
   const handleFeaturePress = async (feature: any) => {
     if (feature.isPremium && !isPremium) {
@@ -107,15 +54,16 @@ export default function HomeScreen({ navigation }: any) {
     );
   };
 
-  const renderMainFeature = ({ item }: any) => (
+  const renderMainFeature = (item: any) => (
     <TouchableOpacity
       onPress={() => handleFeaturePress(item)}
       style={styles.mainFeatureWrapper}
+      key={item.id}
     >
       <View style={styles.mainCard}>
         <View style={styles.cardContent}>
           <View style={styles.iconContainer}>
-            <Text style={styles.featureIcon}>{item.icon}</Text>
+            <Text style={styles.featureIcon}>{item.emoji}</Text>
           </View>
           <View style={styles.textContainer}>
             <View style={styles.titleRow}>
@@ -138,51 +86,29 @@ export default function HomeScreen({ navigation }: any) {
       />
       {renderPromoCard()}
       <Text style={styles.sectionTitle}>Let's begin your journey</Text>
-      <View>
-        {mainFeatures.map((feature) => (
+      <View>{mainFeatures.map((feature) => renderMainFeature(feature))}</View>
+      <Text style={styles.sectionTitle}>Your daily communication tools</Text>
+      <View style={styles.secondaryFeatureContainer}>
+        {secondaryFeatures.map((feature) => (
           <TouchableOpacity
             key={feature.id}
-            onPress={() => handleFeaturePress(feature)}
-            style={styles.mainFeatureWrapper}
-          >
-            <View style={styles.mainCard}>
-              <View style={styles.cardContent}>
-                <View style={styles.iconContainer}>
-                  <Text style={styles.featureIcon}>{feature.icon}</Text>
-                </View>
-                <View style={styles.textContainer}>
-                  <View style={styles.titleRow}>
-                    <Text style={styles.cardTitle}>{feature.title}</Text>
-                    {feature.isPremium && !isPremium && <PremiumBadge />}
-                  </View>
-                  <Text style={styles.cardDesc}>{feature.description}</Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <Text style={styles.sectionTitle}>Your daily flirt tools</Text>
-      <View style={styles.secondaryFeatureContainer}>
-        {secondaryFeatures.map((item) => (
-          <TouchableOpacity
-            key={item.id}
             style={styles.secondaryCardWrapper}
-            onPress={() => navigation.navigate(item.screen)}
+            onPress={() => navigation.navigate(feature.screen)}
           >
             <LinearGradient
-              colors={item.gradient as any}
+              colors={feature.gradient as any}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.secondaryCard}
             >
               <View style={styles.emojiContainer}>
-                <Text style={styles.emoji}>{item.emoji}</Text>
+                <Text style={styles.emoji}>{feature.emoji}</Text>
               </View>
               <View style={styles.contentContainer}>
-                <Text style={styles.secondaryCardTitle}>{item.title}</Text>
-                <Text style={styles.secondaryCardDesc}>{item.description}</Text>
+                <Text style={styles.secondaryCardTitle}>{feature.title}</Text>
+                <Text style={styles.secondaryCardDesc}>
+                  {feature.description}
+                </Text>
               </View>
             </LinearGradient>
           </TouchableOpacity>

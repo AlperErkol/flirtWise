@@ -18,8 +18,6 @@ import * as ImagePicker from "expo-image-picker";
 import useProfileStore from "../../store/profileStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-import { uploadImageToCloudinary } from "@/utils/cloudinary";
-import { generatePhotoOpeners } from "@/utils/photoOpeners";
 import Theme from "@/constants/Theme";
 import { usePremiumStore } from "@/store/usePremiumStore";
 import { usePaywall } from "@/hooks/usePaywall";
@@ -28,6 +26,8 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
+import { uploadImageToCloudinary } from "@/services/cloudinary";
+import { generatePhotoOpeners } from "@/services/photo";
 
 export default function PhotoOpenersScreen() {
   const { showPaywall } = usePaywall();
@@ -40,7 +40,6 @@ export default function PhotoOpenersScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   useEffect(() => {
-    console.log("Suggestions updated:", suggestions);
     if (suggestions.length > 0) {
       bottomSheetRef.current?.expand();
     }
@@ -49,7 +48,6 @@ export default function PhotoOpenersScreen() {
   const handleImageProcessing = async (imageUri: string) => {
     if (!isPremium) {
       const canAnalyzePhoto = await incrementPhotoCount();
-      console.log("canAnalyzePhoto", canAnalyzePhoto);
       if (!canAnalyzePhoto) {
         Alert.alert(
           "Photo Analysis Limit Reached",
@@ -75,10 +73,7 @@ export default function PhotoOpenersScreen() {
     try {
       const cloudinaryImage: any = await uploadImageToCloudinary(imageUri);
       const imageUrl = cloudinaryImage.secure_url;
-      console.log("Generating openers for image:", imageUrl);
-
       const newSuggestions = await generatePhotoOpeners(imageUrl, userProfile);
-      console.log("Generated suggestions:", newSuggestions);
 
       if (Array.isArray(newSuggestions) && newSuggestions.length > 0) {
         setSuggestions(newSuggestions);

@@ -1,29 +1,27 @@
-# FlirtWise - Your Personal Flirting Coach 📱
+# SocialSage - Your Personal Communication Coach 📱
 
-## Current Features 🌟
+## Core Features 🌟
 
-### Core Features
-
-1. **Photo-Based Openers**
+1. **Photo-Based Analysis**
 
    - Analyzes profile photos
    - Generates contextual conversation starters
    - Limited free uses per day
 
-2. **Chat Enhancer (Premium)**
+2. **Message Enhancer (Premium)**
 
    - Revives stalled conversations
    - Provides multiple response options
    - Helps maintain engaging dialogues
 
-3. **Flirt Coach**
+3. **Communication Coach**
 
-   - Personalized flirting advice
+   - Personalized communication advice
    - Real-time conversation guidance
    - Situation-specific suggestions
 
 4. **Tips Library**
-   - Basic flirting tips (Free)
+   - Basic communication tips (Free)
    - Advanced strategies (Premium)
    - Copyable text suggestions
 
@@ -33,23 +31,23 @@
 
 - **Basic UX Improvements**
 
-  - Bottom sheet implementation for responses \*\*
-  - Copy function for suggestions \*\*
+  - Bottom sheet implementation for responses ✅
+  - Copy function for suggestions ✅
   - Analysis animation
   - Feedback system
 
 - **Input Enhancements**
-  - Additional input fields for target person info \*\*
+  - Additional input fields for target person info ✅
   - Photo upload optimization
 
 ### 2. High Priority (Core Features)
 
 - **Onboarding Enhancement**
 
-  - New user flow
-  - Flirting style selection
-  - Interest areas
-  - Communication preferences
+  - New user flow ✅
+  - Communication style selection ✅
+  - Interest areas ✅
+  - Communication preferences ✅
 
 - **Cost Optimization**
   - Cloudinary cleanup system
@@ -57,16 +55,16 @@
 
 ### 3. Medium Priority (Feature Enhancement)
 
-- **Flirt Tips Enhancement**
+- **Communication Tips Enhancement**
 
-  - New categories
-  - Premium content
+  - New categories ✅
+  - Premium content ✅
   - Interaction system
 
-- **Flirt Coach Enhancement**
+- **Communication Coach Enhancement**
   - AI persona system
   - Structured chat modes
-  - Premium features
+  - Premium features ✅
 
 ### 4. Low Priority (Expansion)
 
@@ -85,12 +83,12 @@
 - **Free Tier**
 
   - Limited photo analyses (3/day)
-  - Basic flirting tips
-  - Basic Flirt Coach access
+  - Basic communication tips
+  - Basic Communication Coach access
 
 - **Premium+ Subscription**
   - Unlimited photo analyses
-  - Chat enhancement feature
+  - Message enhancement feature
   - Advanced tips library
   - Priority support
 

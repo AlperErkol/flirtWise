@@ -1,63 +1,40 @@
-import Theme from "@/constants/Theme";
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React from "react";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { useRouter } from "expo-router";
+
+const LANGUAGES = [
+  { code: "en", name: "English" },
+  { code: "tr", name: "Türkçe" },
+];
 
 export default function LanguageScreen() {
-  const [selectedLanguage, setSelectedLanguage] = useState("English");
+  const router = useRouter();
 
-  const languages = [
-    { name: "English", flag: "🇬🇧" },
-    { name: "Türkçe", flag: "🇹🇷" },
-  ];
-
-  return (
-    <View style={styles.container}>
-      <View>
-        {languages.map((lang) => (
-          <TouchableOpacity
-            key={lang.name}
-            style={styles.menuItem}
-            onPress={() => setSelectedLanguage(lang.name)}
-          >
-            <Text style={styles.emoji}>{lang.flag}</Text>
-            <Text style={styles.menuText}>{lang.name}</Text>
-            {selectedLanguage === lang.name && (
-              <Text style={styles.checkMark}>✓</Text>
-            )}
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
-  );
+  return <View style={styles.container}></View>;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Theme.colors.background,
+    padding: 20,
+    backgroundColor: "#fff",
   },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+  languageButton: {
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+    backgroundColor: "#f5f5f5",
   },
-  emoji: {
-    fontSize: 18,
+  selectedLanguage: {
+    backgroundColor: "#4FACFE",
   },
-  menuText: {
-    fontSize: 15,
-    fontWeight: "600",
-    color: Theme.colors.text,
-    flex: 1,
-    marginLeft: 15,
+  languageText: {
+    fontSize: 16,
+    color: "#333",
+    fontFamily: "Inter_400Regular",
   },
-  checkMark: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: Theme.colors.primary,
+  selectedText: {
+    color: "#fff",
+    fontFamily: "Inter_600SemiBold",
   },
 });

@@ -1,4 +1,4 @@
-export const FREE_CATEGORIES = [
+const FREE_CATEGORIES = [
   {
     id: "first_impressions",
     title: "First Impressions",
@@ -6,32 +6,32 @@ export const FREE_CATEGORIES = [
     gradient: ["#FF9A8B", "#FF6B6B"],
     subCategories: [
       {
-        id: "profile_photo_tips",
-        title: "Profile Photo Tips",
-        description: "Standout photo selection & poses",
+        id: "profile_presentation",
+        title: "Profile Presentation",
+        description: "Create an effective profile",
       },
       {
-        id: "bio_writing",
-        title: "Bio Writing",
-        description: "Create an attractive bio",
+        id: "introduction_tips",
+        title: "Introduction Tips",
+        description: "Make a strong first impression",
       },
       {
-        id: "opening_lines",
-        title: "Opening Lines",
-        description: "Attention-grabbing first messages",
+        id: "conversation_starters",
+        title: "Conversation Starters",
+        description: "Engaging ways to start talking",
       },
     ],
   },
   {
-    id: "basic_conversation",
-    title: "Basic Conversation",
+    id: "communication_basics",
+    title: "Communication Basics",
     icon: "💭",
     gradient: ["#4FACFE", "#00F2FE"],
     subCategories: [
       {
         id: "question_techniques",
         title: "Question Techniques",
-        description: "Keep them interested & talking",
+        description: "Keep conversations flowing",
       },
       {
         id: "conversation_topics",
@@ -70,7 +70,7 @@ export const FREE_CATEGORIES = [
   },
 ];
 
-export const PREMIUM_CATEGORIES = [
+const PREMIUM_CATEGORIES = [
   {
     id: "advanced_psychology",
     title: "Psychology Pro",
@@ -95,15 +95,15 @@ export const PREMIUM_CATEGORIES = [
     ],
   },
   {
-    id: "date_strategies",
-    title: "Date Success",
+    id: "social_success",
+    title: "Social Success",
     icon: "🎯",
     gradient: ["#FF3CAC", "#784BA0"],
     subCategories: [
       {
-        id: "date_planning",
-        title: "Perfect Date Planning",
-        description: "Memorable date ideas & execution",
+        id: "event_planning",
+        title: "Social Planning",
+        description: "Organize memorable meetups",
       },
       {
         id: "chemistry_building",
@@ -141,3 +141,5 @@ export const PREMIUM_CATEGORIES = [
     ],
   },
 ];
+
+export { FREE_CATEGORIES, PREMIUM_CATEGORIES };

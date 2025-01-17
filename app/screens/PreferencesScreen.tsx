@@ -1,21 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useProfileStore from "@/store/profileStore";
-import {
-  AGE_OPTIONS,
-  GENDER_OPTIONS,
-  EXPERIENCE_OPTIONS,
-  INTEREST_OPTIONS,
-} from "@/constants/Options";
-import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import {
   ChevronDownIcon,
@@ -25,18 +11,27 @@ import {
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Theme from "@/constants/Theme";
 import Header from "@/components/Header";
+import {
+  AGE_OPTIONS,
+  GENDER_OPTIONS,
+  COMMUNICATION_STYLES,
+  INTEREST_AREAS,
+  INTEREST_OPTIONS,
+} from "@/constants/wizard/options";
 
 type ProfileType = {
   gender: string;
   age: string;
   interest: string;
-  experience: string;
+  communicationStyle: string;
+  interests: string[];
 };
 
 type Section = {
   title: string;
   options: Array<{ id: string; label: string; description?: string }>;
   field: keyof ProfileType;
+  multiSelect?: boolean;
 };
 
 type AccordionSectionProps = {
@@ -128,7 +123,8 @@ export default function PreferencesScreen({ navigation }: any) {
     gender: "",
     age: "",
     interest: "",
-    experience: "",
+    communicationStyle: "",
+    interests: [],
   });
   const [hasChanges, setHasChanges] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -139,11 +135,21 @@ export default function PreferencesScreen({ navigation }: any) {
   const sections: Section[] = [
     { title: "Gender", options: GENDER_OPTIONS, field: "gender" },
     { title: "Age Range", options: AGE_OPTIONS, field: "age" },
-    { title: "Interest", options: INTEREST_OPTIONS, field: "interest" },
     {
-      title: "Flirting Experience",
-      options: EXPERIENCE_OPTIONS,
-      field: "experience",
+      title: "Perfect Match",
+      options: INTEREST_OPTIONS,
+      field: "interest",
+    },
+    {
+      title: "Communication Style",
+      options: COMMUNICATION_STYLES,
+      field: "communicationStyle",
+    },
+    {
+      title: "Interest Areas",
+      options: INTEREST_AREAS,
+      field: "interests",
+      multiSelect: true,
     },
   ];
 
@@ -212,7 +218,7 @@ export default function PreferencesScreen({ navigation }: any) {
             <AccordionSection
               key={section.field}
               section={section}
-              selectedValue={localProfile[section.field]}
+              selectedValue={localProfile[section.field] as any}
               onChange={handleChange}
               isOpen={openSection === section.field}
               onToggle={() =>

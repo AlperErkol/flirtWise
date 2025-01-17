@@ -6,26 +6,13 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/Header";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
+import { GENDER_OPTIONS, AGE_OPTIONS } from "@/constants/wizard/options";
 
 const { height } = Dimensions.get("window");
-
-const GENDER_OPTIONS = [
-  { id: "male", label: "Male", emoji: "👨" },
-  { id: "female", label: "Female", emoji: "👩" },
-  { id: "other", label: "Other", emoji: "🫂" },
-];
-
-const AGE_OPTIONS = [
-  { id: "18-24", label: "18-24" },
-  { id: "25-34", label: "25-34" },
-  { id: "35-44", label: "35-44" },
-  { id: "45+", label: "45+" },
-];
 
 export default function Step1Screen({ navigation }: any) {
   const [selectedGender, setSelectedGender] = useState("");
@@ -60,7 +47,7 @@ export default function Step1Screen({ navigation }: any) {
           <Text style={styles.emoji}>👋</Text>
           <Text style={styles.title}>Hey there!</Text>
           <Text style={styles.subtitle}>
-            Let's create your perfect flirting profile in just a few steps
+            Let's create your perfect communication profile in just a few steps
           </Text>
         </View>
 

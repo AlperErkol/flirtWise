@@ -5,19 +5,9 @@ import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/Header";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { saveUserProfile } from "@/utils/storage";
 import useProfileStore from "@/store/profileStore";
-
-const INTEREST_AREAS = [
-  { id: "sports", label: "Sports & Fitness", emoji: "🏃‍♂️" },
-  { id: "arts", label: "Arts & Culture", emoji: "🎨" },
-  { id: "travel", label: "Travel & Adventure", emoji: "✈️" },
-  { id: "music", label: "Music & Entertainment", emoji: "🎵" },
-  { id: "food", label: "Food & Cooking", emoji: "🍳" },
-  { id: "tech", label: "Technology & Gaming", emoji: "🎮" },
-  { id: "nature", label: "Nature & Outdoors", emoji: "🌲" },
-  { id: "books", label: "Reading & Literature", emoji: "📚" },
-];
+import { saveUserProfile } from "@/store";
+import { INTEREST_AREAS } from "@/constants/wizard/options";
 
 export default function Step4Screen({ navigation, route }: any) {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
@@ -117,7 +107,7 @@ export default function Step4Screen({ navigation, route }: any) {
             <Ionicons name="arrow-forward" size={20} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.termsText}>
-            By continuing, you agree to FlirtWise{" "}
+            By continuing, you agree to SocialSage{" "}
             <Text
               style={styles.linkText}
               // onPress={() => router.push("/privacy")}

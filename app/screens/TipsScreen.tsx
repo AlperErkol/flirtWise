@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Clipboard,
   Alert,
   ActivityIndicator,
 } from "react-native";
@@ -19,14 +18,11 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import PremiumBadge from "@/components/PremiumBadge";
-import {
-  FREE_CATEGORIES,
-  PREMIUM_CATEGORIES,
-} from "../constants/tipCategories";
-import { getFlirtTip } from "@/utils/tips";
 import { usePaywall } from "@/hooks/usePaywall";
 import Theme from "@/constants/Theme";
 import useProfileStore from "@/store/profileStore";
+import { FREE_CATEGORIES, PREMIUM_CATEGORIES } from "@/constants/tip/category";
+import { getCommunicationTip } from "@/services/tips";
 
 interface Category {
   id: string;
@@ -90,7 +86,7 @@ export default function TipsScreen() {
       setIsLoading(true);
       setSelectedSubCategory(subCategory);
 
-      const tip = await getFlirtTip(
+      const tip = await getCommunicationTip(
         selectedCategory?.title || "",
         subCategory.title,
         userProfile,
@@ -123,7 +119,7 @@ export default function TipsScreen() {
     } catch (error) {
       Alert.alert(
         "Error",
-        "Failed to generate flirting tip. Please try again."
+        "Failed to generate communication tip. Please try again."
       );
       setSelectedSubCategory(null);
     } finally {
@@ -201,7 +197,11 @@ export default function TipsScreen() {
               </Text>
             </View>
           ) : (
-            <ScrollView style={styles.tipsContainer}>
+            <ScrollView
+              style={styles.tipsContainer}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 100 }}
+            >
               <View style={styles.successRateContainer}>
                 <View style={styles.successRateRow}>
                   <View style={styles.successRateInfo}>
@@ -431,7 +431,7 @@ export default function TipsScreen() {
   return (
     <GlobalSafeAreaView>
       <Header logo showBackButton />
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <View style={styles.categoriesContainer}>
             <Text style={styles.sectionTitle}>Basic Categories</Text>
@@ -914,7 +914,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 16,
     fontFamily: "Inter_500Medium",
-    color: "red",
+    color: "#666",
     textAlign: "center",
   },
   instructionContainer: {

@@ -1,5 +1,5 @@
+import cld from "@/lib/cloudinary";
 import { upload } from "cloudinary-react-native";
-import cld from "../lib/cloudinary";
 
 const options = {
   upload_preset: "default",

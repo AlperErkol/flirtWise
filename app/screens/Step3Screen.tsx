@@ -5,45 +5,13 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
-  ActivityIndicator,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import useProfileStore from "@/store/profileStore";
-import { saveUserProfile } from "@/utils/storage";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useLocalSearchParams } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
 import Header from "@/components/Header";
-import { EXPERIENCE_OPTIONS } from "@/constants/Options";
-
-const { height } = Dimensions.get("window");
-
-const COMMUNICATION_STYLES = [
-  {
-    id: "playful",
-    label: "Playful & Humorous",
-    emoji: "😊",
-  },
-  {
-    id: "direct",
-    label: "Direct & Straightforward",
-    emoji: "🎯",
-  },
-  {
-    id: "deep",
-    label: "Deep & Intellectual",
-    emoji: "🤔",
-  },
-  {
-    id: "casual",
-    label: "Casual & Easygoing",
-    emoji: "🌟",
-  },
-];
+import { COMMUNICATION_STYLES } from "@/constants/wizard/options";
 
 export default function Step3Screen({ navigation, route }: any) {
   const [selectedStyle, setSelectedStyle] = useState("");

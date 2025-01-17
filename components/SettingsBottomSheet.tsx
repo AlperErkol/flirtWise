@@ -24,7 +24,7 @@ export default function SettingsBottomSheet({
   const handleShareApp = async () => {
     try {
       await Share.share({
-        message: "Hey! Check out this amazing app, FlirtWise!",
+        message: "Hey! Check out this amazing app, SocialSage!",
       });
     } catch (error) {
       console.error("Error sharing app: ", error);
@@ -37,7 +37,6 @@ export default function SettingsBottomSheet({
 
   const handleUpgrade = async () => {
     await showPaywall();
-    
   };
 
   const menuItems = [

@@ -1,9 +1,11 @@
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 export default function PremiumBadge() {
   return (
     <View style={styles.premiumBadge}>
+      <Ionicons name="star" size={12} color="#FFD700" />
       <Text style={styles.premiumText}>Premium+</Text>
     </View>
   );
@@ -11,22 +13,17 @@ export default function PremiumBadge() {
 
 const styles = StyleSheet.create({
   premiumBadge: {
-    backgroundColor: "#FFD700",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+    gap: 4,
   },
   premiumText: {
-    color: "#000",
+    color: "#FFD700",
     fontSize: 12,
-    fontWeight: "600",
+    fontFamily: "Inter_600SemiBold",
   },
 });

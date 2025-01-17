@@ -1,3 +1,4 @@
+import { PRIVACY_URL, TERMS_URL } from "@/constants/settings/urls";
 import React from "react";
 import {
   Text,
@@ -14,7 +15,7 @@ export default function SettingsScreen({ navigation }: any) {
     try {
       const result = await Share.share({
         message:
-          "Hey! Check out this amazing app, FlirtWise! It's fun and helpful for sparking great conversations. Download it now: [APP_LINK]",
+          "Hey! Check out this amazing app, SocialSage! It's fun and helpful for sparking great conversations. Download it now: [APP_LINK]",
       });
 
       if (result.action === Share.sharedAction) {
@@ -47,16 +48,15 @@ export default function SettingsScreen({ navigation }: any) {
     {
       id: "2",
       title: "Upgrade",
-      // screen: presentPaywallIfNeeded,
       emoji: "💳",
     },
-
     {
       id: "4",
       title: "Feedback",
       screen: "FeedbackScreen",
       emoji: "💬",
     },
+
     {
       id: "5",
       title: "Share App",
@@ -88,23 +88,11 @@ export default function SettingsScreen({ navigation }: any) {
           style={styles.logo}
         />
         <View style={styles.footerLinks}>
-          <TouchableOpacity
-            onPress={() =>
-              handleLinkPress(
-                "https://drive.google.com/file/d/1TXaOZhEE3eSqB8pe1mgbNX8teG4xYsGF/view?usp=drive_link"
-              )
-            }
-          >
+          <TouchableOpacity onPress={() => handleLinkPress(TERMS_URL)}>
             <Text style={styles.footerLink}>Terms</Text>
           </TouchableOpacity>
           <Text style={styles.footerSeparator}>|</Text>
-          <TouchableOpacity
-            onPress={() =>
-              handleLinkPress(
-                "https://drive.google.com/file/d/1jewICfEkgKyuvMYmYFNw8fx5GyrFCX7v/view?usp=drive_link"
-              )
-            }
-          >
+          <TouchableOpacity onPress={() => handleLinkPress(PRIVACY_URL)}>
             <Text style={styles.footerLink}>Privacy Policy</Text>
           </TouchableOpacity>
         </View>

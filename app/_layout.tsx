@@ -26,7 +26,6 @@ import Step3Screen from "./screens/Step3Screen";
 import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import TipsScreen from "./screens/TipsScreen";
-import FlirtCoachScreen from "./screens/FlirtCoachScreen";
 import PhotoOpenersScreen from "./screens/PhotoOpenersScreen";
 import ChatEnhancerScreen from "./screens/ChatEnhancerScreen";
 import FeedbackScreen from "./screens/FeedbackScreen";
@@ -37,6 +36,8 @@ import useOfflineStore from "../store/offlineStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Step4Screen from "./screens/Step4Screen";
+import CommunicationCoachSelectionScreen from "./screens/CommunicationCoachSelectionScreen";
+import CommunicationCoachScreen from "./screens/CommunicationCoachScreen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -119,13 +120,8 @@ export default function RootLayout() {
         />
         <Stack.Screen name="TipsScreen" component={TipsScreen} />
         <Stack.Screen
-          name="FlirtCoachScreen"
-          component={FlirtCoachScreen}
-          options={{
-            headerShown: true,
-            title: "Flirt Coach",
-            headerTitleAlign: "center",
-          }}
+          name="CommunicationCoachScreen"
+          component={CommunicationCoachScreen as React.ComponentType<any>}
         />
         <Stack.Screen
           name="PhotoOpenersScreen"
@@ -146,6 +142,10 @@ export default function RootLayout() {
         />
         <Stack.Screen name="PreferencesScreen" component={PreferencesScreen} />
         <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} />
+        <Stack.Screen
+          name="CommunicationCoachSelectionScreen"
+          component={CommunicationCoachSelectionScreen}
+        />
       </Stack.Navigator>
       <Modal
         animationType="fade"

@@ -11,15 +11,9 @@ import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "@/components/Header";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
-import { useLocalSearchParams } from "expo-router";
+import { INTEREST_OPTIONS } from "@/constants/wizard/options";
 
 const { height } = Dimensions.get("window");
-
-const INTEREST_OPTIONS = [
-  { id: "men", label: "Men", emoji: "👨" },
-  { id: "women", label: "Women", emoji: "👩" },
-  { id: "both", label: "Both", emoji: "👥" },
-];
 
 export default function Step2Screen({ navigation, route }: any) {
   const [selectedInterest, setSelectedInterest] = useState("");

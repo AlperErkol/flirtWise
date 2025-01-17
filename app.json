@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "flirtWise",
-    "slug": "flirtWise",
+    "name": "SocialSage",
+    "slug": "socialsage",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "flirtwise",
+    "scheme": "socialsage",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
