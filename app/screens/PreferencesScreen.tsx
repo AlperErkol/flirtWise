@@ -3,11 +3,6 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useProfileStore from "@/store/profileStore";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  SparklesIcon,
-} from "react-native-heroicons/outline";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Theme from "@/constants/Theme";
 import Header from "@/components/Header";
@@ -18,6 +13,7 @@ import {
   INTEREST_AREAS,
   INTEREST_OPTIONS,
 } from "@/constants/wizard/options";
+import { Ionicons } from "@expo/vector-icons";
 
 type ProfileType = {
   gender: string;
@@ -72,9 +68,14 @@ const AccordionSection = React.memo(
               </Text>
             )}
             {isOpen ? (
-              <ChevronUpIcon size={20} color={isOpen ? "#4F46E5" : "#6B7280"} />
+              <Ionicons
+                name="chevron-up"
+                size={20}
+                color={isOpen ? "#4F46E5" : "#6B7280"}
+              />
             ) : (
-              <ChevronDownIcon
+              <Ionicons
+                name="chevron-down"
                 size={20}
                 color={isOpen ? "#4F46E5" : "#6B7280"}
               />
@@ -204,7 +205,7 @@ export default function PreferencesScreen({ navigation }: any) {
       <Header logo={true} showBackButton={true} />
       <View style={styles.headerContainer}>
         <View style={styles.titleContainer}>
-          <SparklesIcon size={20} color="#4F46E5" />
+          <Ionicons name="star" size={20} color="#4F46E5" />
           <Text style={styles.headerTitle}>AI Personalization</Text>
         </View>
         <Text style={styles.headerDescription}>
@@ -359,7 +360,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   bottomContainer: {
-    padding: 16,
     borderRadius: 10,
     position: "absolute",
     bottom: 0,

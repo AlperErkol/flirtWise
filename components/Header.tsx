@@ -42,7 +42,7 @@ export default function Header({
             showSettingsIcon &&
             logo && (
               <Image
-                source={require("../assets/images/fw-logo.png")}
+                source={require("../assets/images/logo.png")}
                 style={styles.logo}
               />
             )
@@ -57,7 +57,7 @@ export default function Header({
         >
           {logo && !showSettingsIcon && (
             <Image
-              source={require("../assets/images/fw-logo.png")}
+              source={require("../assets/images/logo.png")}
               style={styles.logo}
             />
           )}

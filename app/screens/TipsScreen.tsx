@@ -26,6 +26,7 @@ import { getCommunicationTip } from "@/services/tips";
 
 interface Category {
   id: string;
+  isPremium: boolean;
   title: string;
   icon: string;
   gradient: string[];
@@ -61,7 +62,7 @@ export default function TipsScreen() {
   }, [selectedSubCategory]);
 
   useEffect(() => {
-    if (selectedCategory) {
+    if (selectedCategory?.id !== null && selectedCategory?.id !== undefined) {
       bottomSheetRef.current?.expand();
     }
   }, [selectedCategory]);
@@ -74,7 +75,7 @@ export default function TipsScreen() {
   ];
 
   const handleCategoryPress = (category: Category) => {
-    if (category.id.includes("premium") && !isPremium) {
+    if (category.isPremium && !isPremium) {
       showPaywall();
       return;
     }
@@ -458,6 +459,12 @@ export default function TipsScreen() {
         backdropComponent={renderBackdrop}
         handleIndicatorStyle={styles.bottomSheetIndicator}
         backgroundStyle={styles.bottomSheetBackground}
+        onChange={(index) => {
+          if (index === -1) {
+            setSelectedCategory(null);
+            setSelectedSubCategory(null);
+          }
+        }}
       >
         {renderBottomSheetContent()}
       </BottomSheet>

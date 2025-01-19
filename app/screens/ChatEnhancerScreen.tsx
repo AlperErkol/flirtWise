@@ -35,7 +35,6 @@ export default function ChatEnhancerScreen() {
   const [additionalInfo, setAdditionalInfo] = useState("");
 
   useEffect(() => {
-    console.log("suggestions", suggestions);
     if (suggestions.length > 0) {
       bottomSheetRef.current?.expand();
     }

@@ -119,7 +119,7 @@ export default function SettingsBottomSheet({
 
         <View style={styles.footer}>
           <Image
-            source={require("../assets/images/fw-logo.png")}
+            source={require("../assets/images/logo.png")}
             style={styles.logo}
           />
           <View style={styles.footerLinks}>

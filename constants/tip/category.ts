@@ -1,6 +1,7 @@
 const FREE_CATEGORIES = [
   {
     id: "first_impressions",
+    isPremium: false,
     title: "First Impressions",
     icon: "👋",
     gradient: ["#FF9A8B", "#FF6B6B"],
@@ -24,6 +25,7 @@ const FREE_CATEGORIES = [
   },
   {
     id: "communication_basics",
+    isPremium: false,
     title: "Communication Basics",
     icon: "💭",
     gradient: ["#4FACFE", "#00F2FE"],
@@ -47,6 +49,7 @@ const FREE_CATEGORIES = [
   },
   {
     id: "texting_101",
+    isPremium: false,
     title: "Texting 101",
     icon: "📱",
     gradient: ["#43E97B", "#38F9D7"],
@@ -73,6 +76,7 @@ const FREE_CATEGORIES = [
 const PREMIUM_CATEGORIES = [
   {
     id: "advanced_psychology",
+    isPremium: true,
     title: "Psychology Pro",
     icon: "🧠",
     gradient: ["#FA709A", "#FEE140"],
@@ -96,6 +100,7 @@ const PREMIUM_CATEGORIES = [
   },
   {
     id: "social_success",
+    isPremium: true,
     title: "Social Success",
     icon: "🎯",
     gradient: ["#FF3CAC", "#784BA0"],
@@ -119,6 +124,7 @@ const PREMIUM_CATEGORIES = [
   },
   {
     id: "advanced_texting",
+    isPremium: true,
     title: "Text Like a Pro",
     icon: "✨",
     gradient: ["#13547A", "#80D0C7"],

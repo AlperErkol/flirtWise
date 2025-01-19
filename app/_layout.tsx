@@ -73,9 +73,9 @@ export default function RootLayout() {
         await Purchases.configure({
           apiKey: "appl_TvvyCFvFSroRvVfDHICvelkQChX",
         });
-        console.log("RevenueCat başarıyla yapılandırıldı");
+        console.log("RevenueCat integration successful");
       } catch (error) {
-        console.error("RevenueCat yapılandırma hatası:", error);
+        console.error("RevenueCat integration error:", error);
       }
     };
 

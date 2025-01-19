@@ -10,7 +10,7 @@ const mainFeatures = [
   },
   {
     id: "2",
-    title: "Message Enhancer",
+    title: "Chat Wizard",
     description: "Enhance your conversations with AI-powered suggestions",
     screen: "ChatEnhancerScreen",
     isPremium: true,
@@ -22,7 +22,7 @@ const mainFeatures = [
 const secondaryFeatures = [
   {
     id: "3",
-    title: "Communication Coach",
+    title: "Social Coach",
     description: "Get personalized communication advice",
     screen: "CommunicationCoachSelectionScreen",
     gradient: ["#FF6B6B", "#FF9A8B"],
@@ -31,7 +31,7 @@ const secondaryFeatures = [
   },
   {
     id: "4",
-    title: "Communication Tips",
+    title: "Chat Mentor",
     description: "Learn proven techniques",
     screen: "TipsScreen",
     gradient: ["#4FACFE", "#00F2FE"],

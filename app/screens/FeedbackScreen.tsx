@@ -19,9 +19,6 @@ export default function FeedbackScreen() {
       Alert.alert("Error", "Please fill in all fields.");
       return;
     }
-
-    console.log("Feedback:", { name, feedback });
-
     Alert.alert("Thank you!", "Your feedback has been received.");
     setName("");
     setFeedback("");

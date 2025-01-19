@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation }: any) {
                 Get unlimited access to all premium features!
               </Text>
             </View>
-            <TouchableOpacity style={styles.promoButton}>
+            <TouchableOpacity style={styles.promoButton} onPress={showPaywall}>
               <Text style={styles.promoButtonText}>Get Started</Text>
             </TouchableOpacity>
           </View>
@@ -68,7 +68,7 @@ export default function HomeScreen({ navigation }: any) {
           <View style={styles.textContainer}>
             <View style={styles.titleRow}>
               <Text style={styles.cardTitle}>{item.title}</Text>
-              {item.isPremium && !isPremium && <PremiumBadge />}
+              {item.isPremium && !isPremium && <PremiumBadge bgWhite={true} />}
             </View>
             <Text style={styles.cardDesc}>{item.description}</Text>
           </View>
@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+    marginBottom: 20,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
     justifyContent: "center",
     alignItems: "center",
@@ -239,7 +240,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: "flex-end",
   },
   promoCard: {
     marginVertical: 10,
