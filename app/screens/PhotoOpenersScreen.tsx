@@ -73,7 +73,11 @@ export default function PhotoOpenersScreen() {
     try {
       const cloudinaryImage: any = await uploadImageToCloudinary(imageUri);
       const imageUrl = cloudinaryImage.secure_url;
-      const newSuggestions = await generatePhotoOpeners(imageUrl, userProfile);
+      const newSuggestions = await generatePhotoOpeners(
+        imageUrl,
+        userProfile,
+        additionalInfo
+      );
 
       if (Array.isArray(newSuggestions) && newSuggestions.length > 0) {
         setSuggestions(newSuggestions);
@@ -137,6 +141,11 @@ export default function PhotoOpenersScreen() {
           <View style={styles.container}>
             {!selectedImage ? (
               <>
+                <View style={styles.instructionContainer}>
+                  <Text style={styles.instructionText}>
+                    Upload a photo or story that you want to reply
+                  </Text>
+                </View>
                 <View style={styles.heroContainer}>
                   <Image
                     source={require("../../assets/images/photo-based.png")}
@@ -144,7 +153,7 @@ export default function PhotoOpenersScreen() {
                   />
                 </View>
                 <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
-                  <Text style={styles.pickText}>Pick a Photo</Text>
+                  <Text style={styles.pickText}>Upload an Image</Text>
                 </TouchableOpacity>
               </>
             ) : (
@@ -236,12 +245,24 @@ export default function PhotoOpenersScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
   },
   container: {
     flex: 1,
+  },
+  instructionContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 32,
+    alignItems: "center",
+  },
+  instructionText: {
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    color: "#1F2937",
+    textAlign: "center",
+    lineHeight: 28,
   },
   heroContainer: {
     flex: 1,
@@ -424,5 +445,20 @@ const styles = StyleSheet.create({
     color: "#666",
     textAlign: "center",
     marginTop: 20,
+  },
+  heroTitle: {
+    fontSize: 24,
+    fontFamily: "Inter_700Bold",
+    color: "#1F2937",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  heroSubtitle: {
+    fontSize: 16,
+    fontFamily: "Inter_400Regular",
+    color: "#6B7280",
+    textAlign: "center",
+    paddingHorizontal: 20,
+    lineHeight: 24,
   },
 });

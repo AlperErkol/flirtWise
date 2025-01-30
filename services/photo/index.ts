@@ -3,8 +3,12 @@ import ApiService, { OPENAI_MODEL_FAST } from "../ApiService";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { PhotoOpenerExtraction } from "@/utils/openai/response";
 
-export const generatePhotoOpeners = async (imageUrl: any, userInfo: any) => {
-  let prompt = getPhotoOpenerPrompt({ userInfo });
+export const generatePhotoOpeners = async (
+  imageUrl: any,
+  userInfo: any,
+  additionalInfo?: string
+) => {
+  let prompt = getPhotoOpenerPrompt({ userInfo }, additionalInfo);
 
   try {
     const response = await ApiService.post("/chat/completions", {

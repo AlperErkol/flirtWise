@@ -1,4 +1,4 @@
-# SocialSage - Your Personal Communication Coach 📱
+# FlirtWise - Your Personal Communication Coach 📱
 
 ## Core Features 🌟
 

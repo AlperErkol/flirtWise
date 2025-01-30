@@ -7,7 +7,7 @@ import { usePremiumStore } from "@/store/usePremiumStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import PremiumBadge from "@/components/PremiumBadge";
-import personas from "../../constants/tip/persona";
+import personas from "@/constants/tip/persona";
 
 export default function CommunicationCoachSelectionScreen({ navigation }: any) {
   const { showPaywall } = usePaywall();

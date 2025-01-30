@@ -19,8 +19,6 @@ type ProfileType = {
   gender: string;
   age: string;
   interest: string;
-  communicationStyle: string;
-  interests: string[];
 };
 
 type Section = {
@@ -124,8 +122,6 @@ export default function PreferencesScreen({ navigation }: any) {
     gender: "",
     age: "",
     interest: "",
-    communicationStyle: "",
-    interests: [],
   });
   const [hasChanges, setHasChanges] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -140,17 +136,6 @@ export default function PreferencesScreen({ navigation }: any) {
       title: "Perfect Match",
       options: INTEREST_OPTIONS,
       field: "interest",
-    },
-    {
-      title: "Communication Style",
-      options: COMMUNICATION_STYLES,
-      field: "communicationStyle",
-    },
-    {
-      title: "Interest Areas",
-      options: INTEREST_AREAS,
-      field: "interests",
-      multiSelect: true,
     },
   ];
 
@@ -379,7 +364,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   headerContainer: {
-    paddingVertical: 16,
+    paddingTop: 16,
   },
   titleContainer: {
     flexDirection: "row",

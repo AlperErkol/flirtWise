@@ -13,7 +13,7 @@ class ApiService {
     baseURL: "https://api.openai.com/v1",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer XXX`,
+      Authorization: `Bearer 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`,
     },
   });
 

@@ -65,7 +65,11 @@ export default function ChatEnhancerScreen() {
     try {
       const cloudinaryImage: any = await uploadImageToCloudinary(imageUri);
       const imageUrl = cloudinaryImage.secure_url;
-      const newSuggestions = await enhanceChat(imageUrl, userProfile);
+      const newSuggestions = await enhanceChat(
+        imageUrl,
+        userProfile,
+        additionalInfo
+      );
       setSuggestions(newSuggestions);
       bottomSheetRef.current?.expand();
     } catch (error) {
@@ -102,15 +106,18 @@ export default function ChatEnhancerScreen() {
             {!selectedImage ? (
               <>
                 <View style={styles.heroContainer}>
+                  <View style={styles.instructionContainer}>
+                    <Text style={styles.instructionText}>
+                      Upload a chat screenshot that you want to enhance
+                    </Text>
+                  </View>
                   <Image
                     source={require("../../assets/images/chat-enhancer.png")}
                     style={styles.heroImage}
                   />
                 </View>
                 <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
-                  <Text style={styles.pickText}>
-                    Upload and Improve Your Chat!
-                  </Text>
+                  <Text style={styles.pickText}>Upload a Screenshot</Text>
                 </TouchableOpacity>
               </>
             ) : (
@@ -200,6 +207,18 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  instructionContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 32,
+    alignItems: "center",
+  },
+  instructionText: {
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    color: "#1F2937",
+    textAlign: "center",
+    lineHeight: 28,
   },
   heroContainer: {
     flex: 1,

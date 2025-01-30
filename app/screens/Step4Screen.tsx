@@ -107,7 +107,7 @@ export default function Step4Screen({ navigation, route }: any) {
             <Ionicons name="arrow-forward" size={20} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.termsText}>
-            By continuing, you agree to SocialSage{" "}
+            By continuing, you agree to FlirtWise{" "}
             <Text
               style={styles.linkText}
               // onPress={() => router.push("/privacy")}

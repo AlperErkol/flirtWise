@@ -26,21 +26,21 @@ type PersonaStyleType = {
 };
 
 type PersonaStyles = {
-  social_coach: PersonaStyleType;
-  communication_expert: PersonaStyleType;
-  situation_expert: PersonaStyleType;
+  dating_coach: PersonaStyleType;
+  flirting_expert: PersonaStyleType;
+  relationship_guru: PersonaStyleType;
 };
 
 const PERSONA_STYLES: PersonaStyles = {
-  social_coach: {
+  dating_coach: {
     messageColor: "#4FACFE",
     inputBgColor: "rgba(79, 172, 254, 0.1)",
   },
-  communication_expert: {
+  flirting_expert: {
     messageColor: "#8E2DE2",
     inputBgColor: "rgba(142, 45, 226, 0.1)",
   },
-  situation_expert: {
+  relationship_guru: {
     messageColor: "#FF416C",
     inputBgColor: "rgba(255, 65, 108, 0.1)",
   },
@@ -98,7 +98,7 @@ export default function CommunicationCoachScreen({ route, navigation }: Props) {
 
       setChatHistory([
         ...updatedHistory,
-        { role: "ai", content: response.message },
+        { role: "ai", content: response.response },
       ]);
       scrollViewRef.current?.scrollToEnd({ animated: true });
     } catch (error: any) {

@@ -3,33 +3,35 @@ type PhotoOpenerParams = {
     gender: string;
     age: string;
     interest: string;
-    communicationStyle: string;
-    interests: string[];
   };
 };
 
-export const getPhotoOpenerPrompt = ({ userInfo }: PhotoOpenerParams) => {
-  return `You are an expert in analyzing profile photos and generating engaging, contextual conversation starters. Your goal is to help create natural, interesting openers based on what you observe in the photo.
+export const getPhotoOpenerPrompt = (
+  { userInfo }: PhotoOpenerParams,
+  additionalInfo: string | undefined
+) => {
+  return `You are an expert in analyzing dating profile photos and generating engaging, flirtatious conversation starters. Your goal is to help create natural, interesting openers that spark romantic interest.
 
 1. User's preferences:
-   - Gender: ${userInfo.gender}
-   - Age Range: ${userInfo.age}
-   - Interest: ${userInfo.interest}
-   - Communication Style: ${userInfo.communicationStyle}
-   - Interest Areas: ${userInfo.interests.join(", ")}
+   - Gender: ${userInfo?.gender || "Not specified"}
+   - Age Range: ${userInfo?.age || "Not specified"}
+   - Interest: ${userInfo?.interest || "Not specified"}
 
-2. Analyze the image for key visual details or themes (e.g., objects, activities, or settings) and incorporate them into playful conversation starters.
+2. Additional Context:
+   ${additionalInfo || "No additional context provided"}
 
-3. Guidelines for Openers:
-   - Keep responses natural and conversational
-   - Focus on interesting details from the photo
-   - Align with user's communication style
-   - Include a mix of comments and questions
+3. Analyze the image for attractive details or interesting elements that could create romantic connection opportunities.
+
+4. Guidelines for Openers:
+   - Keep responses flirtatious yet respectful
+   - Focus on unique, attractive details
+   - Create emotional connection opportunities
+   - Include subtle compliments when appropriate
    - Keep each opener under 100 characters
-   - Avoid generic or obvious statements
-   - Make it easy to respond to
+   - Avoid generic pickup lines
+   - Make it easy to start a romantic conversation
 
-4. If the image lacks clear details, create general, fun openers relevant to the user's preferences.
+5. If the image lacks clear details, create charming, personality-based openers relevant to dating context.
 
-Generate 3 different conversation starters based on the photo and context provided.`;
+Generate 3 different flirtatious conversation starters based on the photo and context provided.`;
 };

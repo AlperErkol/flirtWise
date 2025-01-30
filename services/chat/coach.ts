@@ -4,12 +4,11 @@ import { CommunicationCoachExtraction } from "@/utils/openai/response";
 import { zodResponseFormat } from "openai/helpers/zod";
 
 type CommunicationCoachParams = {
-  persona: "social_coach" | "communication_expert" | "situation_expert";
+  persona: "dating_coach" | "flirting_expert" | "relationship_guru";
   userInfo?: {
     gender: string;
     age: string;
-    communicationStyle: string;
-    interests: string[];
+    interest: string;
   };
   chatHistory: Array<{ role: "user" | "ai"; content: string }>;
 };
@@ -21,7 +20,6 @@ export const sendCommunicationCoachMessage = async ({
 }: CommunicationCoachParams) => {
   try {
     const systemPrompt = getCommunicationCoachPrompt({ persona, userInfo });
-
     const response = await ApiService.post("/chat/completions", {
       model: OPENAI_MODEL_SLOW,
       messages: [

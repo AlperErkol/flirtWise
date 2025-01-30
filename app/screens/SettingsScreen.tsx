@@ -15,7 +15,7 @@ export default function SettingsScreen({ navigation }: any) {
     try {
       const result = await Share.share({
         message:
-          "Hey! Check out this amazing app, SocialSage! It's fun and helpful for sparking great conversations. Download it now: [APP_LINK]",
+          "Hey! Check out this amazing app, FlirtWise! It's fun and helpful for sparking great conversations. Download it now: [APP_LINK]",
       });
 
       if (result.action === Share.sharedAction) {

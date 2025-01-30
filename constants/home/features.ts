@@ -22,8 +22,8 @@ const mainFeatures = [
 const secondaryFeatures = [
   {
     id: "3",
-    title: "Social Coach",
-    description: "Get personalized communication advice",
+    title: "Flirting Coach",
+    description: "Get personalized flirting advice",
     screen: "CommunicationCoachSelectionScreen",
     gradient: ["#FF6B6B", "#FF9A8B"],
     emoji: "🎯",
@@ -31,7 +31,7 @@ const secondaryFeatures = [
   },
   {
     id: "4",
-    title: "Chat Mentor",
+    title: "Get Flirting Tips",
     description: "Learn proven techniques",
     screen: "TipsScreen",
     gradient: ["#4FACFE", "#00F2FE"],

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Text, TouchableOpacity, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
@@ -28,7 +29,9 @@ export default function HomeScreen({ navigation }: any) {
   };
 
   const renderPromoCard = () => {
-    if (isPremium) return null;
+    if (isPremium) {
+      return <DailyStatsCard />;
+    }
 
     return (
       <TouchableOpacity onPress={showPaywall}>
@@ -87,7 +90,7 @@ export default function HomeScreen({ navigation }: any) {
       {renderPromoCard()}
       <Text style={styles.sectionTitle}>Let's begin your journey</Text>
       <View>{mainFeatures.map((feature) => renderMainFeature(feature))}</View>
-      <Text style={styles.sectionTitle}>Your daily communication tools</Text>
+      <Text style={styles.sectionTitle}>Your daily flirting tools</Text>
       <View style={styles.secondaryFeatureContainer}>
         {secondaryFeatures.map((feature) => (
           <TouchableOpacity
@@ -121,6 +124,45 @@ export default function HomeScreen({ navigation }: any) {
     </GlobalSafeAreaView>
   );
 }
+
+const DailyStatsCard = () => {
+  return (
+    <LinearGradient
+      colors={["#4F46E5", "#7C3AED"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.statsGrid}
+    >
+      <View style={styles.statItem}>
+        <View style={styles.statIconContainer}>
+          <Ionicons name="camera" size={20} color="#4F46E5" />
+        </View>
+        <Text style={styles.statNumber}>∞</Text>
+        <Text style={styles.statLabel}>Photo Analysis</Text>
+      </View>
+
+      <View style={styles.divider} />
+
+      <View style={styles.statItem}>
+        <View style={styles.statIconContainer}>
+          <Ionicons name="chatbubbles" size={20} color="#4F46E5" />
+        </View>
+        <Text style={styles.statNumber}>∞</Text>
+        <Text style={styles.statLabel}>Chat Enhance</Text>
+      </View>
+
+      <View style={styles.divider} />
+
+      <View style={styles.statItem}>
+        <View style={styles.statIconContainer}>
+          <Ionicons name="star" size={20} color="#4F46E5" />
+        </View>
+        <Text style={styles.statNumber}>Active</Text>
+        <Text style={styles.statLabel}>Premium Status</Text>
+      </View>
+    </LinearGradient>
+  );
+};
 
 const styles = StyleSheet.create({
   gradientBackground: {
@@ -298,5 +340,82 @@ const styles = StyleSheet.create({
     color: "#333",
     marginBottom: 16,
     marginTop: 24,
+  },
+  statsCard: {
+    marginVertical: 10,
+    borderRadius: 16,
+    padding: 16,
+    elevation: 5,
+    shadowColor: "#7C3AED",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+  },
+  statsHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  headerLeft: {
+    flex: 1,
+  },
+  statsTitle: {
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
+    color: "#FFFFFF",
+    marginBottom: 4,
+  },
+  statsSubtitle: {
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    color: "rgba(255, 255, 255, 0.8)",
+  },
+  crownContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  statsGrid: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 10,
+  },
+  statItem: {
+    flex: 1,
+    alignItems: "center",
+  },
+  statIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  statNumber: {
+    fontSize: 18,
+    fontFamily: "Inter_700Bold",
+    color: "#FFFFFF",
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    fontFamily: "Inter_500Medium",
+    color: "rgba(255, 255, 255, 0.8)",
+    textAlign: "center",
+  },
+  divider: {
+    width: 1,
+    height: 40,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
   },
 });
