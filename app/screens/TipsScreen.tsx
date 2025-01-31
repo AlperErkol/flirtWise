@@ -118,6 +118,7 @@ export default function TipsScreen() {
         successRate: tip.successRate,
       });
     } catch (error) {
+      console.log(error);
       Alert.alert(
         "Error",
         "Failed to generate communication tip. Please try again."

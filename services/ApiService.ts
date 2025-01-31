@@ -13,7 +13,7 @@ class ApiService {
     baseURL: "https://api.openai.com/v1",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer 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`,
+      Authorization: `Bearer ${process.env.EXPO_PUBLIC_OPENAI_API_KEY}`,
     },
   });
 
@@ -60,7 +60,6 @@ class ApiService {
       this.windowStart = Date.now();
     }
 
-    // Rate limit kontrolü
     if (this.requestCount >= RATE_LIMIT) {
       const waitTime = RATE_LIMIT_WINDOW - (Date.now() - this.windowStart);
       throw new Error(
@@ -77,7 +76,6 @@ class ApiService {
   static async post(endpoint: string, data: any) {
     try {
       await this.checkRateLimit();
-      console.log("here");
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 

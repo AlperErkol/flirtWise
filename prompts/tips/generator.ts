@@ -17,9 +17,10 @@ Category: "${category}"
 Sub-Category: "${subCategory}"
 
 User Context:
-- Gender: ${userInfo.gender || "Not specified"}
-- Age Range: ${userInfo.ageRange || "Not specified"}
-- Interest: ${userInfo.interest || "Not specified"}
+- Gender: ${userInfo?.gender || "Not specified"}
+- Age Range: ${userInfo?.ageRange || "Not specified"}
+- Interest: ${userInfo?.interest || "Not specified"}
+
 
 Guidelines for generating advice:
 

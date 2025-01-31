@@ -78,3 +78,8 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
+
+# env files
+.env
+.env.*
+!.env.example

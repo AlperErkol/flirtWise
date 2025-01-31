@@ -38,7 +38,6 @@ export const enhanceChat = async (
 
     const aiText = response.choices[0].message.content;
     const hints = JSON.parse(aiText);
-    console.log(hints);
     return hints.enhancers;
   } catch (error: any) {
     console.error(
