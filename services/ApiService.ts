@@ -9,15 +9,11 @@ const TIMEOUT = 50000;
 export const OPENAI_MODEL_FAST = "gpt-4o-2024-11-20";
 export const OPENAI_MODEL_SLOW = "gpt-4o-mini";
 
-const apiKey = RemoteConfigService.getOpenAIApiKey();
-console.log("apiKey", apiKey);
-
 class ApiService {
   private static instance = axios.create({
     baseURL: "https://api.openai.com/v1",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.EXPO_PUBLIC_OPENAI_API_KEY}`,
     },
   });
 

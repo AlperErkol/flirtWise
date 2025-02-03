@@ -96,7 +96,20 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    RemoteConfigService.initialize();
+    const initializeServices = async () => {
+      try {
+        await RemoteConfigService.initialize();
+        // Test API key
+        const apiKey = RemoteConfigService.getOpenAIApiKey();
+        if (!apiKey) {
+          console.warn("OpenAI API key not found!");
+        }
+      } catch (error) {
+        console.error('RemoteConfig initialization failed:', error);
+      }
+    };
+
+    initializeServices();
   }, []);
 
   if (!loaded) {
