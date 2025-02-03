@@ -38,6 +38,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Step4Screen from "./screens/Step4Screen";
 import CommunicationCoachSelectionScreen from "./screens/CommunicationCoachSelectionScreen";
 import CommunicationCoachScreen from "./screens/CommunicationCoachScreen";
+import RemoteConfigService from "@/services/RemoteConfigService";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -92,6 +93,10 @@ export default function RootLayout() {
 
   useEffect(() => {
     checkOnboardingStatus();
+  }, []);
+
+  useEffect(() => {
+    RemoteConfigService.initialize();
   }, []);
 
   if (!loaded) {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import RemoteConfigService from "./RemoteConfigService";
 
 const RATE_LIMIT = 20;
 const RATE_LIMIT_WINDOW = 5 * 60 * 1000;
@@ -7,6 +8,9 @@ const TIMEOUT = 50000;
 
 export const OPENAI_MODEL_FAST = "gpt-4o-2024-11-20";
 export const OPENAI_MODEL_SLOW = "gpt-4o-mini";
+
+const apiKey = RemoteConfigService.getOpenAIApiKey();
+console.log("apiKey", apiKey);
 
 class ApiService {
   private static instance = axios.create({
@@ -73,13 +77,23 @@ class ApiService {
     await this.saveRequestCount();
   }
 
+  private static async getHeaders() {
+    const apiKey = RemoteConfigService.getOpenAIApiKey();
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    };
+  }
+
   static async post(endpoint: string, data: any) {
     try {
       await this.checkRateLimit();
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 
+      const headers = await this.getHeaders();
       const response = await this.instance.post(endpoint, data, {
+        headers,
         signal: controller.signal,
         timeout: TIMEOUT,
       });
@@ -88,7 +102,7 @@ class ApiService {
       return response.data;
     } catch (error: any) {
       if (error.name === "AbortError") {
-        throw new Error("Request timed out. Please try again.");
+        throw new Error("İstek zaman aşımına uğradı. Lütfen tekrar deneyin.");
       }
       if (error.message.includes("Rate limit")) {
         throw error;
@@ -96,11 +110,11 @@ class ApiService {
       if (error.response) {
         switch (error.response.status) {
           case 429:
-            throw new Error("API rate limit exceeded. Please wait a moment.");
+            throw new Error("API rate limit aşıldı. Lütfen biraz bekleyin.");
           case 401:
-            throw new Error("Invalid API key.");
+            throw new Error("Geçersiz API anahtarı.");
           default:
-            throw new Error("API request failed.");
+            throw new Error("API isteği başarısız oldu.");
         }
       }
       throw error;
