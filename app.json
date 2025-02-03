@@ -10,7 +10,8 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.erkol.flirtWise"
+      "bundleIdentifier": "com.erkol.flirtWise",
+      "googleServicesFile": "GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +36,9 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      "expo-dev-client"
+      "expo-dev-client",
+      "@react-native-firebase/app",
+      "@react-native-firebase/remote-config"
     ],
     "experiments": {
       "typedRoutes": true
