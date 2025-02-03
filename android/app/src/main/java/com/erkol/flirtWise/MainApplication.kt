@@ -1,4 +1,4 @@
-package com.flirtWise.app
+package com.erkol.flirtWise
 
 import android.app.Application
 import android.content.res.Configuration

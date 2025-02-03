@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "945878196766",
+    "project_id": "flirtwise-d42bc",
+    "storage_bucket": "flirtwise-d42bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945878196766:android:490d3c9a1a1c6f163dc40f",
+        "android_client_info": {
+          "package_name": "com.erkol.flirtWise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbWD3gxVQnGCzU6Y7F-vsZEe1FKepK6Dg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

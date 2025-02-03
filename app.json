@@ -11,14 +11,15 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.erkol.flirtWise",
-      "googleServicesFile": "GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.erkol.flirtWise"
+      "package": "com.erkol.flirtWise",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -26,6 +27,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
       "expo-router",
       [
         "expo-splash-screen",
@@ -37,8 +39,14 @@
         }
       ],
       "expo-dev-client",
-      "@react-native-firebase/app",
-      "@react-native-firebase/remote-config"
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

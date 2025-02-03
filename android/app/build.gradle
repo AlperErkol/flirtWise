@@ -86,7 +86,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.flirtWise.app'
+    namespace 'com.erkol.flirtWise'
     defaultConfig {
         applicationId 'com.erkol.flirtWise'
         minSdkVersion rootProject.ext.minSdkVersion
@@ -174,3 +174,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+apply plugin: 'com.google.gms.google-services'
