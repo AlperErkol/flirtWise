@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>flirtWise</string>
+    <string>FlirtWise</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -52,7 +52,7 @@
       <true/>
     </dict>
     <key>NSCameraUsageDescription</key>
-    <string>This app requires access to your photo library to allow the AI to analyze uploaded images and generate responses based on their content. Your photos are only used for processing and are not stored or shared.</string>
+    <string>Allow $(PRODUCT_NAME) to access your camera</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) to access your microphone</string>
     <key>NSPhotoLibraryUsageDescription</key>
