@@ -1,109 +1,95 @@
-# FlirtWise - Your Personal Communication Coach 📱
+# FlirtWise - Development Tracking 1.0.1 🎯
 
-## Core Features 🌟
+## Critical Issues 🚨
 
-1. **Photo-Based Analysis**
+### 1. Photo Openers & Response Quality
 
-   - Analyzes profile photos
-   - Generates contextual conversation starters
-   - Limited free uses per day
+- **Issue**: Flörtöz olmayan, generic açılış cümleleri
+- **Priority**: High
+- **Action Items**:
+  - [ ] OpenAI prompt'larını flörtöz tonda güncelle
+  - [ ] Response parsing mekanizmasını düzelt
+  - [ ] Her zaman 3 farklı seçenek göster
+  - [ ] Cevapları kategorize et (Funny, Flirty, Casual)
 
-2. **Message Enhancer (Premium)**
+### 2. Free Credits System
 
-   - Revives stalled conversations
-   - Provides multiple response options
-   - Helps maintain engaging dialogues
+- **Issue**: Kullanıcılar uygulamayı silip yeniden yükleyerek ücretsiz hakları sıfırlayabiliyor
+- **Priority**: High
+- **Action Items**:
+  - [ ] Firebase Realtime Database kurulumu
+  - [ ] Unique kullanıcı tanımlama sistemi
+    - Device ID veya Anonymous Auth
+    - Kullanıcı persistence
+  - [ ] Günlük kredi sistemi
+    - Günlük 3 ücretsiz hak
+    - 24 saat sonra otomatik yenileme
+    - Kullanım geçmişi takibi
+  - [ ] Async storage'dan Firebase'e geçiş
+    - Mevcut kullanıcıların kredilerini koruma
+    - Sorunsuz geçiş stratejisi
 
-3. **Communication Coach**
+### 3. Performance Issues
 
-   - Personalized communication advice
-   - Real-time conversation guidance
-   - Situation-specific suggestions
+- **Issue**: Get Flirting Tips ilk tıklamada çalışmıyor
+- **Priority**: High
+- **Action Items**:
+  - [ ] BottomSheet mounting mekanizmasını düzelt
+  - [ ] İlk render performansını optimize et
+  - [ ] Loading state ekle
 
-4. **Tips Library**
-   - Basic communication tips (Free)
-   - Advanced strategies (Premium)
-   - Copyable text suggestions
+## Feature Improvements 🚀
 
-## Upcoming Features & Improvements 🚀
+### 1. Paywall & Onboarding Optimization
 
-### 1. Urgent Priority (User Experience)
+- **Current Issues**:
+  - Onboarding'de gereksiz bilgi toplama
+  - Tek plan sunumu
+- **Action Items**:
+  - [ ] Yeni onboarding flow tasarımı
+    - Uygulama özelliklerini anlat
+    - Wizard sonrası paywall göster
+  - [ ] İkinci plan ekleme
+    - Plan karşılaştırma tablosu
+    - Yeni fiyatlandırma stratejisi
 
-- **Basic UX Improvements**
+### 2. Feedback System Implementation
 
-  - Bottom sheet implementation for responses ✅
-  - Copy function for suggestions ✅
-  - Analysis animation
-  - Feedback system
+- **Issue**: Feedback sistemi çalışmıyor
+- **Priority**: Medium
+- **Action Items**:
+  - [ ] Firebase'de feedback collection oluştur
+  - [ ] Feedback form tasarımını güncelle
+  - [ ] Rating sistemi ekle
+  - [ ] Screenshot ekleme özelliği
 
-- **Input Enhancements**
-  - Additional input fields for target person info ✅
-  - Photo upload optimization
+## Technical Improvements 🛠
 
-### 2. High Priority (Core Features)
+### 1. Response Parsing
 
-- **Onboarding Enhancement**
+- **Issue**: Photo opener yanıtları bazen parse edilemiyor
+- **Priority**: High
+- **Action Items**:
+  - [ ] OpenAI response format standardizasyonu
+  - [ ] Error handling geliştirme
+  - [ ] Fallback mekanizması
 
-  - New user flow ✅
-  - Communication style selection ✅
-  - Interest areas ✅
-  - Communication preferences ✅
+## Next Sprint Goals 🎯
 
-- **Cost Optimization**
-  - Cloudinary cleanup system
-  - Photo analysis optimization
+1. Firebase credit system implementasyonu
+2. Onboarding & Paywall yenileme
+3. Photo opener kalitesini artırma
+4. Response parsing fix
 
-### 3. Medium Priority (Feature Enhancement)
+## Progress Tracking 📊
 
-- **Communication Tips Enhancement**
+- 🟢 Completed
+- 🟡 In Progress
+- 🔴 Not Started
+- ⚫ Blocked
 
-  - New categories ✅
-  - Premium content ✅
-  - Interaction system
+## Notes 📝
 
-- **Communication Coach Enhancement**
-  - AI persona system
-  - Structured chat modes
-  - Premium features ✅
-
-### 4. Low Priority (Expansion)
-
-- **Language Support**
-
-  - Turkish
-  - Spanish
-  - German
-
-- **Dark Mode**
-
-## Business Model 💰
-
-### Freemium Structure
-
-- **Free Tier**
-
-  - Limited photo analyses (3/day)
-  - Basic communication tips
-  - Basic Communication Coach access
-
-- **Premium+ Subscription**
-  - Unlimited photo analyses
-  - Message enhancement feature
-  - Advanced tips library
-  - Priority support
-
-## Technical Stack 🛠
-
-[Mevcut teknik stack bilgileri buraya eklenecek]
-
-## Getting Started 🚀
-
-[Kurulum ve başlangıç bilgileri buraya eklenecek]
-
-## Contributing 🤝
-
-[Katkı sağlama bilgileri buraya eklenecek]
-
-## License 📝
-
-[Lisans bilgileri buraya eklenecek]
+- A/B testing için yeni paywall tasarımları hazırlanacak
+- Kullanıcı davranışlarını analiz etmek için Firebase Analytics eklenecek
+- Performance monitoring için Sentry entegrasyonu düşünülüyor
