@@ -9,14 +9,42 @@ ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWO
 
 # Xcode Cloud için pre-install hook ekliyoruz
 pre_install do |installer|
-  # Pod cache'i temizle
-  Pod::UI.puts "Cleaning Pod cache..."
-  system("rm -rf ${HOME}/Library/Caches/CocoaPods; rm -rf Pods/; rm -rf ~/Library/Developer/Xcode/DerivedData; pod cache clean --all")
+  Pod::UI.puts "Running pre install hooks..."
   
-  # Podfile.lock'u sil
+  # Temizleme işlemleri
+  system("rm -rf ${HOME}/Library/Caches/CocoaPods; rm -rf Pods/; rm -rf ~/Library/Developer/Xcode/DerivedData; pod cache clean --all")
   system("rm -f Podfile.lock")
   
-  Pod::UI.puts "Pod cache cleaned successfully"
+  # xcconfig dosyalarının varlığını kontrol et ve oluştur
+  unless Dir.exist?('Pods')
+    Dir.mkdir('Pods')
+  end
+  
+  unless Dir.exist?('Pods/Target Support Files')
+    FileUtils.mkdir_p('Pods/Target Support Files/Pods-FlirtWise')
+  end
+  
+  # Debug ve Release xcconfig dosyalarını oluştur
+  ['Debug', 'Release'].each do |config|
+    xcconfig_path = "Pods/Target Support Files/Pods-FlirtWise/Pods-FlirtWise.#{config.downcase}.xcconfig"
+    unless File.exist?(xcconfig_path)
+      File.open(xcconfig_path, 'w') do |f|
+        f.puts "FRAMEWORK_SEARCH_PATHS = $(inherited)"
+        f.puts "GCC_PREPROCESSOR_DEFINITIONS = $(inherited)"
+        f.puts "HEADER_SEARCH_PATHS = $(inherited)"
+        f.puts "OTHER_CFLAGS = $(inherited)"
+        f.puts "OTHER_LDFLAGS = $(inherited)"
+        f.puts "OTHER_SWIFT_FLAGS = $(inherited)"
+        f.puts "PODS_BUILD_DIR = ${BUILD_DIR}"
+        f.puts "PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)"
+        f.puts "PODS_PODFILE_DIR_PATH = ${SRCROOT}/.."
+        f.puts "PODS_ROOT = ${SRCROOT}/Pods"
+        f.puts "USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES"
+      end
+    end
+  end
+  
+  Pod::UI.puts "Pre-install completed successfully"
 end
 
 platform :ios, podfile_properties['ios.deploymentTarget'] || '15.1'
