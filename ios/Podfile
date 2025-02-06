@@ -7,6 +7,18 @@ podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties
 ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '1' : '0'
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
+# Xcode Cloud için pre-install hook ekliyoruz
+pre_install do |installer|
+  # Pod cache'i temizle
+  Pod::UI.puts "Cleaning Pod cache..."
+  system("rm -rf ${HOME}/Library/Caches/CocoaPods; rm -rf Pods/; rm -rf ~/Library/Developer/Xcode/DerivedData; pod cache clean --all")
+  
+  # Podfile.lock'u sil
+  system("rm -f Podfile.lock")
+  
+  Pod::UI.puts "Pod cache cleaned successfully"
+end
+
 platform :ios, podfile_properties['ios.deploymentTarget'] || '15.1'
 install! 'cocoapods',
   :deterministic_uuids => false
@@ -45,6 +57,18 @@ target 'FlirtWise' do
   )
 
   post_install do |installer|
+    # Mevcut post_install işlemleri
+    Pod::UI.puts "Running post install hooks..."
+    
+    # Pod yapılandırmalarını kontrol et
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 15.1
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
+        end
+      end
+    end
+    
     react_native_post_install(
       installer,
       config[:reactNativePath],
