@@ -7,60 +7,6 @@ podfile_properties = JSON.parse(File.read(File.join(__dir__, 'Podfile.properties
 ENV['RCT_NEW_ARCH_ENABLED'] = podfile_properties['newArchEnabled'] == 'true' ? '1' : '0'
 ENV['EX_DEV_CLIENT_NETWORK_INSPECTOR'] = podfile_properties['EX_DEV_CLIENT_NETWORK_INSPECTOR']
 
-# Workspace ve scheme adlarını sabit olarak tanımlayalım
-WORKSPACE_NAME = 'FlirtWise.xcworkspace'
-SCHEME_NAME = 'FlirtWise'
-
-pre_install do |installer|
-  Pod::UI.puts "Running pre install hooks..."
-  
-  # Temizleme işlemleri
-  system("rm -rf ${HOME}/Library/Caches/CocoaPods; rm -rf Pods/; rm -rf ~/Library/Developer/Xcode/DerivedData; pod cache clean --all")
-  system("rm -f Podfile.lock")
-  
-  # Workspace kontrolü
-  unless File.exist?(WORKSPACE_NAME)
-    Pod::UI.puts "Creating workspace..."
-    workspace = Xcodeproj::Workspace.new
-    workspace << "FlirtWise.xcodeproj"
-    workspace.save_as(WORKSPACE_NAME)
-  end
-  
-  # Scheme kontrolü ve oluşturma
-  scheme_path = "FlirtWise.xcodeproj/xcshareddata/xcschemes/#{SCHEME_NAME}.xcscheme"
-  unless File.exist?(scheme_path)
-    Pod::UI.puts "Creating scheme..."
-    system("xcodebuild -workspace #{WORKSPACE_NAME} -scheme #{SCHEME_NAME} -list")
-  end
-  
-  # xcconfig dosyaları için dizin yapısı
-  FileUtils.mkdir_p('Pods/Target Support Files/Pods-FlirtWise')
-  
-  # Debug ve Release xcconfig dosyalarını oluştur
-  ['Debug', 'Release'].each do |config|
-    xcconfig_path = "Pods/Target Support Files/Pods-FlirtWise/Pods-FlirtWise.#{config.downcase}.xcconfig"
-    File.open(xcconfig_path, 'w') do |f|
-      f.puts <<~CONFIG
-        CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
-        FRAMEWORK_SEARCH_PATHS = $(inherited)
-        GCC_PREPROCESSOR_DEFINITIONS = $(inherited)
-        HEADER_SEARCH_PATHS = $(inherited)
-        OTHER_CFLAGS = $(inherited)
-        OTHER_LDFLAGS = $(inherited)
-        OTHER_SWIFT_FLAGS = $(inherited)
-        PODS_BUILD_DIR = ${BUILD_DIR}
-        PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
-        PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
-        PODS_ROOT = ${SRCROOT}/Pods
-        PODS_XCFRAMEWORKS_BUILD_DIR = $(PODS_CONFIGURATION_BUILD_DIR)/XCFrameworkIntermediates
-        USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES
-      CONFIG
-    end
-  end
-  
-  Pod::UI.puts "Pre-install completed successfully"
-end
-
 platform :ios, podfile_properties['ios.deploymentTarget'] || '15.1'
 install! 'cocoapods',
   :deterministic_uuids => false
@@ -99,32 +45,21 @@ target 'FlirtWise' do
   )
 
   post_install do |installer|
-    Pod::UI.puts "Running post install hooks..."
-    
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        # iOS deployment target ayarı
-        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 15.1
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false,
+      :ccache_enabled => podfile_properties['apple.ccacheEnabled'] == 'true',
+    )
+
+    # This is necessary for Xcode 14, because it signs resource bundles by default
+    # when building for devices.
+    installer.target_installation_results.pod_target_installation_results
+      .each do |pod_name, target_installation_result|
+      target_installation_result.resource_bundle_targets.each do |resource_bundle_target|
+        resource_bundle_target.build_configurations.each do |config|
+          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         end
-        
-        # Ek build ayarları
-        config.build_settings['ENABLE_BITCODE'] = 'NO'
-        config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
-        
-        # Eğer bu bir Swift pod ise
-        if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.framework"
-          config.build_settings['SWIFT_VERSION'] = '5.0'
-        end
-      end
-    end
-    
-    # React Native ve Expo ayarları
-    installer.aggregate_targets.each do |aggregate_target|
-      aggregate_target.xcconfigs.each do |config_name, config_file|
-        config_file.attributes['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
-        xcconfig_path = aggregate_target.xcconfig_path(config_name)
-        config_file.save_as(xcconfig_path)
       end
     end
   end
