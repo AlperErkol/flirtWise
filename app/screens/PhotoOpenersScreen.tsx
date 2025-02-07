@@ -47,8 +47,10 @@ export default function PhotoOpenersScreen() {
 
   const handleImageProcessing = async (imageUri: string) => {
     if (!isPremium) {
+      setLoading(true);
       const canAnalyzePhoto = await incrementPhotoCount();
       if (!canAnalyzePhoto) {
+        setLoading(false);
         Alert.alert(
           "Photo Analysis Limit Reached",
           "You've reached your free photo analysis limit. Upgrade to Premium+ for unlimited photo analyses!",
@@ -65,7 +67,6 @@ export default function PhotoOpenersScreen() {
             },
           ]
         );
-        setSelectedImage(null);
         return;
       }
     }
@@ -299,9 +300,9 @@ export const styles = StyleSheet.create({
   },
   imagePreview: {
     width: "100%",
-    height: "70%",
+    height: 400,
     borderRadius: 10,
-    resizeMode: "cover",
+    resizeMode: "contain",
     marginVertical: 10,
   },
   suggestionText: {
@@ -413,7 +414,7 @@ export const styles = StyleSheet.create({
   },
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 1000,

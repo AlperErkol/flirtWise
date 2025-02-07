@@ -221,7 +221,7 @@ export default function TipsScreen() {
                     >
                       <Ionicons name="star" size={16} color="#FFD700" />
                       <Text style={styles.upgradePillText}>
-                        +15% with Premium+ ✨
+                        Boost with Premium+ ✨
                       </Text>
                     </TouchableOpacity>
                   )}

@@ -1,4 +1,4 @@
-import { getChatEnhancerPrompt } from "@/prompts/chat/enhancer";
+import { getChatEnhancerPrompt, getDeadChatEnhancerPrompt } from "@/prompts/chat/enhancer";
 import ApiService, { OPENAI_MODEL_FAST } from "@/services/ApiService";
 import { ChatEnhancerExtraction } from "@/utils/openai/response";
 import { zodResponseFormat } from "openai/helpers/zod";
@@ -6,9 +6,13 @@ import { zodResponseFormat } from "openai/helpers/zod";
 export const enhanceChat = async (
   imageUrl: any,
   userInfo: any,
-  additionalInfo?: string
+  additionalInfo?: string,
+  isDeadConversation?: boolean
 ) => {
-  let prompt = getChatEnhancerPrompt(userInfo, additionalInfo);
+  console.log(isDeadConversation);
+  let prompt = isDeadConversation
+    ? getDeadChatEnhancerPrompt(userInfo, additionalInfo)
+    : getChatEnhancerPrompt(userInfo, additionalInfo);
   try {
     const response = await ApiService.post("/chat/completions", {
       model: OPENAI_MODEL_FAST,
@@ -38,6 +42,7 @@ export const enhanceChat = async (
 
     const aiText = response.choices[0].message.content;
     const hints = JSON.parse(aiText);
+    console.log(hints);
     return hints.enhancers;
   } catch (error: any) {
     console.error(

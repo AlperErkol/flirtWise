@@ -11,6 +11,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   TextInput,
+  Switch,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import useProfileStore from "../../store/profileStore";
@@ -33,6 +34,7 @@ export default function ChatEnhancerScreen() {
   const [loading, setLoading] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [additionalInfo, setAdditionalInfo] = useState("");
+  const [isDeadConversation, setIsDeadConversation] = useState(false);
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -41,20 +43,14 @@ export default function ChatEnhancerScreen() {
   }, [suggestions]);
 
   const pickImage = async () => {
-    const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
-      alert("Gallery access permission denied!");
-      return;
-    }
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      quality: 0.8,
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      allowsEditing: false,
     });
-    if (!pickerResult.canceled) {
-      const imageUri = pickerResult.assets[0].uri;
-      setSelectedImage(imageUri as any);
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri as any);
     }
   };
 
@@ -68,16 +64,18 @@ export default function ChatEnhancerScreen() {
       const newSuggestions = await enhanceChat(
         imageUrl,
         userProfile,
-        additionalInfo
+        additionalInfo,
+        isDeadConversation
       );
+      
+      setLoading(false);
       setSuggestions(newSuggestions);
-      bottomSheetRef.current?.expand();
+      
     } catch (error) {
+      setLoading(false);
       setSuggestions([
         "An error occurred while enhancing the chat. Please try again.",
       ] as any);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -126,6 +124,15 @@ export default function ChatEnhancerScreen() {
                   source={{ uri: selectedImage }}
                   style={styles.imagePreview}
                 />
+                <View style={styles.switchRow}>
+                  <Text style={styles.switchLabel}>Is this a dead conversation?</Text>
+                  <Switch
+                    value={isDeadConversation}
+                    onValueChange={setIsDeadConversation}
+                    trackColor={{ false: "#D1D5DB", true: "#4F46E5" }}
+                    thumbColor={isDeadConversation ? "#FFFFFF" : "#FFFFFF"}
+                  />
+                </View>
                 <TextInput
                   style={styles.input}
                   placeholder="Add more details about the person or context..."
@@ -261,9 +268,9 @@ const styles = StyleSheet.create({
   },
   imagePreview: {
     width: "100%",
-    height: "70%",
+    height: 400,
     borderRadius: 10,
-    resizeMode: "cover",
+    resizeMode: "contain",
     marginVertical: 10,
   },
   suggestionText: {
@@ -316,7 +323,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   loadingText: {
     color: "#fff",
@@ -400,5 +407,18 @@ const styles = StyleSheet.create({
     elevation: 3,
     minHeight: 100,
     textAlignVertical: "top",
+  },
+  switchRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 12,
+    paddingHorizontal: 4,
+    marginBottom: 4,
+  },
+  switchLabel: {
+    fontSize: 16,
+    fontFamily: "Inter_500Medium",
+    color: "#374151",
   },
 });

@@ -42,7 +42,7 @@ export default function HomeScreen({ navigation }: any) {
           style={styles.promoCard}
         >
           <View style={styles.promoContent}>
-            <View>
+            <View style={styles.promoTextContainer}>
               <Text style={styles.promoTitle}>Unlock Premium+</Text>
               <Text style={styles.promoDesc}>
                 Get unlimited access to all premium features!
@@ -299,6 +299,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  promoTextContainer: {
+    flex: 1,
+    marginRight: 16,
+    maxWidth: "65%",
+  },
   promoTitle: {
     fontSize: 18,
     fontWeight: "bold",
@@ -309,13 +314,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#FFFFFF",
     opacity: 0.9,
-    maxWidth: "80%",
+    lineHeight: 18,
   },
   promoButton: {
     backgroundColor: "#FFFFFF",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 20,
+    width: 110,
+    alignItems: "center",
+    justifyContent: "center",
   },
   promoButtonText: {
     color: "#4F46E5",

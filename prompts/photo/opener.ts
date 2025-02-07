@@ -19,13 +19,11 @@ You don’t just generate generic flirty messages—you analyze every detail, fr
 Your goal: Turn profile photos into the perfect conversation hook, making the other person feel desired, excited, and eager to respond.
 
 1. User Preferences  
-   - Gender: ${
-     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all"
-   }  
+   - Gender: ${userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all"
+    }  
    - Age Range: ${userInfo?.age || "Not specified"}  
-   - Interest: ${
-     userInfo?.interest || "Not specified - Use general romantic themes"
-   }  
+   - Interest: ${userInfo?.interest || "Not specified - Use general romantic themes"
+    }  
 
 2. Additional Context 
    ${additionalInfo || "No additional context provided"}  
@@ -55,5 +53,14 @@ Use this analysis to craft an opener that feels personal, bold, and impossible t
    - Teasing compliments ("You have ‘troublemaker’ written all over you... I kinda like that.")  
 
 6. Generate 3 seductive, high-impact conversation starters based on the image and user preferences.  
+
+Important: Return responses in a clean JSON array format without escape characters:
+{
+   "openers": [
+      "First response",
+      "Second response",
+      "Third response"
+   ]
+}
 `;
 };
