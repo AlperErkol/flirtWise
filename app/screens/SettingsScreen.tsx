@@ -1,4 +1,4 @@
-import { PRIVACY_URL, TERMS_URL } from "@/constants/settings/urls";
+import { PRIVACY_URL, TERMS_URL, APP_STORE_URL } from "@/constants/settings/urls";
 import React from "react";
 import {
   Text,
@@ -14,8 +14,8 @@ export default function SettingsScreen({ navigation }: any) {
   const handleShareApp = async () => {
     try {
       const result = await Share.share({
-        message:
-          "Hey! Check out this amazing app, FlirtWise! It's fun and helpful for sparking great conversations. Download it now: [APP_LINK]",
+        message: `Hey! Check out this amazing app, FlirtWise! It's fun and helpful for sparking great conversations. Download it now: ${APP_STORE_URL}`,
+        url: APP_STORE_URL
       });
 
       if (result.action === Share.sharedAction) {
