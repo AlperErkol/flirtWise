@@ -39,14 +39,14 @@ import Step4Screen from "./screens/Step4Screen";
 import CommunicationCoachSelectionScreen from "./screens/CommunicationCoachSelectionScreen";
 import CommunicationCoachScreen from "./screens/CommunicationCoachScreen";
 import RemoteConfigService from "@/services/RemoteConfigService";
+import Paywall from "@/components/Paywall";
+import RevenueCatService from "@/services/payment/RevenueCatService";
 
 SplashScreen.preventAutoHideAsync();
-
 const Stack = createNativeStackNavigator();
 
 export default function RootLayout() {
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [loaded] = useFonts({
     Inter_400Regular,
@@ -68,27 +68,11 @@ export default function RootLayout() {
     setModalVisible(!isOnline);
   }, [isOnline]);
 
-  useEffect(() => {
-    const initPurchases = async () => {
-      try {
-        await Purchases.configure({
-          apiKey: "appl_TvvyCFvFSroRvVfDHICvelkQChX",
-        });
-        console.log("RevenueCat integration successful");
-      } catch (error) {
-        console.error("RevenueCat integration error:", error);
-      }
-    };
-
-    initPurchases();
-  }, []);
-
   const checkOnboardingStatus = async () => {
     const onboardingCompleted = await AsyncStorage.getItem(
       "onboardingCompleted"
     );
     setIsOnboardingCompleted(onboardingCompleted !== null);
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -96,20 +80,16 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
-    const initializeServices = async () => {
+    const initServices = async () => {
       try {
+        await RevenueCatService.initialize();
         await RemoteConfigService.initialize();
-        // Test API key
-        const apiKey = RemoteConfigService.getOpenAIApiKey();
-        if (!apiKey) {
-          console.warn("OpenAI API key not found!");
-        }
       } catch (error) {
-        console.error('RemoteConfig initialization failed:', error);
+        console.error("Services initialization failed:", error);
       }
     };
 
-    initializeServices();
+    initServices();
   }, []);
 
   if (!loaded) {
@@ -157,6 +137,11 @@ export default function RootLayout() {
             title: "Language",
             headerTitleAlign: "center",
           }}
+        />
+        <Stack.Screen
+          options={{ headerShown: false, presentation: "fullScreenModal" }}
+          name="Paywall"
+          component={Paywall as React.ComponentType<any>}
         />
         <Stack.Screen name="PreferencesScreen" component={PreferencesScreen} />
         <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} />
@@ -210,7 +195,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     alignItems: "center",
     width: "80%",
-    maxWidth: 320, // Modal genişliği azaltıldı
+    maxWidth: 320,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

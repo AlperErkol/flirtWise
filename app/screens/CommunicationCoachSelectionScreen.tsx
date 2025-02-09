@@ -3,24 +3,19 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Theme from "@/constants/Theme";
 import { usePaywall } from "@/hooks/usePaywall";
-import { usePremiumStore } from "@/store/usePremiumStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import PremiumBadge from "@/components/PremiumBadge";
 import personas from "@/constants/tip/persona";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
 
 export default function CommunicationCoachSelectionScreen({ navigation }: any) {
   const { showPaywall } = usePaywall();
-  const { isPremium } = usePremiumStore();
+  const { isProMember } = useRevenueCat();
 
   const handlePersonaSelect = async (persona: any) => {
-    if (persona.isPremium && !isPremium) {
-      const purchased = await showPaywall();
-      if (purchased) {
-        navigation.navigate("CommunicationCoachScreen", {
-          persona: persona.id,
-        });
-      }
+    if (persona.isPremium && !isProMember) {
+      await showPaywall();
       return;
     }
     navigation.navigate("CommunicationCoachScreen", { persona: persona.id });
@@ -53,7 +48,7 @@ export default function CommunicationCoachSelectionScreen({ navigation }: any) {
                   {persona.description}
                 </Text>
               </View>
-              {persona.isPremium && !isPremium && <PremiumBadge />}
+              {persona.isPremium && !isProMember && <PremiumBadge />}
             </View>
           </LinearGradient>
         </TouchableOpacity>

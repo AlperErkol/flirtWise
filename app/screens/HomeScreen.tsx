@@ -5,31 +5,28 @@ import { Ionicons } from "@expo/vector-icons";
 
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-import { usePremiumStore } from "@/store/usePremiumStore";
 import PremiumBadge from "../../components/PremiumBadge";
 import BottomSheet from "@gorhom/bottom-sheet";
 import SettingsBottomSheet from "@/components/SettingsBottomSheet";
 import { usePaywall } from "@/hooks/usePaywall";
 import { mainFeatures, secondaryFeatures } from "@/constants/home/features";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
 
 export default function HomeScreen({ navigation }: any) {
   const { showPaywall } = usePaywall();
-  const { isPremium } = usePremiumStore();
+  const { isProMember } = useRevenueCat();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const handleFeaturePress = async (feature: any) => {
-    if (feature.isPremium && !isPremium) {
-      const purchased = await showPaywall();
-      if (purchased) {
-        navigation.navigate(`${feature.screen}`);
-      }
+    if (feature.isPremium && !isProMember) {
+      showPaywall();
       return;
     }
     navigation.navigate(`${feature.screen}`);
   };
 
   const renderPromoCard = () => {
-    if (isPremium) {
+    if (isProMember) {
       return <DailyStatsCard />;
     }
 
@@ -71,7 +68,9 @@ export default function HomeScreen({ navigation }: any) {
           <View style={styles.textContainer}>
             <View style={styles.titleRow}>
               <Text style={styles.cardTitle}>{item.title}</Text>
-              {item.isPremium && !isPremium && <PremiumBadge bgWhite={true} />}
+              {item.isPremium && !isProMember && (
+                <PremiumBadge bgWhite={true} />
+              )}
             </View>
             <Text style={styles.cardDesc}>{item.description}</Text>
           </View>

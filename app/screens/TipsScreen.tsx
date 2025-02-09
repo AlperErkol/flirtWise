@@ -11,7 +11,6 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-import { usePremiumStore } from "@/store/usePremiumStore";
 import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -23,6 +22,7 @@ import Theme from "@/constants/Theme";
 import useProfileStore from "@/store/profileStore";
 import { FREE_CATEGORIES, PREMIUM_CATEGORIES } from "@/constants/tip/category";
 import { getCommunicationTip } from "@/services/tips";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
 
 interface Category {
   id: string;
@@ -49,10 +49,10 @@ export default function TipsScreen() {
   const [selectedSubCategory, setSelectedSubCategory] =
     useState<SubCategory | null>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { isPremium } = usePremiumStore();
   const [isLoading, setIsLoading] = useState(false);
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const { showPaywall } = usePaywall();
+  const { isProMember } = useRevenueCat();
 
   const snapPoints = useMemo(() => {
     if (selectedSubCategory) {
@@ -74,9 +74,9 @@ export default function TipsScreen() {
     { id: 3, title: "Premium+" },
   ];
 
-  const handleCategoryPress = (category: Category) => {
-    if (category.isPremium && !isPremium) {
-      showPaywall();
+  const handleCategoryPress = async (category: Category) => {
+    if (category.isPremium && !isProMember) {
+      await showPaywall();
       return;
     }
     setSelectedCategory(category);
@@ -91,7 +91,7 @@ export default function TipsScreen() {
         selectedCategory?.title || "",
         subCategory.title,
         userProfile,
-        isPremium
+        isProMember
       );
 
       const formattedTips = [
@@ -102,7 +102,7 @@ export default function TipsScreen() {
         ...tip.doAndDonts.dont.map((item: string) => `❌ ${item}`),
       ];
 
-      if (isPremium && tip.premiumContent) {
+      if (isProMember && tip.premiumContent) {
         formattedTips.push(
           tip.premiumContent.situationalVariations.casual,
           tip.premiumContent.situationalVariations.romantic,
@@ -156,7 +156,7 @@ export default function TipsScreen() {
       >
         <Text style={styles.categoryIcon}>{category.icon}</Text>
         <Text style={styles.categoryTitle}>{category.title}</Text>
-        {isPremiumCategory && !isPremium && (
+        {isPremiumCategory && !isProMember && (
           <View style={styles.premiumBadgeContainer}>
             <PremiumBadge />
           </View>
@@ -214,7 +214,7 @@ export default function TipsScreen() {
                       {selectedSubCategory.successRate}
                     </Text>
                   </View>
-                  {!isPremium && (
+                  {!isProMember && (
                     <TouchableOpacity
                       style={styles.upgradePill}
                       onPress={showPaywall}
@@ -319,11 +319,11 @@ export default function TipsScreen() {
               )}
 
               {activeTab === 3 &&
-                isPremium &&
+                isProMember &&
                 selectedSubCategory?.tips &&
                 renderPremiumContent()}
 
-              {activeTab === 3 && !isPremium && (
+              {activeTab === 3 && !isProMember && (
                 <View style={styles.premiumUpsellContainer}>
                   <Text style={styles.premiumUpsellTitle}>
                     Unlock Premium Features 🌟
@@ -399,7 +399,7 @@ export default function TipsScreen() {
   };
 
   const renderPremiumContent = () => {
-    if (!isPremium || !selectedSubCategory?.tips) return null;
+    if (!isProMember || !selectedSubCategory?.tips) return null;
 
     const premiumTips = selectedSubCategory.tips.slice(-5);
     return (

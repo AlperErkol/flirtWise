@@ -1,9 +1,14 @@
 import { Alert } from "react-native";
-import { router } from "expo-router";
-import { usePremiumStore } from "@/store/usePremiumStore";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+
+type RootStackParamList = {
+  Paywall: undefined;
+};
 
 export const usePremiumCheck = () => {
-  const { isPremium } = usePremiumStore();
+  const { isProMember } = useRevenueCat();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const showPremiumAlert = () => {
     Alert.alert(
@@ -13,11 +18,11 @@ export const usePremiumCheck = () => {
         { text: "Cancel", style: "cancel" },
         {
           text: "Upgrade to Premium+",
-          onPress: () => router.push("/screens/SettingsScreen"),
+          onPress: () => navigation.navigate("Paywall"),
         },
       ]
     );
   };
 
-  return { isPremium, showPremiumAlert };
+  return { isProMember, showPremiumAlert };
 };
