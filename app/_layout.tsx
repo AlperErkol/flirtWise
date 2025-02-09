@@ -17,7 +17,6 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
-import Purchases from "react-native-purchases";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Step1Screen from "./screens/Step1Screen";
@@ -41,6 +40,9 @@ import CommunicationCoachScreen from "./screens/CommunicationCoachScreen";
 import RemoteConfigService from "@/services/RemoteConfigService";
 import Paywall from "@/components/Paywall";
 import RevenueCatService from "@/services/payment/RevenueCatService";
+import GenderPreferenceScreen from "./screens/preferences/GenderPreferenceScreen";
+import MatchPreferenceScreen from "./screens/preferences/MatchPreferenceScreen";
+import AgePreferenceScreen from "./screens/preferences/AgePreferenceScreen";
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -99,7 +101,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={isOnboardingCompleted ? "HomeScreen" : "Step1"}
+        initialRouteName={"Step1"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Step1" component={Step1Screen} />
@@ -148,6 +150,18 @@ export default function RootLayout() {
         <Stack.Screen
           name="CommunicationCoachSelectionScreen"
           component={CommunicationCoachSelectionScreen}
+        />
+        <Stack.Screen
+          name="GenderPreferenceScreen"
+          component={GenderPreferenceScreen}
+        />
+        <Stack.Screen
+          name="AgePreferenceScreen"
+          component={AgePreferenceScreen}
+        />
+        <Stack.Screen
+          name="MatchPreferenceScreen"
+          component={MatchPreferenceScreen}
         />
       </Stack.Navigator>
       <Modal
