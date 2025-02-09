@@ -10,17 +10,18 @@ const genderOptions = [
   {
     id: "male",
     label: "Male",
-    emoji: "👨",
+    icon: "man-outline",
   },
   {
     id: "female",
     label: "Female",
-    emoji: "👩",
+    icon: "woman-outline",
   },
+
   {
     id: "other",
     label: "Other",
-    emoji: "👤",
+    icon: "person-outline",
   },
 ];
 
@@ -70,7 +71,12 @@ export default function GenderPreferenceScreen({ navigation }: any) {
             onPress={() => handleSave(option.id)}
           >
             <View style={styles.leftContent}>
-              <Text style={styles.emoji}>{option.emoji}</Text>
+              <Ionicons
+                name={option.icon as any}
+                size={20}
+                color="#4F46E5"
+                style={{ marginRight: 15 }}
+              />
               <Text style={styles.menuText}>{option.label}</Text>
             </View>
             {selectedGender === option.id && (

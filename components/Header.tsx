@@ -123,10 +123,12 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   backButtonText: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 17,
+    fontFamily: "Inter_600SemiBold",
     color: "#FF6347",
+    letterSpacing: -0.5,
   },
+
   centerLogoContainer: {
     flex: 1,
     justifyContent: "center",

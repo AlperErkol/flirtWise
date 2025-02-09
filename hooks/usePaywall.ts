@@ -20,10 +20,10 @@ export const usePaywall = () => {
   };
 
   const showPaywall = async () => {
-    if (isProMember) {
-      showAlreadyPremiumAlert();
-      return;
-    }
+    // if (isProMember) {
+    //   showAlreadyPremiumAlert();
+    //   return;
+    // }
     navigation.navigate("Paywall");
   };
 

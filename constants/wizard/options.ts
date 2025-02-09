@@ -1,7 +1,7 @@
 const GENDER_OPTIONS = [
-  { id: "male", label: "Male", emoji: "👨" },
-  { id: "female", label: "Female", emoji: "👩" },
-  { id: "other", label: "Other", emoji: "🫂" },
+  { id: "male", label: "Male", icon: "man-outline" },
+  { id: "female", label: "Female", icon: "woman-outline" },
+  { id: "other", label: "Other", icon: "person-outline" },
 ];
 
 const AGE_OPTIONS = [
@@ -12,9 +12,9 @@ const AGE_OPTIONS = [
 ];
 
 const INTEREST_OPTIONS = [
-  { id: "men", label: "Men", emoji: "👨" },
-  { id: "women", label: "Women", emoji: "👩" },
-  { id: "both", label: "Both", emoji: "👥" },
+  { id: "men", label: "Men", icon: "man-outline" },
+  { id: "women", label: "Women", icon: "woman-outline" },
+  { id: "both", label: "Both", icon: "person-outline" },
 ];
 
 const COMMUNICATION_STYLES = [

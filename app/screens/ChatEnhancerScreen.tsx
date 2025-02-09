@@ -185,7 +185,8 @@ export default function ChatEnhancerScreen() {
                       style={{
                         color: "#FF6347",
                         fontSize: 16,
-                        fontWeight: "600",
+                        fontFamily: "Inter_600SemiBold",
+                        letterSpacing: -0.5,
                       }}
                     >
                       Upload a Screenshot
@@ -266,11 +267,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   instructionText: {
-    fontSize: 20,
+    fontSize: 24,
     fontFamily: "Inter_700Bold",
-    color: "#1F2937",
+    color: "#000",
     textAlign: "center",
-    lineHeight: 28,
+    letterSpacing: -0.8,
   },
   heroContainer: {
     flex: 1,
@@ -294,8 +295,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
+
   generateButton: {
     backgroundColor: "#007aff",
     padding: 15,
@@ -304,12 +307,6 @@ const styles = StyleSheet.create({
     bottom: 20,
     alignSelf: "center",
     width: "90%",
-  },
-  generateText: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: "bold",
   },
   imagePreview: {
     width: "100%",
@@ -342,8 +339,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
+
   loadingOverlay: {
     position: "absolute",
     top: 0,
@@ -355,10 +354,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   loadingText: {
+    marginTop: 12,
+    fontSize: 16,
     color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 10,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
   bottomSheetBackground: {
     backgroundColor: "#fff",
@@ -449,8 +449,10 @@ const styles = StyleSheet.create({
   switchLabel: {
     fontSize: 16,
     fontFamily: "Inter_500Medium",
-    color: "#374151",
+    color: "#000",
+    letterSpacing: -0.5,
   },
+
   addInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -478,9 +480,11 @@ const styles = StyleSheet.create({
   additionalButtonText: {
     color: "#FFF",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
     padding: 4,
   },
+
   switchLabelContainer: {
     flexDirection: "row",
     alignItems: "center",

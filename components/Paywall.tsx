@@ -206,17 +206,18 @@ export default function Paywall({ navigation }: any) {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.title}>
-        Level Up with Premium+ and More Matches, Better Dates
+      <Text style={styles.title}>Upgrade now and never get ignored again!</Text>
+      <Text style={styles.description}>
+        🔥89% of users who upgraded reported more replies in 24 hours.
       </Text>
 
       <View style={styles.featuresContainer}>
         <View style={styles.featureRow}>
           <Ionicons
             style={{ marginRight: 16 }}
-            name="checkmark-circle"
+            name="flash-sharp"
             size={28}
-            color="#000"
+            color="#FF6347"
           />
           <View style={styles.featureTextContainer}>
             <Text style={styles.featureTitle}>Elite Dating Coaches</Text>
@@ -229,10 +230,11 @@ export default function Paywall({ navigation }: any) {
         <View style={styles.featureRow}>
           <Ionicons
             style={{ marginRight: 16 }}
-            name="checkmark-circle"
+            name="flash-sharp"
             size={28}
-            color="#000"
+            color="#FF6347"
           />
+
           <View style={styles.featureTextContainer}>
             <Text style={styles.featureTitle}>AI-Powered Insights</Text>
             <Text style={styles.featureDescription}>
@@ -243,10 +245,11 @@ export default function Paywall({ navigation }: any) {
         <View style={styles.featureRow}>
           <Ionicons
             style={{ marginRight: 16 }}
-            name="checkmark-circle"
+            name="flash-sharp"
             size={28}
-            color="#000"
+            color="#FF6347"
           />
+
           <View style={styles.featureTextContainer}>
             <Text style={styles.featureTitle}>Flirting Mastery Tips</Text>
             <Text style={styles.featureDescription}>
@@ -271,7 +274,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 8,
   },
   superBadge: {
     color: "#FF6347",
@@ -283,15 +286,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 23,
     fontWeight: "bold",
+    marginBottom: 12,
+    letterSpacing: -0.5,
+    fontFamily: "Inter_700Bold",
+  },
+  description: {
+    fontSize: 16,
+    color: "#555",
     marginBottom: 24,
+    fontFamily: "Inter_400Regular",
+    letterSpacing: -0.5,
   },
   featuresContainer: {},
+
   featureRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 20,
   },
   featureEmoji: {
     fontSize: 24,
@@ -304,16 +317,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginBottom: 4,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
+
   featureDescription: {
     fontSize: 14,
     color: "#666",
+    fontFamily: "Inter_400Regular",
+    letterSpacing: -0.5,
   },
   plansContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 16,
   },
+
   planButton: {
     flex: 1,
     padding: 16,
@@ -332,27 +351,37 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 4,
     position: "absolute",
-    top: -13,
-    left: 50,
+    top: -15,
+    left: 42,
     backgroundColor: "#FF6347",
     padding: 6,
     borderRadius: 12,
+    letterSpacing: -0.5,
   },
   planTitle: {
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 4,
+    letterSpacing: -0.5,
+    fontFamily: "Inter_600SemiBold",
   },
+
   planPrice: {
     fontSize: 18,
-    color: "#333",
+    color: "#000",
     fontWeight: "500",
+    letterSpacing: -0.5,
+    fontFamily: "Inter_600SemiBold",
   },
+
   planOriginalPrice: {
     fontSize: 12,
     color: "#999",
     textAlign: "center",
+    letterSpacing: -0.5,
+    fontFamily: "Inter_400Regular",
   },
+
   subscribeButton: {
     backgroundColor: "#000",
     padding: 16,
@@ -364,6 +393,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
+    letterSpacing: -0.5,
   },
   footer: {
     flexDirection: "row",
@@ -401,6 +431,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#000000",
     textAlign: "center",
+    letterSpacing: -0.5,
   },
   billingText: {
     fontSize: 12,

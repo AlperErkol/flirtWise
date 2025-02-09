@@ -1,4 +1,8 @@
-import { PRIVACY_URL, TERMS_URL, APP_STORE_URL } from "@/constants/settings/urls";
+import {
+  PRIVACY_URL,
+  TERMS_URL,
+  APP_STORE_URL,
+} from "@/constants/settings/urls";
 import React from "react";
 import {
   Text,
@@ -15,7 +19,7 @@ export default function SettingsScreen({ navigation }: any) {
     try {
       const result = await Share.share({
         message: `Hey! Check out this amazing app, FlirtWise! It's fun and helpful for sparking great conversations. Download it now: ${APP_STORE_URL}`,
-        url: APP_STORE_URL
+        url: APP_STORE_URL,
       });
 
       if (result.action === Share.sharedAction) {
@@ -124,10 +128,10 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 15,
-    fontWeight: "500",
     color: "#000",
     marginLeft: 15,
     fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
   footer: {
     alignItems: "center",

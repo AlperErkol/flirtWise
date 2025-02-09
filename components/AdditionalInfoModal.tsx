@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     padding: 10,
     minHeight: 100,
     textAlignVertical: "top",
+    fontFamily: "Inter_400Regular",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   submitButton: {
-    backgroundColor: "#FF6347",
+    backgroundColor: "#000",
     padding: 12,
     borderRadius: 8,
     flex: 1,

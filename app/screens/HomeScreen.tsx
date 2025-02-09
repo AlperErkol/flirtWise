@@ -228,12 +228,14 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 18,
-    fontFamily: "Inter_700Bold",
+    fontFamily: "Inter_600SemiBold",
     color: "#000",
+    letterSpacing: -0.5,
   },
   cardDesc: {
     fontSize: 14,
     color: "#666",
+    letterSpacing: -0.5,
   },
   secondaryFeatureContainer: {
     flexDirection: "row",
@@ -269,19 +271,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   secondaryCardTitle: {
-    fontSize: 16,
-    fontFamily: "Inter_700Bold",
+    fontSize: 18,
+    fontFamily: "Inter_600SemiBold",
     color: "#FFF",
     marginBottom: 4,
+    letterSpacing: -0.5,
   },
   secondaryCardDesc: {
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: "Inter_400Regular",
-    color: "rgba(255, 255, 255, 0.9)",
+    color: "#FFF",
+    letterSpacing: -0.2,
   },
   contentContainer: {
     flex: 1,
   },
+
   promoCard: {
     marginVertical: 10,
     borderRadius: 16,
@@ -342,11 +347,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontFamily: "Inter_600SemiBold",
-    color: "#333",
+    fontSize: 22,
+    fontFamily: "Inter_700Bold",
+    color: "#000",
     marginBottom: 16,
     marginTop: 24,
+    letterSpacing: -0.5,
   },
   statsCard: {
     marginVertical: 10,
@@ -413,12 +419,14 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     color: "#FFFFFF",
     marginBottom: 4,
+    letterSpacing: -0.5,
   },
   statLabel: {
     fontSize: 12,
     fontFamily: "Inter_500Medium",
     color: "rgba(255, 255, 255, 0.8)",
     textAlign: "center",
+    letterSpacing: -0.5,
   },
   divider: {
     width: 1,

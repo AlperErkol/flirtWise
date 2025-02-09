@@ -44,6 +44,12 @@ import GenderPreferenceScreen from "./screens/preferences/GenderPreferenceScreen
 import MatchPreferenceScreen from "./screens/preferences/MatchPreferenceScreen";
 import AgePreferenceScreen from "./screens/preferences/AgePreferenceScreen";
 
+import WelcomeScreen from "./screens/onboarding/WelcomeScreen";
+import HowItWorksScreen from "./screens/onboarding/HowItWorksScreen";
+import BenefitsScreen from "./screens/onboarding/BenefitsScreen";
+import FinalScreen from "./screens/onboarding/FinalScreen";
+import AIWingmanScreen from "./screens/onboarding/AIWingmanScreen";
+
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
 
@@ -101,13 +107,14 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={"Step1"}
+        initialRouteName={"Welcome"}
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="Step1" component={Step1Screen} />
-        <Stack.Screen name="Step2" component={Step2Screen} />
-        <Stack.Screen name="Step3" component={Step3Screen} />
-        <Stack.Screen name="Step4" component={Step4Screen} />
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="HowItWorksScreen" component={HowItWorksScreen} />
+        <Stack.Screen name="BenefitsScreen" component={BenefitsScreen} />
+        <Stack.Screen name="AIWingmanScreen" component={AIWingmanScreen} />
+        <Stack.Screen name="FinalScreen" component={FinalScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen
           name="SettingsScreen"

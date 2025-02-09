@@ -26,7 +26,7 @@ export default function CommunicationCoachSelectionScreen({ navigation }: any) {
       <Header logo showBackButton />
       <Text style={styles.title}>Choose Your Coach</Text>
       <Text style={styles.subtitle}>
-        Select the coaching style that best fits your needs
+        Select the coaching style that best fits your needs.
       </Text>
 
       {personas.map((persona) => (
@@ -59,18 +59,21 @@ export default function CommunicationCoachSelectionScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 24,
-    fontFamily: "Inter_700Bold",
-    color: Theme.colors.text,
     marginBottom: 8,
     marginTop: 16,
+    fontSize: 22,
+    fontFamily: "Inter_700Bold",
+    color: "#000",
+    letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: 16,
     fontFamily: "Inter_400Regular",
     color: Theme.colors.textLight,
     marginBottom: 24,
+    letterSpacing: -0.5,
   },
+
   personaCard: {
     height: 120,
     borderRadius: 16,
@@ -101,10 +104,13 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     color: "#FFF",
     marginBottom: 4,
+    letterSpacing: -0.5,
   },
+
   personaDescription: {
     fontSize: 14,
     fontFamily: "Inter_400Regular",
     color: "rgba(255, 255, 255, 0.9)",
+    letterSpacing: -0.5,
   },
 });

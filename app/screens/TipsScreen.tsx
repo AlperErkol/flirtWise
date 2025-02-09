@@ -484,11 +484,13 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-    color: "#333",
     marginBottom: 12,
+    fontSize: 22,
+    fontFamily: "Inter_700Bold",
+    color: "#000",
+    letterSpacing: -0.5,
   },
+
   categoryGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -514,12 +516,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Inter_600SemiBold",
     textAlign: "center",
+    letterSpacing: -0.5,
   },
   bottomSheetBackground: {
     backgroundColor: "#FFF",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
+
   bottomSheetIndicator: {
     backgroundColor: "#FF6347",
     width: 40,
@@ -542,6 +546,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Inter_700Bold",
     color: "#333",
+    letterSpacing: -0.5,
   },
   closeButton: {
     padding: 4,

@@ -10,7 +10,7 @@ const preferenceItems = [
     id: "1",
     title: "Gender",
     screen: "GenderPreferenceScreen",
-    emoji: "👤",
+    icon: "man-outline",
     key: "gender",
     getDisplayValue: (value: string) => {
       const options = {
@@ -25,7 +25,7 @@ const preferenceItems = [
     id: "2",
     title: "Age Range",
     screen: "AgePreferenceScreen",
-    emoji: "📅",
+    icon: "calendar-outline",
     key: "age",
     getDisplayValue: (value: string) => value || "Not set",
   },
@@ -33,7 +33,7 @@ const preferenceItems = [
     id: "3",
     title: "Perfect Match",
     screen: "MatchPreferenceScreen",
-    emoji: "💝",
+    icon: "heart-outline",
     key: "interest",
     getDisplayValue: (value: string) => {
       const options = {
@@ -77,7 +77,7 @@ export default function PreferencesScreen({ navigation }: any) {
       <Header logo={true} showBackButton={true} />
       <View style={styles.headerContainer}>
         <View style={styles.titleContainer}>
-          <Ionicons name="sparkles-outline" size={20} color="#4F46E5" />
+          <Ionicons name="sparkles-outline" size={24} color="#4F46E5" />
           <Text style={styles.headerTitle}>AI Personalization</Text>
         </View>
         <Text style={styles.headerDescription}>
@@ -94,7 +94,12 @@ export default function PreferencesScreen({ navigation }: any) {
             onPress={() => navigation.navigate(item.screen)}
           >
             <View style={styles.leftContent}>
-              <Text style={styles.emoji}>{item.emoji}</Text>
+              <Ionicons
+                name={item.icon as any}
+                size={20}
+                color="#4F46E5"
+                style={{ marginRight: 15 }}
+              />
               <Text style={styles.menuText}>{item.title}</Text>
             </View>
             <View style={styles.rightContent}>
@@ -158,16 +163,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: "#111827",
-    fontFamily: "Inter_600SemiBold",
+    fontSize: 22,
+    fontFamily: "Inter_700Bold",
+    color: "#000",
+    letterSpacing: -0.5,
   },
   headerDescription: {
-    fontSize: 15,
-    lineHeight: 19,
-    color: "#6B7280",
+    fontSize: 16,
+    color: "#000",
     marginTop: 8,
-    fontFamily: "Inter_400Regular",
+    fontFamily: "Inter_500Medium",
+    letterSpacing: -0.5,
   },
 });

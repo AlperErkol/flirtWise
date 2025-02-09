@@ -53,9 +53,15 @@ export default function MatchPreferenceScreen({ navigation }: any) {
             onPress={() => handleSave(option.id)}
           >
             <View style={styles.leftContent}>
-              <Text style={styles.emoji}>{option.emoji}</Text>
+              <Ionicons
+                name={option.icon as any}
+                size={20}
+                color="#4F46E5"
+                style={{ marginRight: 15 }}
+              />
               <Text style={styles.menuText}>{option.label}</Text>
             </View>
+
             {selectedInterest === option.id && (
               <Ionicons name="checkmark" size={24} color="#4F46E5" />
             )}

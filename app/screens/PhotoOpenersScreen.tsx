@@ -214,7 +214,8 @@ export default function PhotoOpenersScreen() {
                       style={{
                         color: "#FF6347",
                         fontSize: 16,
-                        fontWeight: "600",
+                        fontFamily: "Inter_600SemiBold",
+                        letterSpacing: -0.5,
                       }}
                     >
                       Upload a New Image
@@ -303,11 +304,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   instructionText: {
-    fontSize: 20,
+    fontSize: 24,
     fontFamily: "Inter_700Bold",
-    color: "#1F2937",
+    color: "#000",
     textAlign: "center",
-    lineHeight: 28,
+    letterSpacing: -0.8,
   },
   heroContainer: {
     flex: 1,
@@ -340,7 +341,8 @@ export const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
     fontSize: 16,
-    fontWeight: "bold",
+    letterSpacing: -0.5,
+    fontFamily: "Inter_600SemiBold",
   },
   imagePreview: {
     width: "100%",
@@ -350,14 +352,17 @@ export const styles = StyleSheet.create({
     marginVertical: 10,
   },
   suggestionText: {
-    color: "#333",
+    color: "#000",
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 12,
+    fontFamily: "Inter_500Medium",
+    letterSpacing: -0.5,
   },
   indicator: {
     marginTop: 10,
   },
+
   input: {
     borderRadius: 12,
     padding: 16,
@@ -392,8 +397,10 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
+
   bottomSheetBackground: {
     backgroundColor: "#fff",
     borderTopLeftRadius: 24,
@@ -420,9 +427,11 @@ export const styles = StyleSheet.create({
   },
   bottomSheetTitle: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#333",
+    fontFamily: "Inter_700Bold",
+    color: "#000",
+    letterSpacing: -0.5,
   },
+
   closeButton: {
     padding: 4,
   },
@@ -452,9 +461,11 @@ export const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: "#FFF",
-    fontWeight: "600",
+    color: "#fff",
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
+
   suggestionActions: {
     borderTopWidth: 1,
     borderTopColor: "#e5e5e5",
