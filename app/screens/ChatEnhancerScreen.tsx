@@ -10,7 +10,6 @@ import {
   TouchableWithoutFeedback,
   Platform,
   KeyboardAvoidingView,
-  TextInput,
   Switch,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -26,6 +25,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import { uploadImageToCloudinary } from "@/services/cloudinary";
 import { enhanceChat } from "@/services/chat/enhancer";
+import AdditionalInfoModal from "@/components/AdditionalInfoModal";
 
 export default function ChatEnhancerScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
@@ -35,6 +35,8 @@ export default function ChatEnhancerScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [additionalInfo, setAdditionalInfo] = useState("");
   const [isDeadConversation, setIsDeadConversation] = useState(false);
+  const [hasAdditionalInfo, setHasAdditionalInfo] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -67,10 +69,9 @@ export default function ChatEnhancerScreen() {
         additionalInfo,
         isDeadConversation
       );
-      
+
       setLoading(false);
       setSuggestions(newSuggestions);
-      
     } catch (error) {
       setLoading(false);
       setSuggestions([
@@ -91,6 +92,16 @@ export default function ChatEnhancerScreen() {
       ),
     []
   );
+
+  const handleSubmit = () => {
+    if (additionalInfo.trim().length > 0) {
+      setHasAdditionalInfo(true);
+    } else {
+      setHasAdditionalInfo(false);
+    }
+    setAdditionalInfo(additionalInfo);
+    setModalVisible(false);
+  };
 
   return (
     <GlobalSafeAreaView>
@@ -125,7 +136,9 @@ export default function ChatEnhancerScreen() {
                   style={styles.imagePreview}
                 />
                 <View style={styles.switchRow}>
-                  <Text style={styles.switchLabel}>Is this a dead conversation?</Text>
+                  <Text style={styles.switchLabel}>
+                    Is this a stucked conversation?
+                  </Text>
                   <Switch
                     value={isDeadConversation}
                     onValueChange={setIsDeadConversation}
@@ -133,14 +146,30 @@ export default function ChatEnhancerScreen() {
                     thumbColor={isDeadConversation ? "#FFFFFF" : "#FFFFFF"}
                   />
                 </View>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Add more details about the person or context..."
-                  placeholderTextColor="#9CA3AF"
-                  value={additionalInfo}
-                  onChangeText={setAdditionalInfo}
-                  multiline
-                />
+                <View style={styles.switchRow}>
+                  <View style={styles.switchLabelContainer}>
+                    <Text style={styles.switchLabel}>Additional Context</Text>
+                    {hasAdditionalInfo && (
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={24}
+                        color="#4F46E5"
+                      />
+                    )}
+                  </View>
+                  <View style={styles.addInfoContainer}>
+                    <TouchableOpacity
+                      style={styles.addButton}
+                      onPress={() => setModalVisible(true)}
+                    >
+                      {hasAdditionalInfo ? (
+                        <Text style={styles.additionalButtonText}>Edit</Text>
+                      ) : (
+                        <Text style={styles.additionalButtonText}>Add</Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                </View>
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
                     style={styles.analyzeButton}
@@ -152,7 +181,15 @@ export default function ChatEnhancerScreen() {
                     style={styles.uploadButton}
                     onPress={pickImage}
                   >
-                    <Ionicons name="camera-outline" size={24} color="#fff" />
+                    <Text
+                      style={{
+                        color: "#FF6347",
+                        fontSize: 16,
+                        fontWeight: "600",
+                      }}
+                    >
+                      Upload a Screenshot
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -204,6 +241,14 @@ export default function ChatEnhancerScreen() {
           ))}
         </BottomSheetView>
       </BottomSheet>
+
+      <AdditionalInfoModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        additionalInfo={additionalInfo}
+        onChangeText={setAdditionalInfo}
+        onSubmit={handleSubmit}
+      />
     </GlobalSafeAreaView>
   );
 }
@@ -274,40 +319,24 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   suggestionText: {
-    fontSize: 14,
-    lineHeight: 20,
     color: "#333",
-    padding: 16,
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 12,
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 20,
+    flexDirection: "column",
     gap: 12,
   },
   analyzeButton: {
-    flex: 1,
     backgroundColor: "#000000",
     padding: 16,
     borderRadius: 12,
     alignItems: "center",
   },
   uploadButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: "#000000",
-    justifyContent: "center",
+    padding: 16,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   buttonText: {
     color: "#fff",
@@ -369,6 +398,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderColor: "#D6BDF7",
     borderWidth: 2,
+    padding: 16,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -378,7 +408,7 @@ const styles = StyleSheet.create({
   suggestionActions: {
     borderTopWidth: 1,
     borderTopColor: "#e5e5e5",
-    padding: 12,
+    paddingTop: 12,
   },
   copyButton: {
     flexDirection: "row",
@@ -420,5 +450,40 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Inter_500Medium",
     color: "#374151",
+  },
+  addInfoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  addButton: {
+    backgroundColor: "#000",
+    padding: 5,
+    borderRadius: 12,
+  },
+  addedInfoBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
+    backgroundColor: "#E8F5E9",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 15,
+  },
+  addedInfoText: {
+    color: "#4CAF50",
+    marginLeft: 5,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  additionalButtonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "600",
+    padding: 4,
+  },
+  switchLabelContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
 });

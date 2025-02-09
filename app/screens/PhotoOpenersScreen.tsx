@@ -7,13 +7,12 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
-  TextInput,
-  Clipboard,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import * as Clipboard from "expo-clipboard";
 import * as ImagePicker from "expo-image-picker";
 import useProfileStore from "../../store/profileStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
@@ -28,16 +27,21 @@ import BottomSheet, {
 import { Ionicons } from "@expo/vector-icons";
 import { uploadImageToCloudinary } from "@/services/cloudinary";
 import { generatePhotoOpeners } from "@/services/photo";
+import AdditionalInfoModal from "@/components/AdditionalInfoModal";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
 
 export default function PhotoOpenersScreen() {
   const { showPaywall } = usePaywall();
-  const { isPremium, incrementPhotoCount } = usePremiumStore();
+  const { incrementPhotoCount } = usePremiumStore();
+  const { isProMember } = useRevenueCat();
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [additionalInfo, setAdditionalInfo] = useState("");
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [hasAdditionalInfo, setHasAdditionalInfo] = useState(false);
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -46,7 +50,7 @@ export default function PhotoOpenersScreen() {
   }, [suggestions]);
 
   const handleImageProcessing = async (imageUri: string) => {
-    if (!isPremium) {
+    if (!isProMember) {
       setLoading(true);
       const canAnalyzePhoto = await incrementPhotoCount();
       if (!canAnalyzePhoto) {
@@ -59,10 +63,7 @@ export default function PhotoOpenersScreen() {
             {
               text: "Upgrade to Premium+",
               onPress: async () => {
-                const purchased = await showPaywall();
-                if (purchased) {
-                  handleImageProcessing(imageUri);
-                }
+                await showPaywall();
               },
             },
           ]
@@ -131,6 +132,16 @@ export default function PhotoOpenersScreen() {
     []
   );
 
+  const handleSubmit = () => {
+    if (additionalInfo.trim().length > 0) {
+      setHasAdditionalInfo(true);
+    } else {
+      setHasAdditionalInfo(false);
+    }
+    setAdditionalInfo(additionalInfo);
+    setModalVisible(false);
+  };
+
   return (
     <GlobalSafeAreaView>
       <Header logo={true} showBackButton={true} />
@@ -163,14 +174,31 @@ export default function PhotoOpenersScreen() {
                   source={{ uri: selectedImage }}
                   style={styles.imagePreview}
                 />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Add more details about the person or context..."
-                  placeholderTextColor="#9CA3AF"
-                  value={additionalInfo}
-                  onChangeText={setAdditionalInfo}
-                  multiline
-                />
+                <View style={styles.switchRow}>
+                  <View style={styles.switchLabelContainer}>
+                    <Text style={styles.switchLabel}>Additional Context</Text>
+                    {hasAdditionalInfo && (
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={24}
+                        color="#4F46E5"
+                      />
+                    )}
+                  </View>
+                  <View style={styles.addInfoContainer}>
+                    <TouchableOpacity
+                      style={styles.addButton}
+                      onPress={() => setModalVisible(true)}
+                    >
+                      {hasAdditionalInfo ? (
+                        <Text style={styles.additionalButtonText}>Edit</Text>
+                      ) : (
+                        <Text style={styles.additionalButtonText}>Add</Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
                     style={styles.analyzeButton}
@@ -182,7 +210,15 @@ export default function PhotoOpenersScreen() {
                     style={styles.uploadButton}
                     onPress={pickImage}
                   >
-                    <Ionicons name="camera-outline" size={24} color="#fff" />
+                    <Text
+                      style={{
+                        color: "#FF6347",
+                        fontSize: 16,
+                        fontWeight: "600",
+                      }}
+                    >
+                      Upload a New Image
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -242,6 +278,14 @@ export default function PhotoOpenersScreen() {
           )}
         </BottomSheetView>
       </BottomSheet>
+
+      <AdditionalInfoModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        additionalInfo={additionalInfo}
+        onChangeText={setAdditionalInfo}
+        onSubmit={handleSubmit}
+      />
     </GlobalSafeAreaView>
   );
 }
@@ -332,32 +376,18 @@ export const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
   buttonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
     gap: 12,
   },
   analyzeButton: {
-    flex: 1,
     backgroundColor: "#000000",
     padding: 16,
     borderRadius: 12,
     alignItems: "center",
   },
   uploadButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: "#000000",
-    justifyContent: "center",
+    padding: 16,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   buttonText: {
     color: "#fff",
@@ -422,7 +452,7 @@ export const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: "#333",
+    color: "#FFF",
     fontWeight: "600",
   },
   suggestionActions: {
@@ -461,5 +491,65 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 20,
     lineHeight: 24,
+  },
+  addInfoButton: {
+    backgroundColor: "#FF6347",
+    padding: 15,
+    borderRadius: 8,
+    margin: 15,
+  },
+  addInfoButtonText: {
+    color: "white",
+    textAlign: "center",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  switchRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 12,
+    paddingHorizontal: 4,
+    marginBottom: 4,
+  },
+  switchLabel: {
+    fontSize: 16,
+    fontFamily: "Inter_500Medium",
+    color: "#374151",
+  },
+  addInfoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  addButton: {
+    backgroundColor: "#000",
+    padding: 5,
+    borderRadius: 12,
+  },
+  addedInfoBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
+    backgroundColor: "#E8F5E9",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 15,
+  },
+  addedInfoText: {
+    color: "#4CAF50",
+    marginLeft: 5,
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  additionalButtonText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "600",
+    padding: 4,
+  },
+  switchLabelContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
 });
