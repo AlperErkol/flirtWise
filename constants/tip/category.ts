@@ -5,6 +5,8 @@ const FREE_CATEGORIES = [
     title: "First Impression",
     icon: "✨",
     gradient: ["#FF9A8B", "#FF6B6B"],
+    description:
+      "Master the art of creating memorable first impressions in dating. Learn essential techniques for profile optimization and authentic self-presentation.",
     subCategories: [
       {
         id: "profile_optimization",
@@ -29,6 +31,8 @@ const FREE_CATEGORIES = [
     title: "Conversation Basics",
     icon: "💭",
     gradient: ["#4FACFE", "#00F2FE"],
+    description:
+      "Develop fundamental conversation skills for dating success. Learn how to start and maintain engaging discussions with confidence.",
     subCategories: [
       {
         id: "ice_breakers",
@@ -53,6 +57,8 @@ const FREE_CATEGORIES = [
     title: "Dating Essentials",
     icon: "💝",
     gradient: ["#43E97B", "#38F9D7"],
+    description:
+      "Essential dating skills and knowledge for successful relationships. From planning perfect dates to understanding body language.",
     subCategories: [
       {
         id: "date_planning",
@@ -80,6 +86,8 @@ const PREMIUM_CATEGORIES = [
     title: "Advanced Attraction",
     icon: "🌟",
     gradient: ["#FA709A", "#FEE140"],
+    description:
+      "Advanced psychological insights and strategies for creating genuine attraction. Learn deeper aspects of dating psychology.",
     subCategories: [
       {
         id: "psychology_attraction",
@@ -104,6 +112,8 @@ const PREMIUM_CATEGORIES = [
     title: "Dating Strategy",
     icon: "🎯",
     gradient: ["#FF3CAC", "#784BA0"],
+    description:
+      "Strategic approaches to modern dating, including advanced app techniques and handling complex dating scenarios.",
     subCategories: [
       {
         id: "dating_apps",
@@ -128,6 +138,8 @@ const PREMIUM_CATEGORIES = [
     title: "Relationship Building",
     icon: "💫",
     gradient: ["#13547A", "#80D0C7"],
+    description:
+      "Expert guidance on building and maintaining meaningful relationships. Learn to create lasting connections and deep emotional bonds.",
     subCategories: [
       {
         id: "commitment_signs",

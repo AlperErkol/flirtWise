@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import * as ImagePicker from "expo-image-picker";
-import useProfileStore from "../../store/profileStore";
+import useProfileStore from "../../../store/profileStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import Theme from "@/constants/Theme";
@@ -160,7 +160,7 @@ export default function PhotoOpenersScreen() {
                 </View>
                 <View style={styles.heroContainer}>
                   <Image
-                    source={require("../../assets/images/photo-based.png")}
+                    source={require("@/assets/images/photo-based.png")}
                     style={styles.heroImage}
                   />
                 </View>

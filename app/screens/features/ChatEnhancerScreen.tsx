@@ -13,7 +13,7 @@ import {
   Switch,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import useProfileStore from "../../store/profileStore";
+import useProfileStore from "../../../store/profileStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import Theme from "@/constants/Theme";
@@ -121,10 +121,11 @@ export default function ChatEnhancerScreen() {
                     </Text>
                   </View>
                   <Image
-                    source={require("../../assets/images/chat-enhancer.png")}
+                    source={require("@/assets/images/chat-enhancer.png")}
                     style={styles.heroImage}
                   />
                 </View>
+
                 <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
                   <Text style={styles.pickText}>Upload a Screenshot</Text>
                 </TouchableOpacity>

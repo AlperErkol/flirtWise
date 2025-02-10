@@ -19,24 +19,21 @@ import {
 } from "react-native";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Step1Screen from "./screens/Step1Screen";
-import Step2Screen from "./screens/Step2Screen";
-import Step3Screen from "./screens/Step3Screen";
+
 import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
-import TipsScreen from "./screens/TipsScreen";
-import PhotoOpenersScreen from "./screens/PhotoOpenersScreen";
-import ChatEnhancerScreen from "./screens/ChatEnhancerScreen";
-import FeedbackScreen from "./screens/FeedbackScreen";
-import LanguageScreen from "./screens/LanguageScreen";
-import PreferencesScreen from "./screens/PreferencesScreen";
+import TipsScreen from "./screens/features/TipsScreen";
+import PhotoOpenersScreen from "./screens/features/PhotoOpenersScreen";
+import ChatEnhancerScreen from "./screens/features/ChatEnhancerScreen";
+import FeedbackScreen from "./screens/settings/FeedbackScreen";
+import LanguageScreen from "./screens/settings/LanguageScreen";
+import PreferencesScreen from "./screens/settings/PreferencesScreen";
 import { useNetworkStatus } from "../hooks/useNetworkStatus";
 import useOfflineStore from "../store/offlineStore";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Step4Screen from "./screens/Step4Screen";
-import CommunicationCoachSelectionScreen from "./screens/CommunicationCoachSelectionScreen";
-import CommunicationCoachScreen from "./screens/CommunicationCoachScreen";
+import CommunicationCoachSelectionScreen from "./screens/features/CommunicationCoachSelectionScreen";
+import CommunicationCoachScreen from "./screens/features/CommunicationCoachScreen";
 import RemoteConfigService from "@/services/RemoteConfigService";
 import Paywall from "@/components/Paywall";
 import RevenueCatService from "@/services/payment/RevenueCatService";
@@ -49,6 +46,8 @@ import HowItWorksScreen from "./screens/onboarding/HowItWorksScreen";
 import BenefitsScreen from "./screens/onboarding/BenefitsScreen";
 import FinalScreen from "./screens/onboarding/FinalScreen";
 import AIWingmanScreen from "./screens/onboarding/AIWingmanScreen";
+import CategoryDetailScreen from "./screens/features/CategoryDetailScreen";
+import SubCategoryDetailScreen from "./screens/features/SubCategoryDetail";
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -170,7 +169,18 @@ export default function RootLayout() {
           name="MatchPreferenceScreen"
           component={MatchPreferenceScreen}
         />
+        <Stack.Screen
+          name="CategoryDetail"
+          component={CategoryDetailScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SubCategoryDetail"
+          component={SubCategoryDetailScreen}
+          options={{ headerShown: false, presentation: "fullScreenModal" }}
+        />
       </Stack.Navigator>
+
       <Modal
         animationType="fade"
         transparent={true}

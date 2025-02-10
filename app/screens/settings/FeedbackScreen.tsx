@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     letterSpacing: -0.5,
   },
-
   headerContainer: {
     paddingTop: 16,
   },
