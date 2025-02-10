@@ -8,32 +8,10 @@ import {
   Dimensions,
 } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
-import { Ionicons } from "@expo/vector-icons";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 
 const { width } = Dimensions.get("window");
-
-const benefits = [
-  {
-    id: "1",
-    title: "Get More Replies",
-    description: "Increase your response rate with AI-optimized messages",
-    icon: "📈",
-  },
-  {
-    id: "2",
-    title: "Save Time",
-    description: "No more staring at blank screens wondering what to say",
-    icon: "⚡️",
-  },
-  {
-    id: "3",
-    title: "Build Better Connections",
-    description: "Create meaningful conversations that lead to real dates",
-    icon: "❤️",
-  },
-];
 
 export default function BenefitsScreen({ navigation }: any) {
   return (
@@ -44,7 +22,6 @@ export default function BenefitsScreen({ navigation }: any) {
         <View style={styles.progressLine} />
         <View style={styles.progressLine} />
         <View style={styles.progressLine} />
-        <View style={[styles.progressLine, styles.inactiveLine]} />
         <View style={[styles.progressLine, styles.inactiveLine]} />
       </View>
 
@@ -63,14 +40,14 @@ export default function BenefitsScreen({ navigation }: any) {
         </View>
 
         <Image
-          source={require("@/assets/images/splash-icon.png")}
+          source={require("@/assets/images/chat-4.png")}
           style={styles.illustration}
         />
 
         <View style={styles.bottomContainer}>
           <TouchableOpacity
             style={styles.nextButton}
-            onPress={() => navigation.navigate("AIWingmanScreen")}
+            onPress={() => navigation.navigate("FinalScreen")}
           >
             <Text style={styles.buttonText}>Save My Chat</Text>
           </TouchableOpacity>
@@ -102,8 +79,8 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     marginTop: 18,
-    marginBottom: 48,
   },
+
   title: {
     fontFamily: "Inter_700Bold",
     fontSize: 28,
@@ -167,8 +144,9 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   illustration: {
-    width: width * 0.8,
-    height: width * 0.8,
+    width: width,
+    height: width,
     alignSelf: "center",
+    resizeMode: "contain",
   },
 });

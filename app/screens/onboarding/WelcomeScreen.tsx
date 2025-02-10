@@ -8,7 +8,6 @@ import {
   Dimensions,
 } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
-import { Ionicons } from "@expo/vector-icons";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 
@@ -21,7 +20,6 @@ export default function WelcomeScreen({ navigation }: any) {
 
       <View style={styles.progressContainer}>
         <View style={styles.progressLine} />
-        <View style={[styles.progressLine, styles.inactiveLine]} />
         <View style={[styles.progressLine, styles.inactiveLine]} />
         <View style={[styles.progressLine, styles.inactiveLine]} />
         <View style={[styles.progressLine, styles.inactiveLine]} />
@@ -41,7 +39,7 @@ export default function WelcomeScreen({ navigation }: any) {
         </View>
 
         <Image
-          source={require("@/assets/images/splash-icon.png")}
+          source={require("@/assets/images/chat.png")}
           style={styles.illustration}
         />
 
@@ -102,10 +100,11 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   illustration: {
-    width: width * 0.8,
-    height: width * 0.8,
+    width: width * 1.1,
+    height: width * 1.1,
     alignSelf: "center",
-    marginTop: 48,
+    marginTop: 36,
+    resizeMode: "contain",
   },
   bottomContainer: {
     marginTop: "auto",

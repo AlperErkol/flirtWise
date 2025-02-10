@@ -187,7 +187,10 @@ export default function Paywall({ navigation }: any) {
             <Text style={styles.footerText}>Restore purchase</Text>
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text style={styles.footerText}>Privacy & terms</Text>
+            <Text style={styles.footerText}>Privacy Policy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.footerText}>Terms of Use</Text>
           </TouchableOpacity>
         </View>
       </>

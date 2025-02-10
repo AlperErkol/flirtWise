@@ -23,7 +23,6 @@ export default function FinalScreen({ navigation }: any) {
         <View style={styles.progressLine} />
         <View style={styles.progressLine} />
         <View style={styles.progressLine} />
-        <View style={styles.progressLine} />
       </View>
       <Animated.View
         entering={FadeInRight}
@@ -42,7 +41,7 @@ export default function FinalScreen({ navigation }: any) {
         </View>
 
         <Image
-          source={require("@/assets/images/splash-icon.png")}
+          source={require("@/assets/images/chat-3.png")}
           style={styles.illustration}
         />
 
@@ -107,41 +106,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     letterSpacing: -0.5,
   },
-  statsContainer: {
-    marginTop: 48,
-  },
-
-  statsCard: {
-    flexDirection: "row",
-    padding: 24,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-  statItem: {
-    alignItems: "center",
-  },
-  statNumber: {
-    fontFamily: "Inter_700Bold",
-    fontSize: 32,
-    color: "#FFF",
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontFamily: "Inter_400Regular",
-    fontSize: 14,
-    color: "#FFF",
-    opacity: 0.9,
-  },
-  statDivider: {
-    width: 1,
-    height: "100%",
-    backgroundColor: "#FFF",
-    opacity: 0.2,
-  },
   bottomContainer: {
-    marginTop: "auto",
-    marginBottom: 32,
     gap: 16,
   },
   startButton: {
@@ -170,8 +135,9 @@ const styles = StyleSheet.create({
     color: "#4F46E5",
   },
   illustration: {
-    width: width * 0.8,
-    height: width * 0.8,
+    width: width,
+    height: width,
     alignSelf: "center",
+    resizeMode: "contain",
   },
 });

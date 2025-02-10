@@ -22,7 +22,6 @@ export default function HowItWorksScreen({ navigation }: any) {
         <View style={styles.progressLine} />
         <View style={[styles.progressLine, styles.inactiveLine]} />
         <View style={[styles.progressLine, styles.inactiveLine]} />
-        <View style={[styles.progressLine, styles.inactiveLine]} />
       </View>
 
       <Animated.View
@@ -40,7 +39,7 @@ export default function HowItWorksScreen({ navigation }: any) {
         </View>
 
         <Image
-          source={require("@/assets/images/splash-icon.png")}
+          source={require("@/assets/images/chat-2.png")}
           style={styles.illustration}
         />
 
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     marginTop: 18,
-    marginBottom: 48,
+    marginBottom: 36,
     textAlign: "center",
   },
   title: {
@@ -126,9 +125,11 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   illustration: {
-    width: width * 0.8,
-    height: width * 0.8,
+    width: width * 0.9,
+    height: width * 0.9,
     alignSelf: "center",
+    resizeMode: "contain",
+    marginBottom: 24,
   },
   bottomContainer: {
     marginTop: "auto",

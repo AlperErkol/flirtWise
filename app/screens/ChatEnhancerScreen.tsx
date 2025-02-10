@@ -316,10 +316,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   suggestionText: {
-    color: "#333",
+    color: "#000",
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 12,
+    fontFamily: "Inter_500Medium",
+    letterSpacing: -0.5,
   },
   buttonContainer: {
     flexDirection: "column",
