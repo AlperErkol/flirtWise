@@ -11,10 +11,15 @@ import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width } = Dimensions.get("window");
 
 export default function FinalScreen({ navigation }: any) {
+  const handleStart = () => {
+    AsyncStorage.setItem("onboardingCompleted", "true");
+    navigation.navigate("HomeScreen");
+  };
+
   return (
     <GlobalSafeAreaView>
       <Header logo={true} showBackButton={true} />
@@ -48,7 +53,7 @@ export default function FinalScreen({ navigation }: any) {
         <View style={styles.bottomContainer}>
           <TouchableOpacity
             style={styles.startButton}
-            onPress={() => navigation.navigate("HomeScreen")}
+            onPress={() => handleStart()}
           >
             <Text style={styles.buttonText}>Start Flirting Smarter</Text>
             <Ionicons name="rocket-outline" size={20} color="#fff" />

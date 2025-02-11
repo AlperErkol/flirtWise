@@ -45,7 +45,6 @@ export const useRevenueCat = (): UseRevenueCatReturn => {
   useEffect(() => {
     const initializeData = async () => {
       try {
-        await RevenueCatService.initialize();
         await refreshPurchaserInfo();
         const offerings = await RevenueCatService.getOfferings();
         setCurrentOffering(offerings.current);

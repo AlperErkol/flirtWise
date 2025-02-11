@@ -106,7 +106,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={"Welcome"}
+        initialRouteName={isOnboardingCompleted ? "HomeScreen" : "Welcome"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
