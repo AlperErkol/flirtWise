@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Text, TouchableOpacity, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,8 +14,18 @@ import { useRevenueCat } from "@/hooks/useRevenueCat";
 
 export default function HomeScreen({ navigation }: any) {
   const { showPaywall } = usePaywall();
-  const { isProMember } = useRevenueCat();
+  const { isProMember, isLoading } = useRevenueCat();
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  useEffect(() => {
+    const checkProStatus = async () => {
+      if (!isLoading && !isProMember) {
+        await showPaywall();
+      }
+    };
+
+    checkProStatus();
+  }, [isProMember, isLoading]);
 
   const handleFeaturePress = async (feature: any) => {
     if (feature.isPremium && !isProMember) {

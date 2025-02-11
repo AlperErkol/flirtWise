@@ -14,6 +14,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import { usePaywall } from "@/hooks/usePaywall";
+import { APP_STORE_URL } from "@/constants/settings/urls";
 
 export default function SettingsBottomSheet({
   bottomSheetRef,
@@ -23,9 +24,20 @@ export default function SettingsBottomSheet({
 
   const handleShareApp = async () => {
     try {
-      await Share.share({
-        message: "Hey! Check out this amazing app, FlirtWise!",
+      const result = await Share.share({
+        message: `Hey! Check out this amazing app, FlirtWise! It's fun and helpful for sparking great conversations. Download it now:`,
+        url: APP_STORE_URL,
       });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          console.log("Shared with activity type: ", result.activityType);
+        } else {
+          console.log("App successfully shared!");
+        }
+      } else if (result.action === Share.dismissedAction) {
+        console.log("Share dismissed");
+      }
     } catch (error) {
       console.error("Error sharing app: ", error);
     }

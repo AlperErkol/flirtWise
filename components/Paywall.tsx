@@ -6,24 +6,30 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ScrollView,
+  Linking,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import GlobalSafeAreaView from "./GlobalSafeAreaView";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
 import Purchases from "react-native-purchases";
 import RevenueCatService from "@/services/payment/RevenueCatService";
+import { PRIVACY_URL, TERMS_URL } from "@/constants/settings/urls";
 
 export default function Paywall({ navigation }: any) {
   const { currentOffering } = useRevenueCat();
   const [selectedPlan, setSelectedPlan] = useState<"QUARTERLY" | "WEEKLY">(
     "QUARTERLY"
   );
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePlanSelect = (plan: "QUARTERLY" | "WEEKLY") => {
     setSelectedPlan(plan);
   };
 
   const handlePlanPurchase = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       if (!currentOffering?.weekly || !currentOffering?.threeMonth) {
         return;
@@ -38,14 +44,15 @@ export default function Paywall({ navigation }: any) {
 
       if (purchaserInfo.customerInfo.entitlements.active.pro) {
         await RevenueCatService.resetState();
-        console.log("Purchase Successful and state refreshed");
+        Alert.alert("Purchase Successful", "You are now a pro member.");
+        navigation.goBack();
       }
-    } catch (error) {
-      console.error("Purchase failed:", error);
-      Alert.alert(
-        "Purchase Failed",
-        "There was an error processing your purchase. Please try again."
-      );
+    } catch (error: any) {
+      if (!error.userCancelled) {
+        Alert.alert("Purchase Failed", error.message);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,6 +66,12 @@ export default function Paywall({ navigation }: any) {
     } else {
       Alert.alert("No Purchase Found", "You have not made any purchases.");
     }
+  };
+
+  const handleLinkPress = (url: any) => {
+    Linking.openURL(url).catch((err) =>
+      console.error("Failed to open URL:", err)
+    );
   };
 
   const renderPlans = () => {
@@ -176,20 +189,26 @@ export default function Paywall({ navigation }: any) {
         </Text>
 
         <TouchableOpacity
-          style={styles.subscribeButton}
-          onPress={() => handlePlanPurchase()}
+          style={[
+            styles.subscribeButton,
+            isLoading && styles.subscribeButtonDisabled,
+          ]}
+          onPress={handlePlanPurchase}
+          disabled={isLoading}
         >
-          <Text style={styles.subscribeButtonText}>Try for Free ⚡</Text>
+          <Text style={styles.subscribeButtonText}>
+            {isLoading ? "Processing..." : "Try for Free ⚡"}
+          </Text>
         </TouchableOpacity>
 
         <View style={styles.footer}>
           <TouchableOpacity onPress={handleRestorePurchase}>
             <Text style={styles.footerText}>Restore purchase</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleLinkPress(PRIVACY_URL)}>
             <Text style={styles.footerText}>Privacy Policy</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleLinkPress(TERMS_URL)}>
             <Text style={styles.footerText}>Terms of Use</Text>
           </TouchableOpacity>
         </View>
@@ -199,70 +218,74 @@ export default function Paywall({ navigation }: any) {
 
   return (
     <GlobalSafeAreaView>
-      <View style={styles.header}>
-        <Image
-          source={require("../assets/images/logo.png")}
-          style={styles.logo}
-        />
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="close" size={32} color="#000" />
-        </TouchableOpacity>
-      </View>
-
-      <Text style={styles.title}>Upgrade now and never get ignored again!</Text>
-      <Text style={styles.description}>
-        🔥89% of users who upgraded reported more replies in 24 hours.
-      </Text>
-
-      <View style={styles.featuresContainer}>
-        <View style={styles.featureRow}>
-          <Ionicons
-            style={{ marginRight: 16 }}
-            name="flash-sharp"
-            size={28}
-            color="#FF6347"
+      <ScrollView>
+        <View style={styles.header}>
+          <Image
+            source={require("../assets/images/logo.png")}
+            style={styles.logo}
           />
-          <View style={styles.featureTextContainer}>
-            <Text style={styles.featureTitle}>Elite Dating Coaches</Text>
-            <Text style={styles.featureDescription}>
-              Get unlimited access to top-tier dating experts!
-            </Text>
-          </View>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="close" size={32} color="#000" />
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.featureRow}>
-          <Ionicons
-            style={{ marginRight: 16 }}
-            name="flash-sharp"
-            size={28}
-            color="#FF6347"
-          />
+        <Text style={styles.title}>
+          Upgrade now and never get ignored again!
+        </Text>
+        <Text style={styles.description}>
+          🔥89% of users who upgraded reported more replies in 24 hours.
+        </Text>
 
-          <View style={styles.featureTextContainer}>
-            <Text style={styles.featureTitle}>AI-Powered Insights</Text>
-            <Text style={styles.featureDescription}>
-              Unlock deep photo and conversation analysis.
-            </Text>
+        <View style={styles.featuresContainer}>
+          <View style={styles.featureRow}>
+            <Ionicons
+              style={{ marginRight: 16 }}
+              name="flash-sharp"
+              size={28}
+              color="#FF6347"
+            />
+            <View style={styles.featureTextContainer}>
+              <Text style={styles.featureTitle}>Elite Dating Coaches</Text>
+              <Text style={styles.featureDescription}>
+                Get unlimited access to top-tier dating experts!
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.featureRow}>
+            <Ionicons
+              style={{ marginRight: 16 }}
+              name="flash-sharp"
+              size={28}
+              color="#FF6347"
+            />
+
+            <View style={styles.featureTextContainer}>
+              <Text style={styles.featureTitle}>AI-Powered Insights</Text>
+              <Text style={styles.featureDescription}>
+                Unlock deep photo and conversation analysis.
+              </Text>
+            </View>
+          </View>
+          <View style={styles.featureRow}>
+            <Ionicons
+              style={{ marginRight: 16 }}
+              name="flash-sharp"
+              size={28}
+              color="#FF6347"
+            />
+
+            <View style={styles.featureTextContainer}>
+              <Text style={styles.featureTitle}>Flirting Mastery Tips</Text>
+              <Text style={styles.featureDescription}>
+                Unlock exclusive secrets to spark attraction and keep the
+                chemistry alive.
+              </Text>
+            </View>
           </View>
         </View>
-        <View style={styles.featureRow}>
-          <Ionicons
-            style={{ marginRight: 16 }}
-            name="flash-sharp"
-            size={28}
-            color="#FF6347"
-          />
-
-          <View style={styles.featureTextContainer}>
-            <Text style={styles.featureTitle}>Flirting Mastery Tips</Text>
-            <Text style={styles.featureDescription}>
-              Unlock exclusive secrets to spark attraction and keep the
-              chemistry alive.
-            </Text>
-          </View>
-        </View>
-      </View>
-      {renderPlans()}
+        {renderPlans()}
+      </ScrollView>
     </GlobalSafeAreaView>
   );
 }
@@ -445,5 +468,8 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 12,
     color: "#666",
+  },
+  subscribeButtonDisabled: {
+    backgroundColor: "#999",
   },
 });

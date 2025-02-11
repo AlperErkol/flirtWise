@@ -8,8 +8,9 @@ import RevenueCatService from "@/services/payment/RevenueCatService";
 interface UseRevenueCatReturn {
   customerInfo: CustomerInfo | null;
   isProMember: boolean;
-  currentOffering: any;
+  currentOffering: PurchasesOffering | null;
   refreshPurchaserInfo: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const typesOfSubscriptions = {
@@ -21,6 +22,7 @@ export const useRevenueCat = (): UseRevenueCatReturn => {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
   const [currentOffering, setCurrentOffering] =
     useState<PurchasesOffering | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const isProMember = useMemo(
     () =>
@@ -49,6 +51,8 @@ export const useRevenueCat = (): UseRevenueCatReturn => {
         setCurrentOffering(offerings.current);
       } catch (error) {
         console.error("Failed to initialize RevenueCat data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -68,5 +72,6 @@ export const useRevenueCat = (): UseRevenueCatReturn => {
     customerInfo,
     currentOffering,
     refreshPurchaserInfo,
+    isLoading,
   };
 };

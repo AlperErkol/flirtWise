@@ -26,6 +26,7 @@ import * as Clipboard from "expo-clipboard";
 import { uploadImageToCloudinary } from "@/services/cloudinary";
 import { enhanceChat } from "@/services/chat/enhancer";
 import AdditionalInfoModal from "@/components/AdditionalInfoModal";
+import { useRateUs } from "@/hooks/useRateUs";
 
 export default function ChatEnhancerScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
@@ -37,6 +38,7 @@ export default function ChatEnhancerScreen() {
   const [isDeadConversation, setIsDeadConversation] = useState(false);
   const [hasAdditionalInfo, setHasAdditionalInfo] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const { checkAndShowRateUs } = useRateUs();
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -212,6 +214,9 @@ export default function ChatEnhancerScreen() {
         backgroundStyle={styles.bottomSheetBackground}
         handleIndicatorStyle={styles.bottomSheetIndicator}
         backdropComponent={renderBackdrop}
+        onClose={() => {
+          checkAndShowRateUs();
+        }}
       >
         <BottomSheetView style={styles.bottomSheetContent}>
           <View style={styles.bottomSheetHeader}>

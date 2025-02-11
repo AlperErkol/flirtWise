@@ -29,10 +29,11 @@ import { uploadImageToCloudinary } from "@/services/cloudinary";
 import { generatePhotoOpeners } from "@/services/photo";
 import AdditionalInfoModal from "@/components/AdditionalInfoModal";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { useRateUs } from "@/hooks/useRateUs";
 
 export default function PhotoOpenersScreen() {
   const { showPaywall } = usePaywall();
-  const { incrementPhotoCount } = usePremiumStore();
+  const { incrementPhotoCount, dailyPhotoCount } = usePremiumStore();
   const { isProMember } = useRevenueCat();
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -42,6 +43,7 @@ export default function PhotoOpenersScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [hasAdditionalInfo, setHasAdditionalInfo] = useState(false);
+  const { checkAndShowRateUs } = useRateUs();
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -142,6 +144,8 @@ export default function PhotoOpenersScreen() {
     setModalVisible(false);
   };
 
+  const remainingAnalyzes = 1 - dailyPhotoCount;
+
   return (
     <GlobalSafeAreaView>
       <Header logo={true} showBackButton={true} />
@@ -167,6 +171,16 @@ export default function PhotoOpenersScreen() {
                 <TouchableOpacity style={styles.pickButton} onPress={pickImage}>
                   <Text style={styles.pickText}>Upload an Image</Text>
                 </TouchableOpacity>
+                {!isProMember && (
+                  <TouchableOpacity
+                    style={styles.analyzeAllowance}
+                    onPress={showPaywall}
+                  >
+                    <Text style={styles.analyzeAllowanceText}>
+                      {remainingAnalyzes} analyze left
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </>
             ) : (
               <View>
@@ -242,6 +256,9 @@ export default function PhotoOpenersScreen() {
         backgroundStyle={styles.bottomSheetBackground}
         handleIndicatorStyle={styles.bottomSheetIndicator}
         backdropComponent={renderBackdrop}
+        onClose={() => {
+          checkAndShowRateUs();
+        }}
       >
         <BottomSheetView style={styles.bottomSheetContent}>
           <View style={styles.bottomSheetHeader}>
@@ -562,5 +579,18 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  analyzeAllowance: {
+    backgroundColor: "#000",
+    padding: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    alignSelf: "center",
+  },
+  analyzeAllowanceText: {
+    color: "#fff",
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
 });
