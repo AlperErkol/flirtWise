@@ -21,7 +21,6 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import HomeScreen from "./screens/HomeScreen";
-import SettingsScreen from "./screens/SettingsScreen";
 import TipsScreen from "./screens/features/TipsScreen";
 import PhotoOpenersScreen from "./screens/features/PhotoOpenersScreen";
 import ChatEnhancerScreen from "./screens/features/ChatEnhancerScreen";
@@ -115,15 +114,6 @@ export default function RootLayout() {
         <Stack.Screen name="AIWingmanScreen" component={AIWingmanScreen} />
         <Stack.Screen name="FinalScreen" component={FinalScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen
-          name="SettingsScreen"
-          component={SettingsScreen}
-          options={{
-            headerShown: true,
-            title: "Settings",
-            headerTitleAlign: "center",
-          }}
-        />
         <Stack.Screen name="TipsScreen" component={TipsScreen} />
         <Stack.Screen
           name="CommunicationCoachScreen"
@@ -236,7 +226,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   offlineTitle: {
-    fontSize: 18, // Font boyutu küçültüldü
+    fontSize: 18,
     fontWeight: "600",
     color: "#333",
     marginTop: 12,
@@ -244,12 +234,12 @@ const styles = StyleSheet.create({
   },
   offlineText: {
     color: "#666",
-    fontSize: 14, // Font boyutu küçültüldü
+    fontSize: 14,
     textAlign: "center",
     marginBottom: 16,
   },
   closeButton: {
-    backgroundColor: "#FF6347", // Turuncu renk
+    backgroundColor: "#FF6347",
     paddingVertical: 10,
     paddingHorizontal: 25,
     borderRadius: 8,
