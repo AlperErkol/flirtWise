@@ -14,6 +14,13 @@
 
 1. Free Credits System
 2. Feedback System Implementation
+3. Copied Badge Implementation
+4. Extend Preferences Options
+   - Dating Goal
+   - Conversation Style
+   - Preffered Dating Apps
+   - Sosyal Kişilik Tipi (Introvert, Extrovert)
+   - Relationship Experience
 
 ## Notes 📝
 
