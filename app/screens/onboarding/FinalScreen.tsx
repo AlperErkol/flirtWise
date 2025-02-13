@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
@@ -34,6 +35,7 @@ export default function FinalScreen({ navigation }: any) {
         exiting={FadeOutLeft}
         style={styles.content}
       >
+        <ScrollView>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             Stop Getting Ignored. Start Getting Replies.
@@ -63,8 +65,9 @@ export default function FinalScreen({ navigation }: any) {
             By continuing, you agree to our{" "}
             <Text style={styles.termsLink}>Terms of Service</Text> and{" "}
             <Text style={styles.termsLink}>Privacy Policy</Text>
-          </Text>
-        </View>
+            </Text>
+          </View>
+        </ScrollView>
       </Animated.View>
     </GlobalSafeAreaView>
   );
@@ -140,8 +143,8 @@ const styles = StyleSheet.create({
     color: "#4F46E5",
   },
   illustration: {
-    width: width,
-    height: width,
+    width: width * 0.9,
+    height: width * 0.9,
     alignSelf: "center",
     resizeMode: "contain",
   },

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
@@ -30,6 +31,7 @@ export default function BenefitsScreen({ navigation }: any) {
         exiting={FadeOutLeft}
         style={styles.content}
       >
+        <ScrollView>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>She Left You on Read. Again.</Text>
           <Text style={styles.subtitle}>
@@ -50,8 +52,9 @@ export default function BenefitsScreen({ navigation }: any) {
             onPress={() => navigation.navigate("FinalScreen")}
           >
             <Text style={styles.buttonText}>Save My Chat</Text>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </Animated.View>
     </GlobalSafeAreaView>
   );
@@ -125,7 +128,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   bottomContainer: {
-    marginTop: "auto",
     marginBottom: 32,
   },
   nextButton: {
@@ -144,8 +146,8 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   illustration: {
-    width: width,
-    height: width,
+    width: width * 0.9 ,
+    height: width * 0.9,
     alignSelf: "center",
     resizeMode: "contain",
   },

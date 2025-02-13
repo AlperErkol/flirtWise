@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
@@ -17,7 +18,6 @@ export default function WelcomeScreen({ navigation }: any) {
   return (
     <GlobalSafeAreaView>
       <Header logo={true} />
-
       <View style={styles.progressContainer}>
         <View style={styles.progressLine} />
         <View style={[styles.progressLine, styles.inactiveLine]} />
@@ -30,27 +30,29 @@ export default function WelcomeScreen({ navigation }: any) {
         exiting={FadeOutLeft}
         style={styles.content}
       >
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Still Stuck Saying ‘Hey’?</Text>
-          <Text style={styles.subtitle}>
-            You know that weak opener won’t work. But you send it anyway. And
-            guess what? No reply. Time to stop being ignored.
-          </Text>
-        </View>
+        <ScrollView>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Still Stuck Saying ‘Hey’?</Text>
+            <Text style={styles.subtitle}>
+              You know that weak opener won’t work. But you send it anyway. And
+              guess what? No reply. Time to stop being ignored.
+            </Text>
+          </View>
 
-        <Image
-          source={require("@/assets/images/chat.png")}
-          style={styles.illustration}
-        />
+          <Image
+            source={require("@/assets/images/chat.png")}
+            style={styles.illustration}
+          />
 
-        <View style={styles.bottomContainer}>
-          <TouchableOpacity
-            style={styles.nextButton}
-            onPress={() => navigation.navigate("HowItWorksScreen")}
-          >
-            <Text style={styles.buttonText}>Fix My Messages Now</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.bottomContainer}>
+            <TouchableOpacity
+              style={styles.nextButton}
+              onPress={() => navigation.navigate("HowItWorksScreen")}
+            >
+              <Text style={styles.buttonText}>Fix My Messages Now</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </Animated.View>
     </GlobalSafeAreaView>
   );
@@ -100,8 +102,8 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   illustration: {
-    width: width * 1.1,
-    height: width * 1.1,
+    width: width,
+    height: width,
     alignSelf: "center",
     marginTop: 36,
     resizeMode: "contain",

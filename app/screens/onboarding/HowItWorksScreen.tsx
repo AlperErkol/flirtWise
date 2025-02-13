@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
@@ -29,12 +30,12 @@ export default function HowItWorksScreen({ navigation }: any) {
         exiting={FadeOutLeft}
         style={styles.content}
       >
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Fire Emojis Won’t Get You a Date</Text>
-          <Text style={styles.subtitle}>
+        <ScrollView>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>Fire Emojis Won’t Get You a Date</Text>
+            <Text style={styles.subtitle}>
             Reacting with 🔥? Congrats, you just blended in with every other
-            boring guy in her DMs. Upload her story and let AI craft an opener
-            she actually wants to reply to.
+            boring guy in her DMs. Upload her story and let FlirtWise craft perfect opener.
           </Text>
         </View>
 
@@ -49,8 +50,9 @@ export default function HowItWorksScreen({ navigation }: any) {
             onPress={() => navigation.navigate("BenefitsScreen")}
           >
             <Text style={styles.buttonText}>Generate My Opener</Text>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </Animated.View>
     </GlobalSafeAreaView>
   );
