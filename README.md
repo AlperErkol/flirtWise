@@ -5,13 +5,15 @@
 
 # FlirtWise - Development Tracking 1.0.2 🎯
 
-1. Paywall
-2. Onboarding Optimization
-3. Free Credits System
-4. Performance Issues - Get Flirting Tips ilk tıklamada çalışmıyor
-5. Rate Us Implementation
-6. Paywall Gösterimi
-7. Feedback System Implementation
+1. Performance Issues - Get Flirting Tips ilk tıklamada çalışmıyor - Done
+2. Rate Us Implementation - Done
+3. Paywall & Paywall Gösterimi - Done
+4. Onboarding Optimization - Done
+
+# FlirtWise - Development Tracking 1.0.3 🎯
+
+1. Free Credits System
+2. Feedback System Implementation
 
 ## Notes 📝
 
