@@ -47,6 +47,7 @@ import FinalScreen from "./screens/onboarding/FinalScreen";
 import AIWingmanScreen from "./screens/onboarding/AIWingmanScreen";
 import CategoryDetailScreen from "./screens/features/CategoryDetailScreen";
 import SubCategoryDetailScreen from "./screens/features/SubCategoryDetail";
+import { getLocales } from "expo-localization";
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -83,6 +84,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     checkOnboardingStatus();
+    const deviceLanguage = getLocales()[0].languageCode;
+    console.log(deviceLanguage);
   }, []);
 
   useEffect(() => {
@@ -105,7 +108,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Navigator
-        initialRouteName={"Welcome"}
+        initialRouteName={isOnboardingCompleted ? "HomeScreen" : "Welcome"}
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />

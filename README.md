@@ -12,18 +12,9 @@
 
 # FlirtWise - Development Tracking 1.0.3 🎯
 
-1. Free Credits System
-2. Feedback System Implementation
-3. Copied Badge Implementation
-4. Extend Preferences Options
-   - Dating Goal
-   - Conversation Style
-   - Preffered Dating Apps
-   - Sosyal Kişilik Tipi (Introvert, Extrovert)
-   - Relationship Experience
-
-## Notes 📝
-
-- A/B testing için yeni paywall tasarımları hazırlanacak
-- Kullanıcı davranışlarını analiz etmek için Firebase Analytics eklenecek
-- Performance monitoring için Sentry entegrasyonu düşünülüyor
+1. Feedback System Implementation
+2. Copied Badge Implementation
+3. Multi Language Support
+4. A/B Testing
+5. Uygulama her açıldığında WelcomeScreen gösterilmesi
+6. Texting Wibe seçeneği
