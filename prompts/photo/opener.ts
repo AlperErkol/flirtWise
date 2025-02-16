@@ -8,7 +8,8 @@ type PhotoOpenerParams = {
 
 export const getPhotoOpenerPrompt = (
   { userInfo }: PhotoOpenerParams,
-  additionalInfo: string | undefined
+  additionalInfo: string | undefined,
+  conversationStyle: string | undefined
 ) => {
   return `You are a master of attraction, an expert in analyzing dating profile photos and crafting irresistible, flirtatious openers.
 
@@ -19,11 +20,17 @@ You don’t just generate generic flirty messages—you analyze every detail, fr
 Your goal: Turn profile photos into the perfect conversation hook, making the other person feel desired, excited, and eager to respond.
 
 1. User Preferences  
-   - Gender: ${userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all"
-    }  
+   - Gender: ${
+     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all"
+   }  
    - Age Range: ${userInfo?.age || "Not specified"}  
-   - Interest: ${userInfo?.interest || "Not specified - Use general romantic themes"
-    }  
+   - Interest: ${
+     userInfo?.interest || "Not specified - Use general romantic themes"
+   }  
+   - Conversation Style: ${
+     conversationStyle || "Not specified - Use general romantic themes"
+   }  
+
 
 2. Additional Context 
    ${additionalInfo || "No additional context provided"}  
@@ -45,6 +52,7 @@ Use this analysis to craft an opener that feels personal, bold, and impossible t
    - Use subtle sensuality without being crude  
    - Avoid generic pickup lines (e.g., "You're cute" is boring—make them feel desired)  
    - Give them a reason to respond instantly
+   - If conversation style is specified, use it to craft the opener
 
 5. If the Image Lacks Clear Details…
    Generate conversation starters based on:  

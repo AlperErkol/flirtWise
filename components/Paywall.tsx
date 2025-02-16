@@ -89,11 +89,7 @@ export default function Paywall({ navigation }: any) {
           Select a plan for your free trial.
         </Text>
 
-        {/* Subscriptions */}
-
         <View style={styles.plansContainer}>
-          {/* Quarterly Subscription */}
-
           <TouchableOpacity
             style={[
               styles.planButton,
@@ -101,7 +97,7 @@ export default function Paywall({ navigation }: any) {
             ]}
             onPress={() => handlePlanSelect("QUARTERLY")}
           >
-            <Text style={styles.saveBadge}>BEST DEAL</Text>
+            <Text style={styles.saveBadge}>Most Popular</Text>
             <View>
               <View style={styles.planTitleContainer}>
                 <Text style={styles.planTitle}>
@@ -128,14 +124,13 @@ export default function Paywall({ navigation }: any) {
                   marginBottom: 12,
                 }}
               >
-                <Text style={styles.planPrice}>
-                  {currentOffering.threeMonth?.product.priceString}
-                </Text>
+                <View>
+                  <Text style={styles.planPrice}>
+                    {currentOffering.threeMonth?.product.priceString}
+                  </Text>
+                  <Text>per 3 months</Text>
+                </View>
               </View>
-              <Text style={styles.infoText}>
-                Just {currentOffering.threeMonth?.product.pricePerMonthString}{" "}
-                per month, billed every 3 months
-              </Text>
             </View>
           </TouchableOpacity>
 
@@ -172,22 +167,15 @@ export default function Paywall({ navigation }: any) {
                   </View>
                 </View>
               </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View>
                 <Text style={styles.planPrice}>
                   {currentOffering.weekly?.product.priceString}
                 </Text>
-                <Text>/week</Text>
+                <Text>per week</Text>
               </View>
             </View>
           </TouchableOpacity>
         </View>
-
-        <Text style={styles.billingText}>
-          Billing starts at the end of your free trial unless you cancel. All
-          plans have 3-day free trial. Plans renew automatically. Cancel via the
-          App Store anytime.
-        </Text>
-
         <TouchableOpacity
           style={[
             styles.subscribeButton,
@@ -197,9 +185,27 @@ export default function Paywall({ navigation }: any) {
           disabled={isLoading}
         >
           <Text style={styles.subscribeButtonText}>
-            {isLoading ? "Processing..." : "Try for Free ⚡"}
+            {isLoading ? "Processing..." : "Start 3-Day Free Trial ⚡"}
           </Text>
         </TouchableOpacity>
+        <View style={{ marginBottom: 24, flexDirection: "column", gap: 12 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Ionicons name="shield" size={20} />
+            <Text style={styles.billingText}>Cancel anytime.</Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Ionicons name="notifications" size={20} />
+            <Text style={styles.billingText}>
+              We'll notify you 24 hours before your trial ends.
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Ionicons name="card" size={20} />
+            <Text style={styles.billingText}>
+              Billing starts after 3-day free trial ends.
+            </Text>
+          </View>
+        </View>
 
         <View style={styles.footer}>
           <TouchableOpacity onPress={handleRestorePurchase}>
@@ -224,62 +230,53 @@ export default function Paywall({ navigation }: any) {
             source={require("../assets/images/logo.png")}
             style={styles.logo}
           />
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="close" size={32} color="#000" />
-          </TouchableOpacity>
         </View>
 
         <Text style={styles.title}>
-          Upgrade now and never get ignored again!
+          Turn Texting Into Dates – Unlock Your Trial!
         </Text>
         <Text style={styles.description}>
-          🔥89% of users who upgraded reported more replies in 24 hours.
+          🔥 89% of users who upgraded reported more replies in 24 hours.
         </Text>
 
         <View style={styles.featuresContainer}>
           <View style={styles.featureRow}>
             <Ionicons
-              style={{ marginRight: 16 }}
-              name="flash-sharp"
+              style={{ marginRight: 8 }}
+              name="checkmark-circle"
               size={28}
-              color="#FF6347"
-            />
-            <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>Elite Dating Coaches</Text>
-              <Text style={styles.featureDescription}>
-                Get unlimited access to top-tier dating experts!
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.featureRow}>
-            <Ionicons
-              style={{ marginRight: 16 }}
-              name="flash-sharp"
-              size={28}
-              color="#FF6347"
+              color="#34C759"
             />
 
             <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>AI-Powered Insights</Text>
-              <Text style={styles.featureDescription}>
-                Unlock deep photo and conversation analysis.
+              <Text style={styles.featureTitle}>
+                AI-Powered Photo & Chat Analysis
               </Text>
             </View>
           </View>
           <View style={styles.featureRow}>
             <Ionicons
-              style={{ marginRight: 16 }}
-              name="flash-sharp"
+              style={{ marginRight: 8 }}
+              name="checkmark-circle"
               size={28}
-              color="#FF6347"
+              color="#34C759"
             />
-
             <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>Flirting Mastery Tips</Text>
-              <Text style={styles.featureDescription}>
-                Unlock exclusive secrets to spark attraction and keep the
-                chemistry alive.
+              <Text style={styles.featureTitle}>
+                Expert Flirting Techniques
+              </Text>
+            </View>
+          </View>
+          <View style={styles.featureRow}>
+            <Ionicons
+              style={{ marginRight: 8 }}
+              name="checkmark-circle"
+              size={28}
+              color="#34C759"
+            />
+            <View style={styles.featureTextContainer}>
+              <Text style={styles.featureTitle}>
+                Proven Dating Success Tips
               </Text>
             </View>
           </View>
@@ -298,7 +295,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
   },
@@ -320,39 +317,36 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 16,
-    color: "#555",
+    color: "#000",
     marginBottom: 24,
-    fontFamily: "Inter_400Regular",
+    fontFamily: "Inter_500Medium",
     letterSpacing: -0.5,
   },
-  featuresContainer: {},
+  featuresContainer: {
+    marginBottom: 6,
+  },
 
   featureRow: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
   },
+
   featureEmoji: {
     fontSize: 24,
     marginRight: 16,
   },
+
   featureTextContainer: {
     flex: 1,
   },
   featureTitle: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 17,
     marginBottom: 4,
     fontFamily: "Inter_600SemiBold",
-    letterSpacing: -0.5,
+    letterSpacing: -0.7,
   },
 
-  featureDescription: {
-    fontSize: 14,
-    color: "#666",
-    fontFamily: "Inter_400Regular",
-    letterSpacing: -0.5,
-  },
   plansContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -367,6 +361,7 @@ const styles = StyleSheet.create({
     borderColor: "#999",
     marginHorizontal: 6,
   },
+
   planButtonSelected: {
     borderColor: "#FF6347",
     backgroundColor: "#FFF5F5",
@@ -460,10 +455,10 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   billingText: {
-    fontSize: 12,
-    color: "#666",
-    textAlign: "center",
-    marginBottom: 16,
+    fontSize: 16,
+    color: "#000000",
+    fontFamily: "Inter_500Medium",
+    letterSpacing: -0.5,
   },
   infoText: {
     fontSize: 12,

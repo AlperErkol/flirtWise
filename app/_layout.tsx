@@ -44,7 +44,6 @@ import WelcomeScreen from "./screens/onboarding/WelcomeScreen";
 import HowItWorksScreen from "./screens/onboarding/HowItWorksScreen";
 import BenefitsScreen from "./screens/onboarding/BenefitsScreen";
 import FinalScreen from "./screens/onboarding/FinalScreen";
-import AIWingmanScreen from "./screens/onboarding/AIWingmanScreen";
 import CategoryDetailScreen from "./screens/features/CategoryDetailScreen";
 import SubCategoryDetailScreen from "./screens/features/SubCategoryDetail";
 import { getLocales } from "expo-localization";
@@ -114,7 +113,6 @@ export default function RootLayout() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="HowItWorksScreen" component={HowItWorksScreen} />
         <Stack.Screen name="BenefitsScreen" component={BenefitsScreen} />
-        <Stack.Screen name="AIWingmanScreen" component={AIWingmanScreen} />
         <Stack.Screen name="FinalScreen" component={FinalScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="TipsScreen" component={TipsScreen} />

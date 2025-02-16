@@ -10,11 +10,16 @@ export const enhanceChat = async (
   imageUrl: any,
   userInfo: any,
   additionalInfo?: string,
+  conversationStyle?: string,
   isDeadConversation?: boolean
 ) => {
+  console.log("additionalInfo : ", additionalInfo);
+  console.log("isDeadConversation : ", isDeadConversation);
+  console.log("conversationStyle : ", conversationStyle);
+
   let prompt = isDeadConversation
-    ? getDeadChatEnhancerPrompt(userInfo, additionalInfo)
-    : getChatEnhancerPrompt(userInfo, additionalInfo);
+    ? getDeadChatEnhancerPrompt(userInfo, additionalInfo, conversationStyle)
+    : getChatEnhancerPrompt(userInfo, additionalInfo, conversationStyle);
   try {
     const response = await ApiService.post("/chat/completions", {
       model: OPENAI_MODEL_FAST,

@@ -16,5 +16,7 @@
 2. Copied Badge Implementation
 3. Multi Language Support
 4. A/B Testing
-5. Uygulama her açıldığında WelcomeScreen gösterilmesi
-6. Texting Wibe seçeneği
+5. Uygulama her açıldığında WelcomeScreen gösterilmesi - Done
+6. Texting Wibe seçeneği - Done
+7. Paywall Görünümünün düzenlenmesi - Done
+8. Hard Paywall'a çevirme - Done

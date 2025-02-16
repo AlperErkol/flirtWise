@@ -1,3 +1,5 @@
+import convoStyles from "@/constants/settings/convo-style";
+import Theme from "@/constants/Theme";
 import React from "react";
 import {
   Modal,
@@ -6,6 +8,8 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 
 interface AdditionalInfoModalProps {
@@ -13,7 +17,8 @@ interface AdditionalInfoModalProps {
   onClose: () => void;
   additionalInfo: string;
   onChangeText: (text: string) => void;
-  onSubmit: () => void;
+  conversationStyle: string;
+  setConversationStyle: (style: string) => void;
 }
 
 export default function AdditionalInfoModal({
@@ -21,7 +26,8 @@ export default function AdditionalInfoModal({
   onClose,
   additionalInfo,
   onChangeText,
-  onSubmit,
+  conversationStyle,
+  setConversationStyle,
 }: AdditionalInfoModalProps) {
   return (
     <Modal
@@ -30,28 +36,60 @@ export default function AdditionalInfoModal({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Additional Information</Text>
-          <TextInput
-            style={styles.textArea}
-            multiline
-            numberOfLines={4}
-            placeholder="Add any additional context or specific questions about the photo..."
-            placeholderTextColor="#999"
-            value={additionalInfo}
-            onChangeText={onChangeText}
-          />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-              <Text style={styles.buttonText}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.submitButton]} onPress={onSubmit}>
-              <Text style={styles.buttonText}>Add</Text>
-            </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Additional Information</Text>
+            <TextInput
+              style={styles.textArea}
+              multiline
+              numberOfLines={4}
+              placeholder="Add any helpful details about the photo (e.g. hobbies, vibe, profile highlights)"
+              placeholderTextColor="#999"
+              value={additionalInfo}
+              onChangeText={onChangeText}
+            />
+            <View style={styles.convoStyleContainer}>
+              <Text style={styles.modalTitle}>Conversation Style</Text>
+              <View style={styles.convoStyleRow}>
+                {convoStyles.map((style) => (
+                  <TouchableOpacity
+                    key={style.id}
+                    style={[
+                      styles.convoStyleButton,
+                      conversationStyle === style.id &&
+                        styles.selectedConvoStyle,
+                    ]}
+                    onPress={() =>
+                      setConversationStyle(
+                        conversationStyle === style.id ? "" : style.id
+                      )
+                    }
+                  >
+                    <Text
+                      style={[
+                        styles.convoStyleButtonText,
+                        conversationStyle === style.id &&
+                          styles.selectedConvoStyleText,
+                      ]}
+                    >
+                      {style.title}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
+                <Text style={styles.buttonText}>Close</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.submitButton]} onPress={onClose}>
+                <Text style={styles.buttonText}>Add</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
@@ -72,9 +110,9 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "600",
     marginBottom: 15,
-    textAlign: "center",
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
   textArea: {
     borderWidth: 1,
@@ -82,8 +120,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     minHeight: 100,
-    textAlignVertical: "top",
     fontFamily: "Inter_400Regular",
+    letterSpacing: -0.5,
+    fontSize: 16,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -107,9 +146,48 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     textAlign: "center",
-    fontWeight: "600",
+    fontFamily: "Inter_500Medium",
+    letterSpacing: -0.5,
+    fontSize: 16,
   },
   submitButtonDisabled: {
     opacity: 0.5,
+  },
+  convoStyleContainer: {
+    marginTop: 32,
+    marginBottom: 16,
+  },
+  convoStyleTitle: {
+    fontSize: 18,
+    fontFamily: "Inter_500Medium",
+    color: "#000",
+    marginBottom: 8,
+    letterSpacing: -0.5,
+  },
+  convoStyleRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: -8,
+  },
+  convoStyleButton: {
+    backgroundColor: "#ffffff",
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 8,
+    borderWidth: 2,
+    borderColor: "#F3F4F6",
+  },
+  selectedConvoStyle: {
+    borderColor: Theme.colors.primary,
+  },
+  convoStyleButtonText: {
+    fontSize: 15,
+    fontFamily: "Inter_500Medium",
+    color: "#000",
+    letterSpacing: -0.5,
+  },
+  selectedConvoStyleText: {
+    color: Theme.colors.primary,
   },
 });

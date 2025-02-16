@@ -6,9 +6,17 @@ import { PhotoOpenerExtraction } from "@/utils/openai/response";
 export const generatePhotoOpeners = async (
   imageUrl: any,
   userInfo: any,
-  additionalInfo?: string
+  additionalInfo?: string,
+  conversationStyle?: string
 ) => {
-  let prompt = getPhotoOpenerPrompt({ userInfo }, additionalInfo);
+  console.log("additionalInfo : ", additionalInfo);
+  console.log("conversationStyle : ", conversationStyle);
+
+  let prompt = getPhotoOpenerPrompt(
+    { userInfo },
+    additionalInfo,
+    conversationStyle
+  );
 
   try {
     const response = await ApiService.post("/chat/completions", {
@@ -38,6 +46,7 @@ export const generatePhotoOpeners = async (
     });
 
     const aiText = response.choices[0].message.content;
+    console.log("aiText : ", aiText);
 
     try {
       const hints = JSON.parse(aiText);

@@ -9,7 +9,6 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-import PremiumBadge from "@/components/PremiumBadge";
 import { usePaywall } from "@/hooks/usePaywall";
 import { FREE_CATEGORIES, PREMIUM_CATEGORIES } from "@/constants/tip/category";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
@@ -39,19 +38,13 @@ type RootStackParamList = {
 };
 
 export default function TipsScreen() {
-  const { showPaywall } = usePaywall();
-  const { isProMember } = useRevenueCat();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const handleCategoryPress = async (category: Category) => {
-    if (category.isPremium && !isProMember) {
-      await showPaywall();
-      return;
-    }
     navigation.navigate("CategoryDetail", { category });
   };
 
-  const renderCategory = (category: Category, isPremiumCategory: boolean) => (
+  const renderCategory = (category: Category) => (
     <TouchableOpacity
       key={category.id}
       style={styles.categoryContainer}
@@ -65,11 +58,6 @@ export default function TipsScreen() {
       >
         <Text style={styles.categoryIcon}>{category.icon}</Text>
         <Text style={styles.categoryTitle}>{category.title}</Text>
-        {isPremiumCategory && !isProMember && (
-          <View style={styles.premiumBadgeContainer}>
-            <PremiumBadge />
-          </View>
-        )}
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -82,16 +70,12 @@ export default function TipsScreen() {
           <View style={styles.categoriesContainer}>
             <Text style={styles.sectionTitle}>Basic Categories</Text>
             <View style={styles.categoryGrid}>
-              {FREE_CATEGORIES.map((category) =>
-                renderCategory(category, false)
-              )}
+              {FREE_CATEGORIES.map((category) => renderCategory(category))}
             </View>
 
             <Text style={styles.sectionTitle}>Premium Categories</Text>
             <View style={styles.categoryGrid}>
-              {PREMIUM_CATEGORIES.map((category) =>
-                renderCategory(category, true)
-              )}
+              {PREMIUM_CATEGORIES.map((category) => renderCategory(category))}
             </View>
           </View>
         </View>
