@@ -12,6 +12,8 @@ import pickImage from "@/common/image";
 import AdditionalInfoModal from "@/components/AdditionalInfoModal";
 import handleImageProcessing from "@/common/photo";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
+import { Button } from "@rneui/themed";
+import globalStyles from "@/constants/style";
 
 export default function PhotoOpenersScreen({ navigation, route }: any) {
   const userProfile = useProfileStore((state: any) => state.userProfile);
@@ -83,12 +85,13 @@ export default function PhotoOpenersScreen({ navigation, route }: any) {
                 style={styles.heroImage}
               />
             </View>
-            <TouchableOpacity
-              style={styles.pickButton}
+            <Button
+              title={"Upload an Image"}
+              buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
+              titleStyle={globalStyles.buttonText}
               onPress={pickImageHandler}
-            >
-              <Text style={styles.pickText}>Upload an Image</Text>
-            </TouchableOpacity>
+              style={{ display: "flex", alignItems: "center" }}
+            />
           </>
         ) : (
           <View>
@@ -119,18 +122,29 @@ export default function PhotoOpenersScreen({ navigation, route }: any) {
               </View>
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.analyzeButton}
+              <Button
+                title="Generate Openers ⚡️"
+                buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
+                titleStyle={globalStyles.buttonText}
                 onPress={startAnalysis}
-              >
-                <Text style={styles.buttonText}>Generate Openers ⚡️</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.uploadButton}
+                style={{ display: "flex", alignItems: "center" }}
+              />
+              <Button
+                title="Upload a New Image"
+                buttonStyle={[
+                  globalStyles.button,
+                  globalStyles.transparentButton,
+                ]}
+                titleStyle={[
+                  globalStyles.buttonText,
+                  globalStyles.transparentButton,
+                ]}
                 onPress={pickImageHandler}
-              >
-                <Text style={styles.uploadButtonText}>Upload a New Image</Text>
-              </TouchableOpacity>
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              />
             </View>
           </View>
         )}
@@ -185,23 +199,6 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  pickButtonContainer: {
-    backgroundColor: Theme.colors.primary,
-    padding: 15,
-    borderRadius: 10,
-    position: "absolute",
-    bottom: 40,
-    alignSelf: "center",
-    width: "90%",
-  },
-  pickButton: {
-    backgroundColor: Theme.colors.primary,
-    padding: 16,
-    borderRadius: 12,
-    alignItems: "center",
-    width: "100%",
-    marginBottom: 20,
-  },
   heroImage: {
     width: "100%",
     height: 500,
@@ -225,23 +222,6 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 12,
   },
-  analyzeButton: {
-    backgroundColor: "#000000",
-    padding: 16,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  uploadButton: {
-    padding: 16,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: -0.5,
-  },
-
   bottomSheetBackground: {
     backgroundColor: "#fff",
     borderTopLeftRadius: 24,
@@ -288,11 +268,5 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-  },
-  uploadButtonText: {
-    color: "#FF6347",
-    fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: -0.5,
   },
 });

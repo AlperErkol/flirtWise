@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
-
+import Toast from "react-native-toast-message";
 type BottomSheetComponentProps = {
   title: string;
   suggestions: string[];
@@ -13,6 +13,21 @@ type BottomSheetComponentProps = {
 const CustomBottomSheetView: React.FunctionComponent<
   BottomSheetComponentProps
 > = ({ title, suggestions, bottomSheetRef }) => {
+  const handleCopy = async (suggestion: string) => {
+    await Clipboard.setStringAsync(suggestion);
+    Toast.show({
+      text1: "Copied to clipboard",
+      type: "success",
+      position: "bottom",
+      text1Style: {
+        fontFamily: "Inter_500Medium",
+        fontSize: 16,
+        color: "#000",
+        letterSpacing: -0.5,
+      },
+    });
+  };
+
   return (
     <BottomSheetView style={styles.bottomSheetContent}>
       <View style={styles.bottomSheetHeader}>
@@ -24,7 +39,7 @@ const CustomBottomSheetView: React.FunctionComponent<
           onPress={() => bottomSheetRef.current?.close()}
           style={styles.closeButton}
         >
-          <Ionicons name="close" size={24} color="#666" />
+          <Ionicons name="close" size={32} color="#666" />
         </TouchableOpacity>
       </View>
 
@@ -35,9 +50,9 @@ const CustomBottomSheetView: React.FunctionComponent<
             <View style={styles.suggestionActions}>
               <TouchableOpacity
                 style={styles.copyButton}
-                onPress={() => Clipboard.setString(suggestion)}
+                onPress={() => handleCopy(suggestion)}
               >
-                <Ionicons name="copy-outline" size={20} color="#666" />
+                <Ionicons name="copy-outline" size={20} color="#000" />
                 <Text style={styles.copyText}>Copy</Text>
               </TouchableOpacity>
             </View>
@@ -103,13 +118,14 @@ const styles = StyleSheet.create({
   copyButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
     alignSelf: "flex-end",
+    gap: 8,
   },
   copyText: {
-    color: "#666",
+    color: "#000",
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: "Inter_500Medium",
+    letterSpacing: -0.5,
   },
   suggestionText: {
     color: "#000",

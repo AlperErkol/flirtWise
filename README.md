@@ -12,11 +12,10 @@
 
 # FlirtWise - Development Tracking 1.0.3 🎯
 
-1. Feedback System Implementation
-2. Copied Badge Implementation
-3. Multi Language Support
-4. A/B Testing
-5. Uygulama her açıldığında WelcomeScreen gösterilmesi - Done
-6. Texting Wibe seçeneği - Done
-7. Paywall Görünümünün düzenlenmesi - Done
-8. Hard Paywall'a çevirme - Done
+1. Copied Badge Implementation - Done
+2. Multi Language Support -
+3. Uygulama her açıldığında WelcomeScreen gösterilmesi - Done
+4. Texting Wibe seçeneği - Done
+5. Paywall Görünümünün düzenlenmesi - Done
+6. Hard Paywall'a çevirme - Done
+7. A/B Testing

@@ -47,6 +47,7 @@ import FinalScreen from "./screens/onboarding/FinalScreen";
 import CategoryDetailScreen from "./screens/features/CategoryDetailScreen";
 import SubCategoryDetailScreen from "./screens/features/SubCategoryDetail";
 import { getLocales } from "expo-localization";
+import Toast from "react-native-toast-message";
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -128,15 +129,7 @@ export default function RootLayout() {
           name="ChatEnhancerScreen"
           component={ChatEnhancerScreen}
         />
-        <Stack.Screen
-          name="LanguageScreen"
-          component={LanguageScreen}
-          options={{
-            headerShown: true,
-            title: "Language",
-            headerTitleAlign: "center",
-          }}
-        />
+        <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
         <Stack.Screen
           options={{ headerShown: false, presentation: "fullScreenModal" }}
           name="Paywall"
@@ -199,6 +192,7 @@ export default function RootLayout() {
         </TouchableOpacity>
       </Modal>
       <StatusBar />
+      <Toast />
     </GestureHandlerRootView>
   );
 }

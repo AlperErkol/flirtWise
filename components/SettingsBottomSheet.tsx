@@ -65,13 +65,13 @@ export default function SettingsBottomSheet({
       emoji: "💳",
     },
     {
-      id: "4",
-      title: "Feedback",
-      screen: "FeedbackScreen",
+      id: "3",
+      title: "Language",
+      screen: "LanguageScreen",
       emoji: "💬",
     },
     {
-      id: "5",
+      id: "4",
       title: "Share App",
       action: handleShareApp,
       emoji: "📤",

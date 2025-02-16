@@ -19,6 +19,8 @@ import CustomBottomSheetView from "@/components/CustomBottomSheetView";
 import pickImage from "@/common/image";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
 import handleImageProcessing from "@/common/photo";
+import { Button } from "@rneui/themed";
+import globalStyles from "@/constants/style";
 
 export default function ChatEnhancerScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
@@ -102,12 +104,13 @@ export default function ChatEnhancerScreen() {
               />
             </View>
 
-            <TouchableOpacity
-              style={styles.pickButton}
+            <Button
+              title="Upload a Screenshot"
+              buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
+              titleStyle={globalStyles.buttonText}
               onPress={pickImageHandler}
-            >
-              <Text style={styles.pickText}>Upload a Screenshot</Text>
-            </TouchableOpacity>
+              style={{ display: "flex", alignItems: "center" }}
+            />
           </>
         ) : (
           <View>
@@ -147,27 +150,32 @@ export default function ChatEnhancerScreen() {
               </View>
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.analyzeButton}
+              <Button
+                title="Enhance Chat ⚡️"
+                buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
+                titleStyle={globalStyles.buttonText}
                 onPress={() => startAnalysis()}
-              >
-                <Text style={styles.buttonText}>Enhance Chat ⚡️</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.uploadButton}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              />
+              <Button
+                title="Upload a New Screenshot"
+                buttonStyle={[
+                  globalStyles.button,
+                  globalStyles.transparentButton,
+                ]}
+                titleStyle={[
+                  globalStyles.buttonText,
+                  globalStyles.transparentButton,
+                ]}
                 onPress={pickImageHandler}
-              >
-                <Text
-                  style={{
-                    color: "#FF6347",
-                    fontSize: 16,
-                    fontFamily: "Inter_600SemiBold",
-                    letterSpacing: -0.5,
-                  }}
-                >
-                  Upload a Screenshot
-                </Text>
-              </TouchableOpacity>
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              />
             </View>
           </View>
         )}

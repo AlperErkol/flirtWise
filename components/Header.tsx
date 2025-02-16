@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import SettingsBottomSheet from "./SettingsBottomSheet";
 import BottomSheet from "@gorhom/bottom-sheet";
-
+import { useTranslation } from "@/hooks/useTranslation";
 interface HeaderProps {
   logo?: boolean;
   showBackButton?: boolean;
@@ -21,6 +21,7 @@ export default function Header({
   bottomSheetRef,
 }: HeaderProps) {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   const handleSettingsPress = () => {
     bottomSheetRef?.current?.expand();
@@ -36,7 +37,7 @@ export default function Header({
               style={styles.backButton}
             >
               <Ionicons name="chevron-back" size={24} color="#FF6347" />
-              <Text style={styles.backButtonText}>Back</Text>
+              <Text style={styles.backButtonText}>{t("common.back")}</Text>
             </TouchableOpacity>
           ) : (
             showSettingsIcon &&
