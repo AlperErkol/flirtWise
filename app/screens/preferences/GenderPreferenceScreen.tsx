@@ -5,22 +5,22 @@ import useProfileStore from "@/store/profileStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useTranslation } from "@/hooks/useTranslation";
 const genderOptions = [
   {
     id: "male",
-    label: "Male",
+    label: "male",
     icon: "man-outline",
   },
   {
     id: "female",
-    label: "Female",
+    label: "female",
     icon: "woman-outline",
   },
 
   {
     id: "other",
-    label: "Other",
+    label: "other",
     icon: "person-outline",
   },
 ];
@@ -28,6 +28,7 @@ const genderOptions = [
 export default function GenderPreferenceScreen({ navigation }: any) {
   const [selectedGender, setSelectedGender] = useState("");
   const setUserProfile = useProfileStore((state: any) => state.setUserProfile);
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadGenderPreference();
@@ -62,7 +63,7 @@ export default function GenderPreferenceScreen({ navigation }: any) {
 
   return (
     <GlobalSafeAreaView>
-      <Header showBackButton title="Gender" />
+      <Header showBackButton title={t("gender")} />
       <View style={styles.container}>
         {genderOptions.map((option) => (
           <TouchableOpacity
@@ -77,7 +78,7 @@ export default function GenderPreferenceScreen({ navigation }: any) {
                 color="#4F46E5"
                 style={{ marginRight: 15 }}
               />
-              <Text style={styles.menuText}>{option.label}</Text>
+              <Text style={styles.menuText}>{t(option.label)}</Text>
             </View>
             {selectedGender === option.id && (
               <Ionicons name="checkmark" size={24} color="#4F46E5" />

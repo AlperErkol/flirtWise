@@ -5,8 +5,9 @@ import Theme from "@/constants/Theme";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import personas from "@/constants/tip/persona";
-
+import { useTranslation } from "@/hooks/useTranslation";
 export default function CommunicationCoachSelectionScreen({ navigation }: any) {
+  const { t } = useTranslation();
   const handlePersonaSelect = async (persona: any) => {
     navigation.navigate("CommunicationCoachScreen", { persona: persona.id });
   };
@@ -14,10 +15,8 @@ export default function CommunicationCoachSelectionScreen({ navigation }: any) {
   return (
     <GlobalSafeAreaView>
       <Header logo showBackButton />
-      <Text style={styles.title}>Choose Your Coach</Text>
-      <Text style={styles.subtitle}>
-        Select the coaching style that best fits your needs.
-      </Text>
+      <Text style={styles.title}>{t("chooseYourCoach")}</Text>
+      <Text style={styles.subtitle}>{t("selectCoachingStyle")}</Text>
 
       {personas.map((persona) => (
         <TouchableOpacity
@@ -33,9 +32,9 @@ export default function CommunicationCoachSelectionScreen({ navigation }: any) {
             <View style={styles.personaContent}>
               <Text style={styles.personaEmoji}>{persona.icon}</Text>
               <View style={styles.personaInfo}>
-                <Text style={styles.personaTitle}>{persona.title}</Text>
+                <Text style={styles.personaTitle}>{t(persona.title)}</Text>
                 <Text style={styles.personaDescription}>
-                  {persona.description}
+                  {t(persona.description)}
                 </Text>
               </View>
             </View>

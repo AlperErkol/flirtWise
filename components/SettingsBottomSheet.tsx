@@ -15,12 +15,13 @@ import BottomSheet, {
 import { Ionicons } from "@expo/vector-icons";
 import { usePaywall } from "@/hooks/usePaywall";
 import { APP_STORE_URL } from "@/constants/settings/urls";
-
+import { useTranslation } from "@/hooks/useTranslation";
 export default function SettingsBottomSheet({
   bottomSheetRef,
   navigation,
 }: any) {
   const { showPaywall } = usePaywall();
+  const { t } = useTranslation();
 
   const handleShareApp = async () => {
     try {
@@ -54,25 +55,25 @@ export default function SettingsBottomSheet({
   const menuItems = [
     {
       id: "1",
-      title: "Preferences",
+      title: "preferences",
       screen: "PreferencesScreen",
       emoji: "⚙️",
     },
     {
       id: "2",
-      title: "Upgrade",
+      title: "upgrade",
       action: handleUpgrade,
       emoji: "💳",
     },
     {
       id: "3",
-      title: "Language",
+      title: "language",
       screen: "LanguageScreen",
       emoji: "💬",
     },
     {
       id: "4",
-      title: "Share App",
+      title: "shareApp",
       action: handleShareApp,
       emoji: "📤",
     },
@@ -124,7 +125,7 @@ export default function SettingsBottomSheet({
               }}
             >
               <Text style={styles.emoji}>{item.emoji}</Text>
-              <Text style={styles.menuText}>{item.title}</Text>
+              <Text style={styles.menuText}>{t(item.title)}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -142,7 +143,7 @@ export default function SettingsBottomSheet({
                 )
               }
             >
-              <Text style={styles.footerLink}>Terms</Text>
+              <Text style={styles.footerLink}>{t("terms")}</Text>
             </TouchableOpacity>
             <Text style={styles.footerSeparator}>|</Text>
             <TouchableOpacity
@@ -152,7 +153,7 @@ export default function SettingsBottomSheet({
                 )
               }
             >
-              <Text style={styles.footerLink}>Privacy Policy</Text>
+              <Text style={styles.footerLink}>{t("privacyPolicy")}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -179,6 +180,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     color: "#333",
+    letterSpacing: -0.5,
   },
   divider: {
     height: 1,

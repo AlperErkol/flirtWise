@@ -1,6 +1,7 @@
 import { getLocales } from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { tr, en } from "@/translations";
+import { eventEmitter } from "@/lib/eventEmitter";
 
 const translations = {
   tr,
@@ -25,7 +26,10 @@ class I18n {
           : "en";
       }
     } catch (error) {
-      console.error("Dil başlatılırken hata:", error);
+      console.error(
+        "An error occurred while initializing the language:",
+        error
+      );
     }
   }
 
@@ -33,22 +37,20 @@ class I18n {
     if (translations[language]) {
       this.currentLanguage = language;
       await AsyncStorage.setItem("userLanguage", language);
+      eventEmitter.emit("languageChange");
     }
   }
 
-  static t(key: string) {
-    const keys = key.split(".");
-    let translation: any = translations[this.currentLanguage];
-
-    for (const k of keys) {
-      if (translation[k]) {
-        translation = translation[k];
-      } else {
-        return key;
-      }
-    }
-
-    return translation;
+  static t(key: string): string {
+    const translation = translations[this.currentLanguage] as Record<
+      string,
+      string
+    >;
+    return (
+      translation[key] ||
+      (translations.en as Record<string, string>)[key] ||
+      key
+    );
   }
 }
 

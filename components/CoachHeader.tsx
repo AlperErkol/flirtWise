@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import Theme from "@/constants/Theme";
 
 type Props = {
   persona: string;
@@ -13,7 +12,6 @@ type Props = {
 };
 
 export default function CoachHeader({
-  persona,
   title,
   description,
   gradient,
@@ -64,10 +62,12 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     color: "#FFF",
     marginBottom: 4,
+    letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: 14,
     fontFamily: "Inter_400Regular",
     color: "rgba(255, 255, 255, 0.9)",
+    letterSpacing: -0.5,
   },
 });

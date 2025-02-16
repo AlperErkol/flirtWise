@@ -15,13 +15,14 @@ import { useRevenueCat } from "@/hooks/useRevenueCat";
 import Purchases from "react-native-purchases";
 import RevenueCatService from "@/services/payment/RevenueCatService";
 import { PRIVACY_URL, TERMS_URL } from "@/constants/settings/urls";
-
+import { useTranslation } from "@/hooks/useTranslation";
 export default function Paywall({ navigation }: any) {
   const { currentOffering } = useRevenueCat();
   const [selectedPlan, setSelectedPlan] = useState<"QUARTERLY" | "WEEKLY">(
     "QUARTERLY"
   );
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handlePlanSelect = (plan: "QUARTERLY" | "WEEKLY") => {
     setSelectedPlan(plan);
@@ -78,17 +79,14 @@ export default function Paywall({ navigation }: any) {
     if (!currentOffering) {
       return (
         <View>
-          <Text>Loading...</Text>
+          <Text>{t("loading")}</Text>
         </View>
       );
     }
 
     return (
       <>
-        <Text style={styles.selectPlanText}>
-          Select a plan for your free trial.
-        </Text>
-
+        <Text style={styles.selectPlanText}>{t("selectPlan")}</Text>
         <View style={styles.plansContainer}>
           <TouchableOpacity
             style={[
@@ -97,7 +95,7 @@ export default function Paywall({ navigation }: any) {
             ]}
             onPress={() => handlePlanSelect("QUARTERLY")}
           >
-            <Text style={styles.saveBadge}>Most Popular</Text>
+            <Text style={styles.saveBadge}>{t("mostPopular")}</Text>
             <View>
               <View style={styles.planTitleContainer}>
                 <Text style={styles.planTitle}>
@@ -128,7 +126,7 @@ export default function Paywall({ navigation }: any) {
                   <Text style={styles.planPrice}>
                     {currentOffering.threeMonth?.product.priceString}
                   </Text>
-                  <Text>per 3 months</Text>
+                  <Text>{t("per3Months")}</Text>
                 </View>
               </View>
             </View>
@@ -171,7 +169,7 @@ export default function Paywall({ navigation }: any) {
                 <Text style={styles.planPrice}>
                   {currentOffering.weekly?.product.priceString}
                 </Text>
-                <Text>per week</Text>
+                <Text>{t("perWeek")}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -185,37 +183,37 @@ export default function Paywall({ navigation }: any) {
           disabled={isLoading}
         >
           <Text style={styles.subscribeButtonText}>
-            {isLoading ? "Processing..." : "Start 3-Day Free Trial ⚡"}
+            {isLoading ? t("processing") : t("subscribeButtonText")}
           </Text>
         </TouchableOpacity>
         <View style={{ marginBottom: 24, flexDirection: "column", gap: 12 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Ionicons name="shield" size={20} />
-            <Text style={styles.billingText}>Cancel anytime.</Text>
+            <Text style={styles.billingText}>{t("cancelAnytime")}</Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Ionicons name="notifications" size={20} />
             <Text style={styles.billingText}>
-              We'll notify you 24 hours before your trial ends.
+              {t("notify24HoursBeforeTrialEnds")}
             </Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Ionicons name="card" size={20} />
             <Text style={styles.billingText}>
-              Billing starts after 3-day free trial ends.
+              {t("billingStartsAfterTrialEnds")}
             </Text>
           </View>
         </View>
 
         <View style={styles.footer}>
           <TouchableOpacity onPress={handleRestorePurchase}>
-            <Text style={styles.footerText}>Restore purchase</Text>
+            <Text style={styles.footerText}>{t("restorePurchase")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleLinkPress(PRIVACY_URL)}>
-            <Text style={styles.footerText}>Privacy Policy</Text>
+            <Text style={styles.footerText}>{t("privacyPolicy")}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleLinkPress(TERMS_URL)}>
-            <Text style={styles.footerText}>Terms of Use</Text>
+            <Text style={styles.footerText}>{t("termsOfUse")}</Text>
           </TouchableOpacity>
         </View>
       </>
@@ -232,12 +230,8 @@ export default function Paywall({ navigation }: any) {
           />
         </View>
 
-        <Text style={styles.title}>
-          Turn Texting Into Dates – Unlock Your Trial!
-        </Text>
-        <Text style={styles.description}>
-          🔥 89% of users who upgraded reported more replies in 24 hours.
-        </Text>
+        <Text style={styles.title}>{t("paywallTitle")}</Text>
+        <Text style={styles.description}>{t("paywallDescription")}</Text>
 
         <View style={styles.featuresContainer}>
           <View style={styles.featureRow}>
@@ -249,9 +243,7 @@ export default function Paywall({ navigation }: any) {
             />
 
             <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>
-                AI-Powered Photo & Chat Analysis
-              </Text>
+              <Text style={styles.featureTitle}>{t("paywallFeature1")}</Text>
             </View>
           </View>
           <View style={styles.featureRow}>
@@ -262,9 +254,7 @@ export default function Paywall({ navigation }: any) {
               color="#34C759"
             />
             <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>
-                Expert Flirting Techniques
-              </Text>
+              <Text style={styles.featureTitle}>{t("paywallFeature2")}</Text>
             </View>
           </View>
           <View style={styles.featureRow}>
@@ -275,9 +265,7 @@ export default function Paywall({ navigation }: any) {
               color="#34C759"
             />
             <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>
-                Proven Dating Success Tips
-              </Text>
+              <Text style={styles.featureTitle}>{t("paywallFeature3")}</Text>
             </View>
           </View>
         </View>

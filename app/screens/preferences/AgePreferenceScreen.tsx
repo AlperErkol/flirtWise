@@ -6,10 +6,11 @@ import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import { AGE_OPTIONS } from "@/constants/wizard/options";
-
+import { useTranslation } from "@/hooks/useTranslation";
 export default function AgePreferenceScreen({ navigation }: any) {
   const [selectedAge, setSelectedAge] = useState("");
   const setUserProfile = useProfileStore((state: any) => state.setUserProfile);
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadAgePreference();
@@ -44,7 +45,7 @@ export default function AgePreferenceScreen({ navigation }: any) {
 
   return (
     <GlobalSafeAreaView>
-      <Header showBackButton title="Age Range" />
+      <Header showBackButton title={t("ageRange")} />
       <View style={styles.container}>
         {AGE_OPTIONS.map((option) => (
           <TouchableOpacity

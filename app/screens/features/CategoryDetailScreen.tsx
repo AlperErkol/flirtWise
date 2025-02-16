@@ -10,7 +10,7 @@ import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/constants/Theme";
-
+import { useTranslation } from "@/hooks/useTranslation";
 interface SubCategory {
   id: string;
   title: string;
@@ -21,6 +21,7 @@ interface SubCategory {
 
 export default function CategoryDetailScreen({ route, navigation }: any) {
   const { category } = route.params;
+  const { t } = useTranslation();
 
   const handleSubCategoryPress = async (subCategory: SubCategory) => {
     navigation.navigate("SubCategoryDetail", { category, subCategory });
@@ -33,9 +34,11 @@ export default function CategoryDetailScreen({ route, navigation }: any) {
         <View style={styles.headerContainer}>
           <View style={styles.titleContainer}>
             <Ionicons name="chatbubbles-outline" size={24} color="#4F46E5" />
-            <Text style={styles.headerTitle}>{category.title}</Text>
+            <Text style={styles.headerTitle}>{t(category.title)}</Text>
           </View>
-          <Text style={styles.headerDescription}>{category.description}</Text>
+          <Text style={styles.headerDescription}>
+            {t(category.description)}
+          </Text>
         </View>
         {category.subCategories.map((subCategory: any) => (
           <TouchableOpacity
@@ -43,9 +46,9 @@ export default function CategoryDetailScreen({ route, navigation }: any) {
             style={styles.subCategoryCard}
             onPress={() => handleSubCategoryPress(subCategory)}
           >
-            <Text style={styles.subCategoryTitle}>{subCategory.title}</Text>
+            <Text style={styles.subCategoryTitle}>{t(subCategory.title)}</Text>
             <Text style={styles.subCategoryDescription}>
-              {subCategory.description}
+              {t(subCategory.description)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -80,11 +83,13 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     color: "#333",
     marginBottom: 4,
+    letterSpacing: -0.5,
   },
   subCategoryDescription: {
     fontSize: 14,
     fontFamily: "Inter_400Regular",
     color: "#666",
+    letterSpacing: -0.5,
   },
   headerContainer: {
     paddingVertical: 16,

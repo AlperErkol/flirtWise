@@ -9,11 +9,9 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-import { usePaywall } from "@/hooks/usePaywall";
 import { FREE_CATEGORIES, PREMIUM_CATEGORIES } from "@/constants/tip/category";
-import { useRevenueCat } from "@/hooks/useRevenueCat";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-
+import { useTranslation } from "@/hooks/useTranslation";
 interface Category {
   id: string;
   isPremium: boolean;
@@ -39,6 +37,7 @@ type RootStackParamList = {
 
 export default function TipsScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { t } = useTranslation();
 
   const handleCategoryPress = async (category: Category) => {
     navigation.navigate("CategoryDetail", { category });
@@ -57,7 +56,7 @@ export default function TipsScreen() {
         style={styles.categoryCard}
       >
         <Text style={styles.categoryIcon}>{category.icon}</Text>
-        <Text style={styles.categoryTitle}>{category.title}</Text>
+        <Text style={styles.categoryTitle}>{t(category.title)}</Text>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -68,12 +67,12 @@ export default function TipsScreen() {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <View style={styles.categoriesContainer}>
-            <Text style={styles.sectionTitle}>Basic Categories</Text>
+            <Text style={styles.sectionTitle}>{t("basicCategories")}</Text>
             <View style={styles.categoryGrid}>
               {FREE_CATEGORIES.map((category) => renderCategory(category))}
             </View>
 
-            <Text style={styles.sectionTitle}>Premium Categories</Text>
+            <Text style={styles.sectionTitle}>{t("premiumCategories")}</Text>
             <View style={styles.categoryGrid}>
               {PREMIUM_CATEGORIES.map((category) => renderCategory(category))}
             </View>

@@ -1,5 +1,6 @@
 import convoStyles from "@/constants/settings/convo-style";
 import Theme from "@/constants/Theme";
+import { useTranslation } from "@/hooks/useTranslation";
 import React from "react";
 import {
   Modal,
@@ -29,6 +30,7 @@ export default function AdditionalInfoModal({
   conversationStyle,
   setConversationStyle,
 }: AdditionalInfoModalProps) {
+  const { t } = useTranslation();
   return (
     <Modal
       visible={visible}
@@ -39,18 +41,18 @@ export default function AdditionalInfoModal({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Additional Information</Text>
+            <Text style={styles.modalTitle}>{t("additionalContext")}</Text>
             <TextInput
               style={styles.textArea}
               multiline
               numberOfLines={4}
-              placeholder="Add any helpful details about the photo (e.g. hobbies, vibe, profile highlights)"
+              placeholder={t("additionalContextPlaceholder")}
               placeholderTextColor="#999"
               value={additionalInfo}
               onChangeText={onChangeText}
             />
             <View style={styles.convoStyleContainer}>
-              <Text style={styles.modalTitle}>Conversation Style</Text>
+              <Text style={styles.modalTitle}>{t("conversationStyle")}</Text>
               <View style={styles.convoStyleRow}>
                 {convoStyles.map((style) => (
                   <TouchableOpacity
@@ -73,7 +75,7 @@ export default function AdditionalInfoModal({
                           styles.selectedConvoStyleText,
                       ]}
                     >
-                      {style.title}
+                      {t(style.key)}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -81,10 +83,10 @@ export default function AdditionalInfoModal({
             </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
-                <Text style={styles.buttonText}>Close</Text>
+                <Text style={styles.buttonText}>{t("close")}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.submitButton]} onPress={onClose}>
-                <Text style={styles.buttonText}>Add</Text>
+                <Text style={styles.buttonText}>{t("add")}</Text>
               </TouchableOpacity>
             </View>
           </View>

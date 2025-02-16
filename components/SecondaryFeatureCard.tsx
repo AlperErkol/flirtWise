@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
-
+import { useTranslation } from "@/hooks/useTranslation";
 export function SecondaryFeatureCard({
   feature,
   navigation,
@@ -9,6 +9,8 @@ export function SecondaryFeatureCard({
   feature: any;
   navigation: any;
 }) {
+  const { t } = useTranslation();
+
   const handleFeaturePress = async (feature: any) => {
     navigation.navigate(`${feature.screen}`);
   };
@@ -28,12 +30,12 @@ export function SecondaryFeatureCard({
           <Text style={styles.emoji}>{feature.emoji}</Text>
         </View>
         <View style={styles.contentContainer}>
-          <Text style={styles.secondaryCardTitle}>{feature.title}</Text>
-          <Text style={styles.secondaryCardDesc}>{feature.description}</Text>
+          <Text style={styles.secondaryCardTitle}>{t(feature.title)}</Text>
+          <Text style={styles.secondaryCardDesc}>{t(feature.description)}</Text>
         </View>
         <View style={styles.secondaryViewButtonContainer}>
           <View style={styles.secondaryViewButton}>
-            <Text style={styles.secondaryViewButtonText}>View</Text>
+            <Text style={styles.secondaryViewButtonText}>{t("view")}</Text>
             <Ionicons color={"#FFF"} name="arrow-forward-outline" size={20} />
           </View>
         </View>
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
   },
   secondaryViewButtonContainer: {
     borderTopWidth: 1,
-    borderColor: "#D6BDF7",
+    borderColor: "#fff",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

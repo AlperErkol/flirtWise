@@ -19,7 +19,7 @@ import {
 } from "@/utils/communication-coach";
 import { sendCommunicationCoachMessage } from "@/services/chat/coach";
 import useProfileStore from "@/store/profileStore";
-
+import { useTranslation } from "@/hooks/useTranslation";
 type PersonaStyleType = {
   messageColor: string;
   inputBgColor: string;
@@ -62,12 +62,13 @@ export default function CommunicationCoachScreen({ route, navigation }: Props) {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const userInfo = useProfileStore((state: any) => state.userProfile);
+  const { t } = useTranslation();
 
   const [chatHistory, setChatHistory] = useState<any>(() => {
     return [
       {
         role: "ai",
-        content: getWelcomeMessage(persona),
+        content: t(getWelcomeMessage(persona)),
       },
     ];
   });
@@ -122,8 +123,8 @@ export default function CommunicationCoachScreen({ route, navigation }: Props) {
     <View style={styles.container}>
       <CoachHeader
         persona={persona}
-        title={personaDetails.title}
-        description={personaDetails.description}
+        title={t(personaDetails.title)}
+        description={t(personaDetails.description)}
         gradient={personaDetails.gradient}
         onBackPress={() => navigation.goBack()}
       />
@@ -183,7 +184,7 @@ export default function CommunicationCoachScreen({ route, navigation }: Props) {
             ]}
             value={message}
             onChangeText={setMessage}
-            placeholder="Type your message..."
+            placeholder={t("typeYourMessage")}
             placeholderTextColor={Theme.colors.textLight}
             multiline
             textAlignVertical="center"

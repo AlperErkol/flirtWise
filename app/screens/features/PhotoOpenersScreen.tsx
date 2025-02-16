@@ -3,10 +3,8 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import useProfileStore from "../../../store/profileStore";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-import Theme from "@/constants/Theme";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
-import { useRateUs } from "@/hooks/useRateUs";
 import CustomBottomSheetView from "@/components/CustomBottomSheetView";
 import pickImage from "@/common/image";
 import AdditionalInfoModal from "@/components/AdditionalInfoModal";
@@ -14,17 +12,18 @@ import handleImageProcessing from "@/common/photo";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
 import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
+import { useTranslation } from "@/hooks/useTranslation";
 
-export default function PhotoOpenersScreen({ navigation, route }: any) {
+export default function PhotoOpenersScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [additionalInfo, setAdditionalInfo] = useState("");
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { checkAndShowRateUs } = useRateUs();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [conversationStyle, setConversationStyle] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -76,7 +75,7 @@ export default function PhotoOpenersScreen({ navigation, route }: any) {
           <>
             <View style={styles.instructionContainer}>
               <Text style={styles.instructionText}>
-                Upload a photo or story that you want to reply
+                {t("photoAnalysisInstruction")}
               </Text>
             </View>
             <View style={styles.heroContainer}>
@@ -86,7 +85,7 @@ export default function PhotoOpenersScreen({ navigation, route }: any) {
               />
             </View>
             <Button
-              title={"Upload an Image"}
+              title={t("uploadImage")}
               buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
               titleStyle={globalStyles.buttonText}
               onPress={pickImageHandler}
@@ -101,7 +100,7 @@ export default function PhotoOpenersScreen({ navigation, route }: any) {
             />
             <View style={styles.switchRow}>
               <View style={styles.switchLabelContainer}>
-                <Text style={styles.switchLabel}>Additional Context</Text>
+                <Text style={styles.switchLabel}>{t("additionalContext")}</Text>
                 {(additionalInfo.trim().length > 0 ||
                   conversationStyle.trim().length > 0) && (
                   <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
@@ -114,23 +113,23 @@ export default function PhotoOpenersScreen({ navigation, route }: any) {
                 >
                   {additionalInfo.trim().length > 0 ||
                   conversationStyle.trim().length > 0 ? (
-                    <Text style={styles.additionalButtonText}>Edit</Text>
+                    <Text style={styles.additionalButtonText}>{t("edit")}</Text>
                   ) : (
-                    <Text style={styles.additionalButtonText}>Add</Text>
+                    <Text style={styles.additionalButtonText}>{t("add")}</Text>
                   )}
                 </TouchableOpacity>
               </View>
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title="Generate Openers ⚡️"
+                title={t("generateOpeners")}
                 buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
                 titleStyle={globalStyles.buttonText}
                 onPress={startAnalysis}
                 style={{ display: "flex", alignItems: "center" }}
               />
               <Button
-                title="Upload a New Image"
+                title={t("uploadNewImage")}
                 buttonStyle={[
                   globalStyles.button,
                   globalStyles.transparentButton,
@@ -161,7 +160,7 @@ export default function PhotoOpenersScreen({ navigation, route }: any) {
         backdropComponent={renderBackdrop}
       >
         <CustomBottomSheetView
-          title="Suggested Openers"
+          title={t("suggestedOpeners")}
           suggestions={suggestions}
           bottomSheetRef={bottomSheetRef}
         />

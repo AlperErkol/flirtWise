@@ -2,14 +2,23 @@ import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import Theme from "@/constants/Theme";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, ScrollView, View, Text } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  ActivityIndicator,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LanguageItem from "@/components/LanguageItem";
 import { getLocales } from "expo-localization";
 import I18n from "@/lib/translations";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function LanguageScreen() {
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadCurrentLanguage();
@@ -25,34 +34,45 @@ export default function LanguageScreen() {
         setSelectedLanguage(deviceLanguage || "en");
       }
     } catch (error) {
-      console.error("An error occurred while loading the language:", error);
+      console.error(t("errors.language.loadError"), error);
     }
   };
 
   const handleLanguageSelect = async (languageId: string) => {
     try {
-      await AsyncStorage.setItem("userLanguage", languageId);
+      setIsLoading(true);
       await I18n.setLanguage(languageId as any);
       setSelectedLanguage(languageId);
+      setIsLoading(false);
     } catch (error) {
-      console.error("An error occurred while saving the language:", error);
+      console.error(t("errors.language.saveError"), error);
+      setIsLoading(false);
     }
   };
 
+  const LANGUAGES = [
+    { id: "en", label: "English" },
+    { id: "tr", label: "Türkçe" },
+  ];
+
   return (
     <GlobalSafeAreaView>
-      <Header logo={true} showBackButton={true} />
+      <Header logo showBackButton />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
-          {Object.entries(I18n.t("settings.languages")).map(([id, label]) => (
-            <LanguageItem
-              key={id}
-              id={id}
-              label={label as string}
-              isSelected={selectedLanguage === id}
-              onSelect={handleLanguageSelect}
-            />
-          ))}
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#FF6347" />
+          ) : (
+            LANGUAGES.map(({ id, label }) => (
+              <LanguageItem
+                key={id}
+                id={id}
+                label={label}
+                isSelected={selectedLanguage === id}
+                onSelect={handleLanguageSelect}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
     </GlobalSafeAreaView>
@@ -66,13 +86,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Theme.spacing.vertical,
-  },
-  headerContainer: {
-    padding: Theme.spacing.horizontal,
-  },
-  description: {
-    fontSize: 16,
-    color: Theme.colors.textLight,
-    fontFamily: "Inter_400Regular",
   },
 });

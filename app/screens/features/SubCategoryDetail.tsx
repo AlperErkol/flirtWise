@@ -110,14 +110,6 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
                     {subCategory.title}
                   </Text>
                 </View>
-                {!isProMember && (
-                  <TouchableOpacity
-                    style={styles.upgradePill}
-                    onPress={showPaywall}
-                  >
-                    <Text style={styles.upgradePillText}>Boost Success ✨</Text>
-                  </TouchableOpacity>
-                )}
               </View>
               <View style={styles.successRateContent}>
                 <Text style={styles.successRateLabel}>
@@ -229,34 +221,6 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
               isProMember &&
               selectedSubCategory?.tips &&
               renderPremiumContent()}
-
-            {activeTab === 3 && !isProMember && (
-              <View style={styles.premiumUpsellContainer}>
-                <Text style={styles.premiumUpsellTitle}>
-                  Unlock Premium Features 🌟
-                </Text>
-                <View style={styles.premiumFeatureList}>
-                  <Text style={styles.premiumFeatureText}>
-                    • Situational Variations for Different Scenarios
-                  </Text>
-                  <Text style={styles.premiumFeatureText}>
-                    • Deep Psychological Insights
-                  </Text>
-                  <Text style={styles.premiumFeatureText}>
-                    • Expert Additional Notes
-                  </Text>
-                  <Text style={styles.premiumFeatureText}>
-                    • Higher Success Rate with Premium Tips
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={styles.getPremiumButton}
-                  onPress={showPaywall}
-                >
-                  <Text style={styles.getPremiumButtonText}>Get Premium+</Text>
-                </TouchableOpacity>
-              </View>
-            )}
           </>
         )}
       </>

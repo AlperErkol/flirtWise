@@ -1,7 +1,7 @@
 const GENDER_OPTIONS = [
-  { id: "male", label: "Male", icon: "man-outline" },
-  { id: "female", label: "Female", icon: "woman-outline" },
-  { id: "other", label: "Other", icon: "person-outline" },
+  { id: "male", label: "male", icon: "man-outline" },
+  { id: "female", label: "female", icon: "woman-outline" },
+  { id: "other", label: "other", icon: "person-outline" },
 ];
 
 const AGE_OPTIONS = [
@@ -12,9 +12,9 @@ const AGE_OPTIONS = [
 ];
 
 const INTEREST_OPTIONS = [
-  { id: "men", label: "Men", icon: "man-outline" },
-  { id: "women", label: "Women", icon: "woman-outline" },
-  { id: "both", label: "Both", icon: "person-outline" },
+  { id: "men", label: "men", icon: "man-outline" },
+  { id: "women", label: "women", icon: "woman-outline" },
+  { id: "both", label: "both", icon: "person-outline" },
 ];
 
 const COMMUNICATION_STYLES = [

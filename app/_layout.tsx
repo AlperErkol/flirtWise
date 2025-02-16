@@ -46,8 +46,8 @@ import BenefitsScreen from "./screens/onboarding/BenefitsScreen";
 import FinalScreen from "./screens/onboarding/FinalScreen";
 import CategoryDetailScreen from "./screens/features/CategoryDetailScreen";
 import SubCategoryDetailScreen from "./screens/features/SubCategoryDetail";
-import { getLocales } from "expo-localization";
 import Toast from "react-native-toast-message";
+import I18n from "@/lib/translations";
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -84,8 +84,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     checkOnboardingStatus();
-    const deviceLanguage = getLocales()[0].languageCode;
-    console.log(deviceLanguage);
+    I18n.initialize();
   }, []);
 
   useEffect(() => {

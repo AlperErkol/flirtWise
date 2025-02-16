@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function MainFeatureCard({
   item,
@@ -11,6 +12,8 @@ export function MainFeatureCard({
   const handleFeaturePress = async (feature: any) => {
     navigation.navigate(`${feature.screen}`);
   };
+
+  const { t } = useTranslation();
 
   return (
     <TouchableOpacity
@@ -25,14 +28,14 @@ export function MainFeatureCard({
           </View>
           <View style={styles.textContainer}>
             <View style={styles.titleRow}>
-              <Text style={styles.cardTitle}>{item.title}</Text>
+              <Text style={styles.cardTitle}>{t(item.title)}</Text>
             </View>
-            <Text style={styles.cardDesc}>{item.description}</Text>
+            <Text style={styles.cardDesc}>{t(item.description)}</Text>
           </View>
         </View>
         <View style={styles.viewButtonContainer}>
           <View style={styles.viewButton}>
-            <Text style={styles.viewButtonText}>Get Started</Text>
+            <Text style={styles.viewButtonText}>{t("getStarted")}</Text>
             <Ionicons name="arrow-forward-outline" size={20} />
           </View>
         </View>

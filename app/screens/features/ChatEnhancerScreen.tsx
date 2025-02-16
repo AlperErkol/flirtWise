@@ -14,13 +14,13 @@ import Theme from "@/constants/Theme";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import AdditionalInfoModal from "@/components/AdditionalInfoModal";
-import { useRateUs } from "@/hooks/useRateUs";
 import CustomBottomSheetView from "@/components/CustomBottomSheetView";
 import pickImage from "@/common/image";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
 import handleImageProcessing from "@/common/photo";
 import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function ChatEnhancerScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
@@ -33,6 +33,7 @@ export default function ChatEnhancerScreen() {
   const [hasAdditionalInfo, setHasAdditionalInfo] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [conversationStyle, setConversationStyle] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -95,7 +96,7 @@ export default function ChatEnhancerScreen() {
             <View style={styles.heroContainer}>
               <View style={styles.instructionContainer}>
                 <Text style={styles.instructionText}>
-                  Upload a chat screenshot that you want to enhance
+                  {t("chatEnhancerInstruction")}
                 </Text>
               </View>
               <Image
@@ -105,7 +106,7 @@ export default function ChatEnhancerScreen() {
             </View>
 
             <Button
-              title="Upload a Screenshot"
+              title={t("uploadScreenshot")}
               buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
               titleStyle={globalStyles.buttonText}
               onPress={pickImageHandler}
@@ -119,9 +120,7 @@ export default function ChatEnhancerScreen() {
               style={styles.imagePreview}
             />
             <View style={styles.switchRow}>
-              <Text style={styles.switchLabel}>
-                Is this a stucked conversation?
-              </Text>
+              <Text style={styles.switchLabel}>{t("isStuckConversation")}</Text>
               <Switch
                 value={isDeadConversation}
                 onValueChange={setIsDeadConversation}
@@ -131,7 +130,7 @@ export default function ChatEnhancerScreen() {
             </View>
             <View style={styles.switchRow}>
               <View style={styles.switchLabelContainer}>
-                <Text style={styles.switchLabel}>Additional Context</Text>
+                <Text style={styles.switchLabel}>{t("additionalContext")}</Text>
                 {hasAdditionalInfo && (
                   <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
                 )}
@@ -142,16 +141,16 @@ export default function ChatEnhancerScreen() {
                   onPress={() => setIsModalVisible(true)}
                 >
                   {hasAdditionalInfo ? (
-                    <Text style={styles.additionalButtonText}>Edit</Text>
+                    <Text style={styles.additionalButtonText}>{t("edit")}</Text>
                   ) : (
-                    <Text style={styles.additionalButtonText}>Add</Text>
+                    <Text style={styles.additionalButtonText}>{t("add")}</Text>
                   )}
                 </TouchableOpacity>
               </View>
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title="Enhance Chat ⚡️"
+                title={t("enhanceChat")}
                 buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
                 titleStyle={globalStyles.buttonText}
                 onPress={() => startAnalysis()}
@@ -161,7 +160,7 @@ export default function ChatEnhancerScreen() {
                 }}
               />
               <Button
-                title="Upload a New Screenshot"
+                title={t("uploadNewScreenshot")}
                 buttonStyle={[
                   globalStyles.button,
                   globalStyles.transparentButton,
@@ -190,7 +189,7 @@ export default function ChatEnhancerScreen() {
         backdropComponent={renderBackdrop}
       >
         <CustomBottomSheetView
-          title="Chat Suggestions"
+          title={t("chatSuggestions")}
           suggestions={suggestions}
           bottomSheetRef={bottomSheetRef}
         />

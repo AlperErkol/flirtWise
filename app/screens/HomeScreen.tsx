@@ -9,9 +9,10 @@ import { SecondaryFeatureCard } from "@/components/SecondaryFeatureCard";
 import { mainFeatures, secondaryFeatures } from "@/constants/home/features";
 import { usePaywall } from "@/hooks/usePaywall";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
-
+import { useTranslation } from "@/hooks/useTranslation";
 export default function HomeScreen({ navigation }: any) {
   const { showPaywall } = usePaywall();
+  const { t } = useTranslation();
   const { isProMember, isLoading } = useRevenueCat();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -32,7 +33,7 @@ export default function HomeScreen({ navigation }: any) {
         showSettingsIcon={true}
         bottomSheetRef={bottomSheetRef}
       />
-      <Text style={styles.sectionTitle}>Unlock Your Next Match</Text>
+      <Text style={styles.sectionTitle}>{t("homeMainTitle")}</Text>
       <View>
         {mainFeatures.map((feature) => (
           <MainFeatureCard
@@ -42,7 +43,7 @@ export default function HomeScreen({ navigation }: any) {
           />
         ))}
       </View>
-      <Text style={styles.sectionTitle}>Flirting Boosters for Today</Text>
+      <Text style={styles.sectionTitle}>{t("homeSecondaryTitle")}</Text>
       <View style={styles.secondaryFeatureContainer}>
         {secondaryFeatures.map((feature) => (
           <SecondaryFeatureCard

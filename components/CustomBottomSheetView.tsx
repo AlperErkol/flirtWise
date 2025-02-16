@@ -4,6 +4,8 @@ import { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
 import Toast from "react-native-toast-message";
+import { useTranslation } from "@/hooks/useTranslation";
+
 type BottomSheetComponentProps = {
   title: string;
   suggestions: string[];
@@ -13,10 +15,11 @@ type BottomSheetComponentProps = {
 const CustomBottomSheetView: React.FunctionComponent<
   BottomSheetComponentProps
 > = ({ title, suggestions, bottomSheetRef }) => {
+  const { t } = useTranslation();
   const handleCopy = async (suggestion: string) => {
     await Clipboard.setStringAsync(suggestion);
     Toast.show({
-      text1: "Copied to clipboard",
+      text1: t("copiedToClipboard"),
       type: "success",
       position: "bottom",
       text1Style: {
@@ -53,13 +56,15 @@ const CustomBottomSheetView: React.FunctionComponent<
                 onPress={() => handleCopy(suggestion)}
               >
                 <Ionicons name="copy-outline" size={20} color="#000" />
-                <Text style={styles.copyText}>Copy</Text>
+                <Text style={styles.copyText}>{t("copy")}</Text>
               </TouchableOpacity>
             </View>
           </View>
         ))
       ) : (
-        <Text style={styles.noSuggestionsText}>No suggestions available</Text>
+        <Text style={styles.noSuggestionsText}>
+          {t("noSuggestionsAvailable")}
+        </Text>
       )}
     </BottomSheetView>
   );

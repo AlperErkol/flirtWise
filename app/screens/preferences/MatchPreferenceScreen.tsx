@@ -6,10 +6,11 @@ import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import { INTEREST_OPTIONS } from "@/constants/wizard/options";
-
+import { useTranslation } from "@/hooks/useTranslation";
 export default function MatchPreferenceScreen({ navigation }: any) {
   const [selectedInterest, setSelectedInterest] = useState("");
   const setUserProfile = useProfileStore((state: any) => state.setUserProfile);
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadInterestPreference();
@@ -44,7 +45,7 @@ export default function MatchPreferenceScreen({ navigation }: any) {
 
   return (
     <GlobalSafeAreaView>
-      <Header showBackButton title="Perfect Match" />
+      <Header showBackButton title={t("perfectMatch")} />
       <View style={styles.container}>
         {INTEREST_OPTIONS.map((option) => (
           <TouchableOpacity
@@ -59,7 +60,7 @@ export default function MatchPreferenceScreen({ navigation }: any) {
                 color="#4F46E5"
                 style={{ marginRight: 15 }}
               />
-              <Text style={styles.menuText}>{option.label}</Text>
+              <Text style={styles.menuText}>{t(option.label)}</Text>
             </View>
 
             {selectedInterest === option.id && (

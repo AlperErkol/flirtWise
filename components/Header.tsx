@@ -37,7 +37,7 @@ export default function Header({
               style={styles.backButton}
             >
               <Ionicons name="chevron-back" size={24} color="#FF6347" />
-              <Text style={styles.backButtonText}>{t("common.back")}</Text>
+              <Text style={styles.backButtonText}>{t("back")}</Text>
             </TouchableOpacity>
           ) : (
             showSettingsIcon &&

@@ -4,50 +4,51 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useTranslation } from "@/hooks/useTranslation";
 const preferenceItems = [
   {
     id: "1",
-    title: "Gender",
+    title: "gender",
     screen: "GenderPreferenceScreen",
     icon: "man-outline",
     key: "gender",
     getDisplayValue: (value: string) => {
       const options = {
-        male: "Male",
-        female: "Female",
-        other: "Other",
+        male: "male",
+        female: "female",
+        other: "other",
       };
-      return options[value as keyof typeof options] || "Not set";
+      return options[value as keyof typeof options] || "notSet";
     },
   },
   {
     id: "2",
-    title: "Age Range",
+    title: "ageRange",
     screen: "AgePreferenceScreen",
     icon: "calendar-outline",
     key: "age",
-    getDisplayValue: (value: string) => value || "Not set",
+    getDisplayValue: (value: string) => value || "notSet",
   },
   {
     id: "3",
-    title: "Perfect Match",
+    title: "perfectMatch",
     screen: "MatchPreferenceScreen",
     icon: "heart-outline",
     key: "interest",
     getDisplayValue: (value: string) => {
       const options = {
-        men: "Men",
-        women: "Women",
-        both: "Both",
+        men: "men",
+        women: "women",
+        both: "both",
       };
-      return options[value as keyof typeof options] || "Not set";
+      return options[value as keyof typeof options] || "notSet";
     },
   },
 ];
 
 export default function PreferencesScreen({ navigation }: any) {
   const [userProfile, setUserProfile] = useState<any>({});
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadUserProfile();
@@ -78,12 +79,10 @@ export default function PreferencesScreen({ navigation }: any) {
       <View style={styles.headerContainer}>
         <View style={styles.titleContainer}>
           <Ionicons name="sparkles-outline" size={24} color="#4F46E5" />
-          <Text style={styles.headerTitle}>AI Personalization</Text>
+          <Text style={styles.headerTitle}>{t("preferencesTitle")}</Text>
         </View>
         <Text style={styles.headerDescription}>
-          Customize your preferences to help our AI better understand your
-          unique style and context, delivering more accurate, engaging, and
-          personalized responses in your conversations.
+          {t("preferencesDescription")}
         </Text>
       </View>
       <View style={styles.wrapper}>
@@ -100,11 +99,11 @@ export default function PreferencesScreen({ navigation }: any) {
                 color="#4F46E5"
                 style={{ marginRight: 15 }}
               />
-              <Text style={styles.menuText}>{item.title}</Text>
+              <Text style={styles.menuText}>{t(item.title)}</Text>
             </View>
             <View style={styles.rightContent}>
               <Text style={styles.valueText}>
-                {item.getDisplayValue(userProfile[item.key])}
+                {t(item.getDisplayValue(userProfile[item.key]))}
               </Text>
               <Ionicons name="chevron-forward" size={20} color="#666" />
             </View>

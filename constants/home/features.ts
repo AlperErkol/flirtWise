@@ -1,8 +1,8 @@
 const mainFeatures = [
   {
     id: "1",
-    title: "Photo Analysis",
-    description: "Get smart conversation starters based on photos",
+    title: "photoAnalysisTitle",
+    description: "photoAnalysisDescription",
     screen: "PhotoOpenersScreen",
     isPremium: false,
     backgroundColor: "#4F46E5",
@@ -10,8 +10,8 @@ const mainFeatures = [
   },
   {
     id: "2",
-    title: "Chat Wizard",
-    description: "Enhance your conversations with AI-powered suggestions",
+    title: "chatWizardTitle",
+    description: "chatWizardDescription",
     screen: "ChatEnhancerScreen",
     isPremium: true,
     backgroundColor: "#7C3AED",
@@ -22,8 +22,8 @@ const mainFeatures = [
 const secondaryFeatures = [
   {
     id: "3",
-    title: "Flirting Coach",
-    description: "Get personalized flirting advice",
+    title: "flirtingCoachTitle",
+    description: "flirtingCoachDescription",
     screen: "CommunicationCoachSelectionScreen",
     gradient: ["#FF6B6B", "#FF9A8B"],
     emoji: "🎯",
@@ -31,8 +31,8 @@ const secondaryFeatures = [
   },
   {
     id: "4",
-    title: "Get Flirting Tips",
-    description: "Learn proven techniques",
+    title: "flirtingTipsTitle",
+    description: "flirtingTipsDescription",
     screen: "TipsScreen",
     gradient: ["#4FACFE", "#00F2FE"],
     emoji: "💡",

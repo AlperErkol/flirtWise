@@ -2,63 +2,60 @@ const FREE_CATEGORIES = [
   {
     id: "first_impression",
     isPremium: false,
-    title: "First Impression",
+    title: "firstImpression",
     icon: "✨",
     gradient: ["#FF9A8B", "#FF6B6B"],
-    description:
-      "Master the art of creating memorable first impressions in dating. Learn essential techniques for profile optimization and authentic self-presentation.",
+    description: "firstImpressionDescription",
     subCategories: [
       {
         id: "profile_optimization",
-        title: "Profile Magic",
-        description: "Create an irresistible dating profile",
+        title: "profileMagic",
+        description: "profileMagicDescription",
       },
       {
         id: "photo_selection",
-        title: "Photo Selection",
-        description: "Choose photos that attract attention",
+        title: "photoSelection",
+        description: "photoSelectionDescription",
       },
       {
         id: "bio_writing",
-        title: "Bio Writing",
-        description: "Write a bio that stands out",
+        title: "bioWriting",
+        description: "bioWritingDescription",
       },
     ],
   },
   {
     id: "conversation_basics",
     isPremium: false,
-    title: "Conversation Basics",
+    title: "conversationBasics",
     icon: "💭",
     gradient: ["#4FACFE", "#00F2FE"],
-    description:
-      "Develop fundamental conversation skills for dating success. Learn how to start and maintain engaging discussions with confidence.",
+    description: "conversationBasicsDescription",
     subCategories: [
       {
         id: "ice_breakers",
-        title: "Ice Breakers",
-        description: "Start conversations smoothly",
+        title: "iceBreakers",
+        description: "iceBreakersDescription",
       },
       {
         id: "flirting_basics",
-        title: "Flirting 101",
-        description: "Master the basics of flirting",
+        title: "flirtingBasics",
+        description: "flirtingBasicsDescription",
       },
       {
         id: "engaging_questions",
-        title: "Smart Questions",
-        description: "Keep conversations flowing",
+        title: "smartQuestions",
+        description: "smartQuestionsDescription",
       },
     ],
   },
   {
     id: "dating_essentials",
     isPremium: false,
-    title: "Dating Essentials",
+    title: "datingEssentials",
     icon: "💝",
     gradient: ["#43E97B", "#38F9D7"],
-    description:
-      "Essential dating skills and knowledge for successful relationships. From planning perfect dates to understanding body language.",
+    description: "datingEssentialsDescription",
     subCategories: [
       {
         id: "date_planning",
@@ -83,11 +80,10 @@ const PREMIUM_CATEGORIES = [
   {
     id: "advanced_attraction",
     isPremium: true,
-    title: "Advanced Attraction",
+    title: "advancedAttraction",
     icon: "🌟",
     gradient: ["#FA709A", "#FEE140"],
-    description:
-      "Advanced psychological insights and strategies for creating genuine attraction. Learn deeper aspects of dating psychology.",
+    description: "advancedAttractionDescription",
     subCategories: [
       {
         id: "psychology_attraction",
@@ -109,11 +105,10 @@ const PREMIUM_CATEGORIES = [
   {
     id: "dating_strategy",
     isPremium: true,
-    title: "Dating Strategy",
+    title: "datingStrategy",
     icon: "🎯",
     gradient: ["#FF3CAC", "#784BA0"],
-    description:
-      "Strategic approaches to modern dating, including advanced app techniques and handling complex dating scenarios.",
+    description: "datingStrategyDescription",
     subCategories: [
       {
         id: "dating_apps",
@@ -135,11 +130,10 @@ const PREMIUM_CATEGORIES = [
   {
     id: "relationship_building",
     isPremium: true,
-    title: "Relationship Building",
+    title: "relationshipBuilding",
     icon: "💫",
     gradient: ["#13547A", "#80D0C7"],
-    description:
-      "Expert guidance on building and maintaining meaningful relationships. Learn to create lasting connections and deep emotional bonds.",
+    description: "relationshipBuildingDescription",
     subCategories: [
       {
         id: "commitment_signs",

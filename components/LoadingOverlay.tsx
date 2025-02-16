@@ -1,10 +1,12 @@
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function LoadingOverlay() {
+  const { t } = useTranslation();
   return (
     <View style={styles.loadingOverlay}>
       <ActivityIndicator size="large" color="#FF6347" />
-      <Text style={styles.loadingText}>Analyzing chat...</Text>
+      <Text style={styles.loadingText}>{t("analyzing")}</Text>
     </View>
   );
 }
