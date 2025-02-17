@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/constants/Theme";
 import { getCommunicationTip } from "@/services/tips";
 import useProfileStore from "@/store/profileStore";
-
+import { useTranslation } from "@/hooks/useTranslation";
 interface SubCategory {
   id: string;
   title: string;
@@ -26,18 +26,18 @@ interface SubCategory {
 }
 
 const tabs = [
-  { id: 0, title: "Overview" },
-  { id: 1, title: "Examples" },
-  { id: 2, title: "Strategy" },
-  { id: 3, title: "Premium+" },
+  { id: 0, title: "overview" },
+  { id: 1, title: "examples" },
+  { id: 2, title: "strategy" },
+  { id: 3, title: "premium" },
 ];
 
 export default function SubCategoryDetailScreen({ route, navigation }: any) {
   const { category, subCategory } = route.params;
-  const { showPaywall } = usePaywall();
   const { isProMember } = useRevenueCat();
   const [activeTab, setActiveTab] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedSubCategory, setSelectedSubCategory] =
@@ -97,7 +97,7 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="small" color={Theme.colors.primary} />
             <Text style={styles.loadingText}>
-              Generating your personalized tip...
+              {t("generatingPersonalizedTip")}
             </Text>
           </View>
         ) : (
@@ -105,16 +105,14 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
             <View style={styles.successRateContainer}>
               <View style={styles.successRateHeader}>
                 <View>
-                  <Text style={styles.categoryLabel}>{category.title}</Text>
+                  <Text style={styles.categoryLabel}>{t(category.title)}</Text>
                   <Text style={styles.subCategoryLabel}>
-                    {subCategory.title}
+                    {t(subCategory.title)}
                   </Text>
                 </View>
               </View>
               <View style={styles.successRateContent}>
-                <Text style={styles.successRateLabel}>
-                  Success Rate for This Tip
-                </Text>
+                <Text style={styles.successRateLabel}>{t("successRate")}</Text>
                 <View style={styles.successRateRow}>
                   <Text style={styles.subCategoryLabel}>
                     {selectedSubCategory?.successRate}
@@ -150,7 +148,7 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
                       activeTab === index && styles.activeTabText,
                     ]}
                   >
-                    {tab.title}
+                    {t(tab.title)}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -173,7 +171,9 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
                   ?.slice(2, 5)
                   .map((example, index) => (
                     <View key={index} style={{ marginBottom: 12 }}>
-                      <Text style={styles.hintTitle}>Example {index + 1}</Text>
+                      <Text style={styles.hintTitle}>
+                        {t("example")} {index + 1}
+                      </Text>
                       <View style={styles.exampleCard}>
                         <Text style={styles.exampleText}>{example}</Text>
                       </View>
@@ -184,7 +184,7 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
 
             {activeTab === 2 && (
               <View style={styles.dosDontsContainer}>
-                <Text style={styles.dosDontsTitle}>Do's</Text>
+                <Text style={styles.dosDontsTitle}>{t("dos")}</Text>
                 <View style={styles.tipsGrid}>
                   {selectedSubCategory?.tips?.slice(5, 8).map((item, index) => (
                     <View key={index} style={styles.tipItem}>
@@ -198,7 +198,7 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
                     </View>
                   ))}
                 </View>
-                <Text style={styles.dosDontsTitle}>Don'ts</Text>
+                <Text style={styles.dosDontsTitle}>{t("donts")}</Text>
                 <View style={styles.tipsGrid}>
                   {selectedSubCategory?.tips
                     ?.slice(8, 11)
@@ -233,27 +233,37 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
     const premiumTips = selectedSubCategory.tips.slice(-5);
     return (
       <View>
-        <Text style={styles.premiumSectionTitle}>Situational Variations</Text>
+        <Text style={styles.premiumSectionTitle}>
+          {t("situationalVariations")}
+        </Text>
         <View style={{ marginBottom: 12 }}>
           <View style={styles.tipItem}>
-            <Text style={styles.tipItemText}>Casual: {premiumTips[0]}</Text>
+            <Text style={styles.tipItemText}>
+              {t("casual")}: {premiumTips[0]}
+            </Text>
           </View>
           <View style={styles.tipItem}>
-            <Text style={styles.tipItemText}>Romantic: {premiumTips[1]}</Text>
+            <Text style={styles.tipItemText}>
+              {t("romantic")}: {premiumTips[1]}
+            </Text>
           </View>
           <View style={styles.tipItem}>
-            <Text style={styles.tipItemText}>Recovery: {premiumTips[2]}</Text>
+            <Text style={styles.tipItemText}>
+              {t("recovery")}: {premiumTips[2]}
+            </Text>
           </View>
         </View>
 
         <View style={{ marginBottom: 12 }}>
-          <Text style={styles.premiumSectionTitle}>Psychology Insight</Text>
+          <Text style={styles.premiumSectionTitle}>
+            {t("psychologyInsight")}
+          </Text>
           <View style={styles.tipItem}>
             <Text style={styles.tipItemText}>{premiumTips[3]}</Text>
           </View>
         </View>
 
-        <Text style={styles.premiumSectionTitle}>Expert Notes</Text>
+        <Text style={styles.premiumSectionTitle}>{t("expertNotes")}</Text>
         <View style={styles.tipItem}>
           <Text style={styles.tipItemText}>{premiumTips[4]}</Text>
         </View>

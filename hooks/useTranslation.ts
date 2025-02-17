@@ -1,24 +1,10 @@
-import I18n from "@/lib/translations";
-import { useCallback, useEffect, useState } from "react";
-import { eventEmitter } from "@/lib/eventEmitter";
+import { LanguageContext } from "@/providers/LanguageContext";
+import { useContext } from "react";
 
 export const useTranslation = () => {
-  const [, forceUpdate] = useState({});
-
-  useEffect(() => {
-    const handleLanguageChange = () => {
-      forceUpdate({});
-    };
-
-    eventEmitter.addListener("languageChange", handleLanguageChange);
-    return () => {
-      eventEmitter.removeListener("languageChange", handleLanguageChange);
-    };
-  }, []);
-
-  const t = useCallback((key: string) => {
-    return I18n.t(key);
-  }, []);
-
-  return { t };
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error("useTranslation must be used within a LanguageProvider");
+  }
+  return context;
 };

@@ -16,6 +16,9 @@ const globalStyles = StyleSheet.create({
   primaryButton: {
     backgroundColor: Theme.colors.primary,
   },
+  secondaryButton: {
+    backgroundColor: "#4F46E5",
+  },
   transparentButton: {
     backgroundColor: "transparent",
     color: "#000",

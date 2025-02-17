@@ -1,11 +1,13 @@
 import { getLocales } from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { tr, en } from "@/translations";
-import { eventEmitter } from "@/lib/eventEmitter";
+import { tr, en, fr, de, es } from "@/translations";
 
 const translations = {
   tr,
   en,
+  fr,
+  de,
+  es,
 };
 
 export type AvailableLanguages = keyof typeof translations;
@@ -37,7 +39,6 @@ class I18n {
     if (translations[language]) {
       this.currentLanguage = language;
       await AsyncStorage.setItem("userLanguage", language);
-      eventEmitter.emit("languageChange");
     }
   }
 

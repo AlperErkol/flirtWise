@@ -16,6 +16,9 @@ import Purchases from "react-native-purchases";
 import RevenueCatService from "@/services/payment/RevenueCatService";
 import { PRIVACY_URL, TERMS_URL } from "@/constants/settings/urls";
 import { useTranslation } from "@/hooks/useTranslation";
+import { Button } from "@rneui/themed";
+import globalStyles from "@/constants/style";
+import FeatureItem from "./paywall/FeatureItem";
 export default function Paywall({ navigation }: any) {
   const { currentOffering } = useRevenueCat();
   const [selectedPlan, setSelectedPlan] = useState<"QUARTERLY" | "WEEKLY">(
@@ -174,31 +177,27 @@ export default function Paywall({ navigation }: any) {
             </View>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={[
-            styles.subscribeButton,
-            isLoading && styles.subscribeButtonDisabled,
-          ]}
+        <Button
+          title={isLoading ? t("processing") : t("subscribeButtonText")}
+          buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
+          titleStyle={globalStyles.buttonText}
           onPress={handlePlanPurchase}
           disabled={isLoading}
-        >
-          <Text style={styles.subscribeButtonText}>
-            {isLoading ? t("processing") : t("subscribeButtonText")}
-          </Text>
-        </TouchableOpacity>
+          containerStyle={{ marginBottom: 16 }}
+        />
         <View style={{ marginBottom: 24, flexDirection: "column", gap: 12 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Ionicons name="shield" size={20} />
+            <Ionicons name="shield" size={18} />
             <Text style={styles.billingText}>{t("cancelAnytime")}</Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Ionicons name="notifications" size={20} />
+            <Ionicons name="notifications" size={18} />
             <Text style={styles.billingText}>
               {t("notify24HoursBeforeTrialEnds")}
             </Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Ionicons name="card" size={20} />
+            <Ionicons name="card" size={18} />
             <Text style={styles.billingText}>
               {t("billingStartsAfterTrialEnds")}
             </Text>
@@ -225,49 +224,16 @@ export default function Paywall({ navigation }: any) {
       <ScrollView>
         <View style={styles.header}>
           <Image
-            source={require("../assets/images/logo.png")}
+            source={require("@/assets/images/logo.png")}
             style={styles.logo}
           />
         </View>
-
         <Text style={styles.title}>{t("paywallTitle")}</Text>
         <Text style={styles.description}>{t("paywallDescription")}</Text>
-
         <View style={styles.featuresContainer}>
-          <View style={styles.featureRow}>
-            <Ionicons
-              style={{ marginRight: 8 }}
-              name="checkmark-circle"
-              size={28}
-              color="#34C759"
-            />
-
-            <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>{t("paywallFeature1")}</Text>
-            </View>
-          </View>
-          <View style={styles.featureRow}>
-            <Ionicons
-              style={{ marginRight: 8 }}
-              name="checkmark-circle"
-              size={28}
-              color="#34C759"
-            />
-            <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>{t("paywallFeature2")}</Text>
-            </View>
-          </View>
-          <View style={styles.featureRow}>
-            <Ionicons
-              style={{ marginRight: 8 }}
-              name="checkmark-circle"
-              size={28}
-              color="#34C759"
-            />
-            <View style={styles.featureTextContainer}>
-              <Text style={styles.featureTitle}>{t("paywallFeature3")}</Text>
-            </View>
-          </View>
+          <FeatureItem title="paywallFeature1" />
+          <FeatureItem title="paywallFeature2" />
+          <FeatureItem title="paywallFeature3" />
         </View>
         {renderPlans()}
       </ScrollView>
@@ -311,28 +277,9 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   featuresContainer: {
-    marginBottom: 6,
-  },
-
-  featureRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-
-  featureEmoji: {
-    fontSize: 24,
-    marginRight: 16,
-  },
-
-  featureTextContainer: {
-    flex: 1,
-  },
-  featureTitle: {
-    fontSize: 17,
-    marginBottom: 4,
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: -0.7,
+    marginBottom: 16,
+    borderBottomWidth: 1,
+    borderColor: "#999",
   },
 
   plansContainer: {
@@ -443,16 +390,9 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   billingText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#000000",
     fontFamily: "Inter_500Medium",
     letterSpacing: -0.5,
-  },
-  infoText: {
-    fontSize: 12,
-    color: "#666",
-  },
-  subscribeButtonDisabled: {
-    backgroundColor: "#999",
   },
 });

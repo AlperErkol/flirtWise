@@ -59,18 +59,18 @@ const FREE_CATEGORIES = [
     subCategories: [
       {
         id: "date_planning",
-        title: "Date Planning",
-        description: "Plan memorable first dates",
+        title: "datePlanning",
+        description: "datePlanningDescription",
       },
       {
         id: "body_language",
-        title: "Body Language",
-        description: "Read and use body language",
+        title: "bodyLanguage",
+        description: "bodyLanguageDescription",
       },
       {
         id: "chemistry_building",
-        title: "Chemistry Building",
-        description: "Create natural attraction",
+        title: "chemistryBuilding",
+        description: "chemistryBuildingDescription",
       },
     ],
   },
@@ -87,18 +87,18 @@ const PREMIUM_CATEGORIES = [
     subCategories: [
       {
         id: "psychology_attraction",
-        title: "Attraction Psychology",
-        description: "Understand dating psychology",
+        title: "attractionPsychology",
+        description: "attractionPsychologyDescription",
       },
       {
         id: "emotional_connection",
-        title: "Deep Connection",
-        description: "Build meaningful bonds",
+        title: "deepConnection",
+        description: "deepConnectionDescription",
       },
       {
         id: "confidence_mastery",
-        title: "Confidence Mastery",
-        description: "Boost dating confidence",
+        title: "confidenceMastery",
+        description: "confidenceMasteryDescription",
       },
     ],
   },
@@ -112,18 +112,18 @@ const PREMIUM_CATEGORIES = [
     subCategories: [
       {
         id: "dating_apps",
-        title: "Dating App Pro",
-        description: "Master dating apps",
+        title: "datingAppPro",
+        description: "datingAppProDescription",
       },
       {
         id: "attraction_signals",
-        title: "Interest Signals",
-        description: "Spot and send right signals",
+        title: "interestSignals",
+        description: "interestSignalsDescription",
       },
       {
         id: "rejection_handling",
-        title: "Rejection Mastery",
-        description: "Handle rejection gracefully",
+        title: "rejectionMastery",
+        description: "rejectionMasteryDescription",
       },
     ],
   },
@@ -137,18 +137,18 @@ const PREMIUM_CATEGORIES = [
     subCategories: [
       {
         id: "commitment_signs",
-        title: "Commitment Signs",
-        description: "Recognize relationship potential",
+        title: "commitmentSigns",
+        description: "commitmentSignsDescription",
       },
       {
         id: "communication_mastery",
-        title: "Communication Pro",
-        description: "Advanced dating communication",
+        title: "communicationPro",
+        description: "communicationProDescription",
       },
       {
         id: "long_term",
-        title: "Long-term Success",
-        description: "Build lasting connections",
+        title: "longTermSuccess",
+        description: "longTermSuccessDescription",
       },
     ],
   },
