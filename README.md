@@ -13,9 +13,14 @@
 # FlirtWise - Development Tracking 1.0.3 🎯
 
 1. Copied Badge Implementation - Done
-2. Multi Language Support - In Progress (Türkçe, Almanca, Fransızca ve İspanyolca)
+2. Multi Language Support - In Progress (Türkçe **, Almanca, Fransızca ** ve İspanyolca)
 3. Uygulama her açıldığında WelcomeScreen gösterilmesi - Done
 4. Texting Wibe seçeneği - Done
 5. Paywall Görünümünün düzenlenmesi - Done
 6. Hard Paywall'a çevirme - Done
-7. Contact Us (mailto:flirtwiseai@gmail.com)
+7. Contact Us (mailto:flirtwiseai@gmail.com) - Done
+8. Push Notification
+
+# FlirtWise - New Feature Development (2.0.0) 🎯
+
+1. Dating CRM - Bütün dating platformlarının ortak yönetildiği bir yönetim paneli.

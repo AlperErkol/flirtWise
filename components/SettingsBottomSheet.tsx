@@ -52,6 +52,10 @@ export default function SettingsBottomSheet({
     await showPaywall();
   };
 
+  const handleContactUs = () => {
+    Linking.openURL("mailto:flirtwiseai@gmail.com");
+  };
+
   const menuItems = [
     {
       id: "1",
@@ -63,19 +67,25 @@ export default function SettingsBottomSheet({
       id: "2",
       title: "upgrade",
       action: handleUpgrade,
-      emoji: "💳",
+      emoji: "🚀",
     },
     {
       id: "3",
       title: "language",
       screen: "LanguageScreen",
-      emoji: "💬",
+      emoji: "🌍",
     },
     {
       id: "4",
       title: "shareApp",
       action: handleShareApp,
       emoji: "📤",
+    },
+    {
+      id: "5",
+      title: "contactUs",
+      action: handleContactUs,
+      emoji: "📝",
     },
   ];
 
@@ -107,7 +117,7 @@ export default function SettingsBottomSheet({
           style={styles.closeButton}
           onPress={() => bottomSheetRef.current?.close()}
         >
-          <Ionicons name="close" size={24} color="#333" />
+          <Ionicons name="close" size={30} color="#333" />
         </TouchableOpacity>
 
         <View style={styles.section}>
@@ -143,7 +153,7 @@ export default function SettingsBottomSheet({
                 )
               }
             >
-              <Text style={styles.footerLink}>{t("terms")}</Text>
+              <Text style={styles.footerLink}>{t("termsOfUse")}</Text>
             </TouchableOpacity>
             <Text style={styles.footerSeparator}>|</Text>
             <TouchableOpacity

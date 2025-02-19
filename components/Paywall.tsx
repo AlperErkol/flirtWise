@@ -19,15 +19,16 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
 import FeatureItem from "./paywall/FeatureItem";
+import Plan from "./paywall/Plan";
 export default function Paywall({ navigation }: any) {
   const { currentOffering } = useRevenueCat();
-  const [selectedPlan, setSelectedPlan] = useState<"QUARTERLY" | "WEEKLY">(
-    "QUARTERLY"
+  const [selectedPlan, setSelectedPlan] = useState<"rc_499_1w" | "rc_4799_1q">(
+    "rc_4799_1q"
   );
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
 
-  const handlePlanSelect = (plan: "QUARTERLY" | "WEEKLY") => {
+  const handlePlanSelect = (plan: "rc_499_1w" | "rc_4799_1q") => {
     setSelectedPlan(plan);
   };
 
@@ -40,7 +41,7 @@ export default function Paywall({ navigation }: any) {
       }
 
       const purchasePlan =
-        selectedPlan === "WEEKLY"
+        selectedPlan === "rc_499_1w"
           ? currentOffering.weekly
           : currentOffering.threeMonth;
 
@@ -48,12 +49,12 @@ export default function Paywall({ navigation }: any) {
 
       if (purchaserInfo.customerInfo.entitlements.active.pro) {
         await RevenueCatService.resetState();
-        Alert.alert("Purchase Successful", "You are now a pro member.");
+        Alert.alert(t("purchaseSuccess"), t("purchaseSuccessDescription"));
         navigation.goBack();
       }
     } catch (error: any) {
       if (!error.userCancelled) {
-        Alert.alert("Purchase Failed", error.message);
+        Alert.alert(t("purchaseFailed"), error.message);
       }
     } finally {
       setIsLoading(false);
@@ -63,12 +64,9 @@ export default function Paywall({ navigation }: any) {
   const handleRestorePurchase = async () => {
     const purchaserInfo = await Purchases.restorePurchases();
     if (purchaserInfo.activeSubscriptions.length > 0) {
-      Alert.alert(
-        "Purchase Restored",
-        "You have successfully restored your purchase."
-      );
+      Alert.alert(t("purchaseRestored"), t("purchaseRestoredDescription"));
     } else {
-      Alert.alert("No Purchase Found", "You have not made any purchases.");
+      Alert.alert(t("purchaseNotFound"), t("purchaseNotFoundDescription"));
     }
   };
 
@@ -89,93 +87,24 @@ export default function Paywall({ navigation }: any) {
 
     return (
       <>
-        <Text style={styles.selectPlanText}>{t("selectPlan")}</Text>
+        <Text style={styles.selectPlanText}>
+          {t("Get 3 days on us! Unlock access now!")}
+        </Text>
         <View style={styles.plansContainer}>
-          <TouchableOpacity
-            style={[
-              styles.planButton,
-              selectedPlan === "QUARTERLY" && styles.planButtonSelected,
-            ]}
-            onPress={() => handlePlanSelect("QUARTERLY")}
-          >
-            <Text style={styles.saveBadge}>{t("mostPopular")}</Text>
-            <View>
-              <View style={styles.planTitleContainer}>
-                <Text style={styles.planTitle}>
-                  {currentOffering.threeMonth?.product.title}
-                </Text>
-                <View style={styles.checkboxContainer}>
-                  <View style={styles.checkbox}>
-                    <Ionicons
-                      name={
-                        selectedPlan === "QUARTERLY"
-                          ? "checkmark-circle"
-                          : "ellipse-outline"
-                      }
-                      size={32}
-                      color={selectedPlan === "QUARTERLY" ? "#FF6347" : "#999"}
-                    />
-                  </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginBottom: 12,
-                }}
-              >
-                <View>
-                  <Text style={styles.planPrice}>
-                    {currentOffering.threeMonth?.product.priceString}
-                  </Text>
-                  <Text>{t("per3Months")}</Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          {/* Weekly Subscription */}
-
-          <TouchableOpacity
-            style={[
-              styles.planButton,
-              selectedPlan === "WEEKLY" && styles.planButtonSelected,
-            ]}
-            onPress={() => handlePlanSelect("WEEKLY")}
-          >
-            <View>
-              <View style={styles.planTitleContainer}>
-                <Text style={styles.planTitle}>
-                  {currentOffering.weekly?.product.title}
-                </Text>
-                <View style={styles.checkboxContainer}>
-                  <View
-                    style={[
-                      styles.checkbox,
-                      selectedPlan !== "WEEKLY" && styles.checkboxUnselected,
-                    ]}
-                  >
-                    <Ionicons
-                      name={
-                        selectedPlan === "WEEKLY"
-                          ? "checkmark-circle"
-                          : "ellipse-outline"
-                      }
-                      size={32}
-                      color={selectedPlan === "WEEKLY" ? "#FF6347" : "#999"}
-                    />
-                  </View>
-                </View>
-              </View>
-              <View>
-                <Text style={styles.planPrice}>
-                  {currentOffering.weekly?.product.priceString}
-                </Text>
-                <Text>{t("perWeek")}</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
+          {currentOffering.availablePackages.map((availablePackage: any) => (
+            <Plan
+              identifier={availablePackage.product.identifier}
+              key={availablePackage.product.identifier}
+              selectedPlan={selectedPlan}
+              handlePlanSelect={handlePlanSelect}
+              availablePackage={availablePackage}
+              badge={
+                availablePackage.product.identifier === "rc_4799_1q"
+                  ? t("mostPopular")
+                  : undefined
+              }
+            />
+          ))}
         </View>
         <Button
           title={isLoading ? t("processing") : t("subscribeButtonText")}
@@ -184,6 +113,10 @@ export default function Paywall({ navigation }: any) {
           onPress={handlePlanPurchase}
           disabled={isLoading}
           containerStyle={{ marginBottom: 16 }}
+          disabledStyle={{
+            borderColor: "#999",
+            borderWidth: 1,
+          }}
         />
         <View style={{ marginBottom: 24, flexDirection: "column", gap: 12 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
@@ -205,12 +138,10 @@ export default function Paywall({ navigation }: any) {
         </View>
 
         <View style={styles.footer}>
-          <TouchableOpacity onPress={handleRestorePurchase}>
-            <Text style={styles.footerText}>{t("restorePurchase")}</Text>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => handleLinkPress(PRIVACY_URL)}>
             <Text style={styles.footerText}>{t("privacyPolicy")}</Text>
           </TouchableOpacity>
+          <Text>{t("and")}</Text>
           <TouchableOpacity onPress={() => handleLinkPress(TERMS_URL)}>
             <Text style={styles.footerText}>{t("termsOfUse")}</Text>
           </TouchableOpacity>
@@ -227,6 +158,9 @@ export default function Paywall({ navigation }: any) {
             source={require("@/assets/images/logo.png")}
             style={styles.logo}
           />
+          <TouchableOpacity onPress={handleRestorePurchase}>
+            <Text style={styles.footerText}>{t("restorePurchase")}</Text>
+          </TouchableOpacity>
         </View>
         <Text style={styles.title}>{t("paywallTitle")}</Text>
         <Text style={styles.description}>{t("paywallDescription")}</Text>
@@ -249,7 +183,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 8,
   },
@@ -272,7 +206,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     color: "#000",
-    marginBottom: 24,
+    marginBottom: 16,
     fontFamily: "Inter_500Medium",
     letterSpacing: -0.5,
   },
@@ -285,6 +219,7 @@ const styles = StyleSheet.create({
   plansContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    gap: 16,
     marginBottom: 16,
   },
 
@@ -294,7 +229,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     borderColor: "#999",
-    marginHorizontal: 6,
   },
 
   planButtonSelected: {
@@ -302,17 +236,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF5F5",
   },
   saveBadge: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     color: "#FFFFFF",
     fontSize: 12,
     fontWeight: "600",
-    marginBottom: 4,
     position: "absolute",
     top: -15,
-    left: 42,
+    left: 15,
     backgroundColor: "#FF6347",
-    padding: 6,
     borderRadius: 12,
     letterSpacing: -0.5,
+    textTransform: "uppercase",
+    padding: 6,
+    width: "100%",
+    textAlign: "center",
   },
   planTitle: {
     fontSize: 18,
@@ -353,18 +292,21 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 4,
   },
   footerText: {
-    color: "#666",
+    color: "#FF6347",
     fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.6,
   },
   logo: {
     width: 120,
     height: 40,
     resizeMode: "contain",
   },
-  checkboxContainer: {},
   checkbox: {
     width: 32,
     height: 32,

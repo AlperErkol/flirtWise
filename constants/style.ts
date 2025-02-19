@@ -8,7 +8,7 @@ const globalStyles = StyleSheet.create({
     width: "100%",
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: "center",
     letterSpacing: -0.5,
     fontFamily: "Inter_600SemiBold",

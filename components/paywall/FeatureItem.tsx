@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
   },
   featureTitle: {
     fontSize: 17,
-    marginBottom: 4,
     fontFamily: "Inter_600SemiBold",
     letterSpacing: -0.7,
   },
