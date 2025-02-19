@@ -200,5 +200,6 @@
   "purchaseRestoredDescription": "Votre achat a été restauré avec succès.",
   "purchaseNotFound": "Aucun Achat Trouvé",
   "purchaseNotFoundDescription": "Vous n'avez effectué aucun achat.",
-  "justWeekly": "Seulement {price} par semaine. Facturation trimestrielle."
+  "justWeekly": "Seulement {price} par semaine. Facturation trimestrielle.",
+  "contactUs": "Contactez-nous"
 }

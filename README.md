@@ -13,7 +13,7 @@
 # FlirtWise - Development Tracking 1.0.3 🎯
 
 1. Copied Badge Implementation - Done
-2. Multi Language Support - In Progress (Türkçe **, Almanca, Fransızca ** ve İspanyolca)
+2. Multi Language Support - Done
 3. Uygulama her açıldığında WelcomeScreen gösterilmesi - Done
 4. Texting Wibe seçeneği - Done
 5. Paywall Görünümünün düzenlenmesi - Done
