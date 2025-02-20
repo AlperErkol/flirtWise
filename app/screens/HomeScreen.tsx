@@ -10,13 +10,17 @@ import { mainFeatures, secondaryFeatures } from "@/constants/home/features";
 import { usePaywall } from "@/hooks/usePaywall";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
 import { useTranslation } from "@/hooks/useTranslation";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 export default function HomeScreen({ navigation }: any) {
+  const { expoPushToken, notification } = usePushNotifications();
   const { showPaywall } = usePaywall();
   const { t } = useTranslation();
   const { isProMember, isLoading } = useRevenueCat();
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   useEffect(() => {
+    console.log("expoPushToken", expoPushToken);
+    console.log("notification", notification);
     const checkProStatus = async () => {
       if (!isLoading && !isProMember) {
         await showPaywall();
@@ -24,7 +28,7 @@ export default function HomeScreen({ navigation }: any) {
     };
 
     checkProStatus();
-  }, [isProMember, isLoading]);
+  }, [isProMember, isLoading, expoPushToken, notification]);
 
   return (
     <GlobalSafeAreaView>

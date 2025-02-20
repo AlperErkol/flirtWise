@@ -51,7 +51,6 @@ SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
 
 export default function RootLayout() {
-  const { expoPushToken, notification } = usePushNotifications();
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [loaded] = useFonts({
