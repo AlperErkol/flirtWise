@@ -1,42 +1,50 @@
 import { Alert, Linking, Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { APP_STORE_ID } from "@/constants/settings/urls";
+import { useTranslation } from "./useTranslation";
 
 export const useRateUs = () => {
+  const { t } = useTranslation();
+
   const checkAndShowRateUs = async () => {
     try {
       const hasRated = await AsyncStorage.getItem("hasRated");
-      const appOpenCount = Number(
-        (await AsyncStorage.getItem("appOpenCount")) || "0"
+      const actionCount = Number(
+        (await AsyncStorage.getItem("userActionCount")) || "0"
       );
 
       if (hasRated === "true") return;
 
-      if (appOpenCount >= 1) {
+      if (actionCount >= 2) {
         showRateUsAlert();
-      } else {
-        await AsyncStorage.setItem("appOpenCount", String(appOpenCount + 1));
       }
     } catch (error) {
       console.error("Rate Us check failed:", error);
     }
   };
 
+  const incrementActionCount = async () => {
+    try {
+      const currentCount = Number(
+        (await AsyncStorage.getItem("userActionCount")) || "0"
+      );
+      await AsyncStorage.setItem("userActionCount", String(currentCount + 1));
+    } catch (error) {
+      console.error("Failed to increment action count:", error);
+    }
+  };
+
   const showRateUsAlert = () => {
-    Alert.alert(
-      "Enjoying FlirtWise?",
-      "Would you mind taking a moment to rate us?",
-      [
-        {
-          text: "Not Now",
-          style: "cancel",
-        },
-        {
-          text: "Rate Now",
-          onPress: handleRatePress,
-        },
-      ]
-    );
+    Alert.alert(t("enjoyingFlirtWise"), t("wouldYouMindTaking"), [
+      {
+        text: t("notNow"),
+        style: "cancel",
+      },
+      {
+        text: t("rateNow"),
+        onPress: handleRatePress,
+      },
+    ]);
   };
 
   const handleRatePress = async () => {
@@ -52,5 +60,5 @@ export const useRateUs = () => {
     }
   };
 
-  return { checkAndShowRateUs };
+  return { checkAndShowRateUs, incrementActionCount };
 };

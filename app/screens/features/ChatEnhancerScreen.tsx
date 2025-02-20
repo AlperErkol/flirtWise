@@ -21,6 +21,7 @@ import handleImageProcessing from "@/common/photo";
 import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useRateUs } from "@/hooks/useRateUs";
 
 export default function ChatEnhancerScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
@@ -34,6 +35,7 @@ export default function ChatEnhancerScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [conversationStyle, setConversationStyle] = useState("");
   const { t } = useTranslation();
+  const { checkAndShowRateUs, incrementActionCount } = useRateUs();
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -59,6 +61,9 @@ export default function ChatEnhancerScreen() {
     );
     setSuggestions(suggestions);
     setLoading(false);
+
+    await incrementActionCount();
+    await checkAndShowRateUs();
   };
 
   const renderBackdrop = useMemo(

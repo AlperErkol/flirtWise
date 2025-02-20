@@ -21,7 +21,7 @@ const CustomBottomSheetView: React.FunctionComponent<
     Toast.show({
       text1: t("copiedToClipboard"),
       type: "success",
-      position: "bottom",
+      position: "top",
       text1Style: {
         fontFamily: "Inter_500Medium",
         fontSize: 16,

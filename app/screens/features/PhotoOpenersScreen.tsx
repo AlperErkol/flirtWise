@@ -13,7 +13,7 @@ import { LoadingOverlay } from "@/components/LoadingOverlay";
 import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
 import { useTranslation } from "@/hooks/useTranslation";
-
+import { useRateUs } from "@/hooks/useRateUs";
 export default function PhotoOpenersScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -24,6 +24,7 @@ export default function PhotoOpenersScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [conversationStyle, setConversationStyle] = useState("");
   const { t } = useTranslation();
+  const { checkAndShowRateUs, incrementActionCount } = useRateUs();
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -48,6 +49,8 @@ export default function PhotoOpenersScreen() {
     );
     setSuggestions(suggestions);
     setLoading(false);
+    await incrementActionCount();
+    await checkAndShowRateUs();
   };
 
   const renderBackdrop = useMemo(

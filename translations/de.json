@@ -201,5 +201,15 @@
   "purchaseRestoredDescription": "Dein Kauf wurde erfolgreich wiederhergestellt.",
   "purchaseNotFound": "Kein Kauf gefunden",
   "purchaseNotFoundDescription": "Du hast keine Käufe getätigt.",
-  "justWeekly": "Nur {price} wöchentlich. Vierteljährlich abgerechnet."
+  "justWeekly": "Nur {price} wöchentlich. Vierteljährlich abgerechnet.",
+  "enjoyingFlirtWise": "Gefällt dir FlirtWise?",
+  "wouldYouMindTaking": "Hättest du einen Moment, um uns zu bewerten?",
+  "rateNow": "Jetzt bewerten",
+  "notNow": "Nicht jetzt",
+  "whatDoYouNeedHelpWith": "Wobei brauchst du Hilfe?",
+  "browseCategoriesAndGetExpertTips": "Durchstöbere die Kategorien und erhalte Expertentipps für jede Phase des Flirtens.",
+  "quickTips": "Schnelle Tipps",
+  "instant": "Sofort",
+  "guide": "Anleitung",
+  "oneToOneHelp": "1:1 Hilfe"
 }

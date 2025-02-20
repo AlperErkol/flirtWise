@@ -1,9 +1,9 @@
-const FREE_CATEGORIES = [
+const TIP_CATEGORIES = [
   {
     id: "first_impression",
     isPremium: false,
     title: "firstImpression",
-    icon: "✨",
+    icon: "sparkles-outline",
     gradient: ["#FF9A8B", "#FF6B6B"],
     description: "firstImpressionDescription",
     subCategories: [
@@ -28,7 +28,7 @@ const FREE_CATEGORIES = [
     id: "conversation_basics",
     isPremium: false,
     title: "conversationBasics",
-    icon: "💭",
+    icon: "chatbubble-ellipses-outline",
     gradient: ["#4FACFE", "#00F2FE"],
     description: "conversationBasicsDescription",
     subCategories: [
@@ -53,7 +53,7 @@ const FREE_CATEGORIES = [
     id: "dating_essentials",
     isPremium: false,
     title: "datingEssentials",
-    icon: "💝",
+    icon: "heart-outline",
     gradient: ["#43E97B", "#38F9D7"],
     description: "datingEssentialsDescription",
     subCategories: [
@@ -74,14 +74,11 @@ const FREE_CATEGORIES = [
       },
     ],
   },
-];
-
-const PREMIUM_CATEGORIES = [
   {
     id: "advanced_attraction",
     isPremium: true,
     title: "advancedAttraction",
-    icon: "🌟",
+    icon: "flame-outline",
     gradient: ["#FA709A", "#FEE140"],
     description: "advancedAttractionDescription",
     subCategories: [
@@ -106,7 +103,7 @@ const PREMIUM_CATEGORIES = [
     id: "dating_strategy",
     isPremium: true,
     title: "datingStrategy",
-    icon: "🎯",
+    icon: "map-outline",
     gradient: ["#FF3CAC", "#784BA0"],
     description: "datingStrategyDescription",
     subCategories: [
@@ -131,7 +128,7 @@ const PREMIUM_CATEGORIES = [
     id: "relationship_building",
     isPremium: true,
     title: "relationshipBuilding",
-    icon: "💫",
+    icon: "people-outline",
     gradient: ["#13547A", "#80D0C7"],
     description: "relationshipBuildingDescription",
     subCategories: [
@@ -154,4 +151,4 @@ const PREMIUM_CATEGORIES = [
   },
 ];
 
-export { FREE_CATEGORIES, PREMIUM_CATEGORIES };
+export { TIP_CATEGORIES };

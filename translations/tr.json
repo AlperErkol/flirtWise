@@ -201,5 +201,15 @@
   "purchaseRestoredDescription": "Satın alımın başarıyla geri yüklendi.",
   "purchaseNotFound": "Satın Alma Bulunamadı",
   "purchaseNotFoundDescription": "Herhangi bir satın alma işlemi yapmamışsın.",
-  "justWeekly": "Haftalık sadece {price}. Üç aylık olarak faturalanır."
+  "justWeekly": "Haftalık sadece {price}. Üç aylık olarak faturalanır.",
+  "enjoyingFlirtWise": "FlirtWise'dan memnun musunuz?",
+  "wouldYouMindTaking": "Bize puan vermek için bir dakikanızı ayırır mısınız?",
+  "rateNow": "Hemen Değerlendir",
+  "notNow": "Şimdi Değil",
+  "whatDoYouNeedHelpWith": "Ne Yardıma İhtiyacınız var?",
+  "browseCategoriesAndGetExpertTips": "Kategorilere göz atın ve flörtün her aşaması için uzman ipuçları alın.",
+  "quickTips": "Hızlı İpuçları",
+  "instant": "Anında",
+  "guide": "Rehber",
+  "oneToOneHelp": "Birebir Yardım"
 }

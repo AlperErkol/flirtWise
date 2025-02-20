@@ -21,22 +21,42 @@ export function MainFeatureCard({
       style={styles.mainFeatureWrapper}
       key={item.id}
     >
-      <View style={styles.mainCard}>
+      <View
+        style={[
+          styles.mainCard,
+          { backgroundColor: item.dark ? "#1C1C1C" : "#FFF" },
+        ]}
+      >
         <View style={styles.cardContent}>
-          <View style={styles.iconContainer}>
-            <Text style={styles.featureIcon}>{item.emoji}</Text>
-          </View>
-          <View style={styles.textContainer}>
-            <View style={styles.titleRow}>
-              <Text style={styles.cardTitle}>{t(item.title)}</Text>
+          <Text
+            style={[styles.cardTitle, { color: item.dark ? "#FFF" : "#000" }]}
+          >
+            {t(item.title)}
+          </Text>
+          <View
+            style={{
+              backgroundColor: item.dark ? "#323232" : "#F3F3F3",
+              borderRadius: 34,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              paddingLeft: 8,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: item.dark ? "#999" : "#000",
+                letterSpacing: -0.5,
+                fontFamily: "Inter_500Medium",
+              }}
+            >
+              {t("getStarted")}
+            </Text>
+            <View style={styles.startButtonContainer}>
+              <Ionicons name="caret-forward-outline" size={22} color="#FFF" />
             </View>
-            <Text style={styles.cardDesc}>{t(item.description)}</Text>
-          </View>
-        </View>
-        <View style={styles.viewButtonContainer}>
-          <View style={styles.viewButton}>
-            <Text style={styles.viewButtonText}>{t("getStarted")}</Text>
-            <Ionicons name="arrow-forward-outline" size={20} />
           </View>
         </View>
       </View>
@@ -46,25 +66,20 @@ export function MainFeatureCard({
 
 const styles = StyleSheet.create({
   mainFeatureWrapper: {
+    flex: 1,
     marginBottom: 15,
   },
   mainCard: {
-    backgroundColor: "#FFFFFF",
     borderRadius: 20,
-    borderColor: "#D6BDF7",
-    borderWidth: 2,
-    overflow: "hidden",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
   },
   cardContent: {
     padding: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 15,
+    flexDirection: "column",
+    gap: 50,
   },
   iconContainer: {
     width: 50,
@@ -73,8 +88,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F3F4F6",
     justifyContent: "center",
     alignItems: "center",
-    borderColor: "#D6BDF7",
-    borderWidth: 2,
     overflow: "hidden",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
@@ -95,10 +108,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   cardTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontFamily: "Inter_600SemiBold",
-    color: "#000",
     letterSpacing: -0.5,
+    width: 120,
   },
   cardDesc: {
     fontSize: 14,
@@ -123,5 +136,13 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_500Medium",
     color: "#000",
     letterSpacing: -0.5,
+  },
+  startButtonContainer: {
+    backgroundColor: "#FF6347",
+    borderRadius: 34,
+    width: 34,
+    height: 34,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -201,5 +201,15 @@
   "purchaseRestoredDescription": "Tu compra ha sido restaurada con éxito.",
   "purchaseNotFound": "Compra No Encontrada",
   "purchaseNotFoundDescription": "No has realizado ninguna compra.",
-  "justWeekly": "Solo {price} por semana. Facturado trimestralmente."
+  "justWeekly": "Solo {price} por semana. Facturado trimestralmente.",
+  "enjoyingFlirtWise": "¿Te gusta FlirtWise?",
+  "wouldYouMindTaking": "¿Te importaría tomarte un momento para calificarnos?",
+  "rateNow": "Calificar ahora",
+  "notNow": "Ahora no",
+  "whatDoYouNeedHelpWith": "¿En qué necesitas ayuda?",
+  "browseCategoriesAndGetExpertTips": "Explora las categorías y obtén consejos de expertos para cada etapa del coqueteo.",
+  "quickTips": "Consejos rápidos",
+  "instant": "Instantáneo",
+  "guide": "Guía",
+  "oneToOneHelp": "Ayuda 1:1"
 }

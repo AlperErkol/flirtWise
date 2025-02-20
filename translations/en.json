@@ -201,5 +201,15 @@
   "purchaseRestoredDescription": "You have successfully restored your purchase.",
   "purchaseNotFound": "No Purchase Found",
   "purchaseNotFoundDescription": "You have not made any purchases.",
-  "justWeekly": "Just {price} weekly. Billed quarterly."
+  "justWeekly": "Just {price} weekly. Billed quarterly.",
+  "enjoyingFlirtWise": "Enjoying FlirtWise?",
+  "wouldYouMindTaking": "Would you mind taking a moment to rate us?",
+  "rateNow": "Rate Now",
+  "notNow": "Not Now",
+  "whatDoYouNeedHelpWith": "What Do You Need Help With?",
+  "browseCategoriesAndGetExpertTips": "Browse categories and get expert tips for every stage of flirting.",
+  "quickTips": "Quick Tips",
+  "instant": "Instant",
+  "guide": "Guide",
+  "oneToOneHelp": "1:1 Help"
 }

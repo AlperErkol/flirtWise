@@ -19,7 +19,8 @@
 5. Paywall Görünümünün düzenlenmesi - Done
 6. Hard Paywall'a çevirme - Done
 7. Contact Us (mailto:flirtwiseai@gmail.com) - Done
-8. Push Notification
+8. Push Notification - Done
+9. Rate Us'ı geri ekle ve ayarlarını düzenle - Done
 
 # FlirtWise - New Feature Development (2.0.0) 🎯
 

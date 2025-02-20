@@ -11,6 +11,8 @@ import { usePaywall } from "@/hooks/usePaywall";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
+import Quote from "@/components/quote";
+
 export default function HomeScreen({ navigation }: any) {
   const { expoPushToken, notification } = usePushNotifications();
   const { showPaywall } = usePaywall();
@@ -37,8 +39,8 @@ export default function HomeScreen({ navigation }: any) {
         showSettingsIcon={true}
         bottomSheetRef={bottomSheetRef}
       />
-      <Text style={styles.sectionTitle}>{t("homeMainTitle")}</Text>
-      <View>
+      <Quote />
+      <View style={{ display: "flex", flexDirection: "row", gap: 12 }}>
         {mainFeatures.map((feature) => (
           <MainFeatureCard
             key={feature.title}
@@ -67,17 +69,13 @@ export default function HomeScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   secondaryFeatureContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     gap: 12,
-    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 23,
     fontFamily: "Inter_700Bold",
     color: "#000",
-    marginBottom: 16,
-    marginTop: 24,
+    marginVertical: 16,
     letterSpacing: -1,
   },
 });

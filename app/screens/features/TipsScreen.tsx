@@ -9,9 +9,11 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
-import { FREE_CATEGORIES, PREMIUM_CATEGORIES } from "@/constants/tip/category";
+import { TIP_CATEGORIES } from "@/constants/tip/category";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { useTranslation } from "@/hooks/useTranslation";
+import { Ionicons } from "@expo/vector-icons";
+import Theme from "@/constants/Theme";
 interface Category {
   id: string;
   isPremium: boolean;
@@ -55,7 +57,9 @@ export default function TipsScreen() {
         end={{ x: 1, y: 1 }}
         style={styles.categoryCard}
       >
-        <Text style={styles.categoryIcon}>{category.icon}</Text>
+        <View style={styles.emojiContainer}>
+          <Ionicons name={category.icon as any} size={18} color="#FFF" />
+        </View>
         <Text style={styles.categoryTitle}>{t(category.title)}</Text>
       </LinearGradient>
     </TouchableOpacity>
@@ -67,14 +71,15 @@ export default function TipsScreen() {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <View style={styles.categoriesContainer}>
-            <Text style={styles.sectionTitle}>{t("basicCategories")}</Text>
-            <View style={styles.categoryGrid}>
-              {FREE_CATEGORIES.map((category) => renderCategory(category))}
-            </View>
+            <Text style={styles.sectionTitle}>
+              {t("whatDoYouNeedHelpWith")}
+            </Text>
+            <Text style={styles.subtitle}>
+              {t("browseCategoriesAndGetExpertTips")}
+            </Text>
 
-            <Text style={styles.sectionTitle}>{t("premiumCategories")}</Text>
             <View style={styles.categoryGrid}>
-              {PREMIUM_CATEGORIES.map((category) => renderCategory(category))}
+              {TIP_CATEGORIES.map((category) => renderCategory(category))}
             </View>
           </View>
         </View>
@@ -98,6 +103,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: "Inter_700Bold",
     color: "#000",
+    letterSpacing: -0.5,
+  },
+  subtitle: {
+    fontSize: 16,
+    fontFamily: "Inter_400Regular",
+    color: Theme.colors.textLight,
+    marginBottom: 24,
     letterSpacing: -0.5,
   },
   categoryGrid: {
@@ -136,5 +148,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 8,
     right: 8,
+  },
+  emojiContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginBottom: 12,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#FFF",
   },
 });

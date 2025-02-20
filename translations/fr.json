@@ -201,5 +201,15 @@
   "purchaseNotFound": "Aucun Achat Trouvé",
   "purchaseNotFoundDescription": "Vous n'avez effectué aucun achat.",
   "justWeekly": "Seulement {price} par semaine. Facturation trimestrielle.",
-  "contactUs": "Contactez-nous"
+  "contactUs": "Contactez-nous",
+  "enjoyingFlirtWise": "Vous aimez FlirtWise ?",
+  "wouldYouMindTaking": "Pourriez-vous prendre un moment pour nous noter ?",
+  "rateNow": "Noter maintenant",
+  "notNow": "Pas maintenant",
+  "whatDoYouNeedHelpWith": "De quoi avez-vous besoin d'aide ?",
+  "browseCategoriesAndGetExpertTips": "Parcourez les catégories et obtenez des conseils d'experts pour chaque étape de la drague.",
+  "quickTips": "Conseils rapides",
+  "instant": "Instantané",
+  "guide": "Guide",
+  "oneToOneHelp": "Aide personnalisée"
 }
