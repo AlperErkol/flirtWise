@@ -34,17 +34,17 @@ export default function LanguageScreen() {
   };
 
   const LANGUAGES = [
-    { id: "en", label: "English" },
-    { id: "tr", label: "Türkçe" },
-    { id: "fr", label: "Français" },
-    { id: "de", label: "Deutsch" },
-    { id: "es", label: "Español" },
+    { id: "en", label: "English", emoji: "🇺🇸" },
+    { id: "tr", label: "Türkçe", emoji: "🇹🇷" },
+    { id: "fr", label: "Français", emoji: "🇫🇷" },
+    { id: "de", label: "Deutsch", emoji: "🇩🇪" },
+    { id: "es", label: "Español", emoji: "🇪🇸" },
   ];
 
   return (
     <GlobalSafeAreaView>
-      <Header showBackButton logo />
-      <ScrollView style={styles.container}>
+      <Header showBackButton title="Select a Language" />
+      <View style={styles.container}>
         {isLoading && (
           <ActivityIndicator
             size="large"
@@ -52,16 +52,19 @@ export default function LanguageScreen() {
             style={styles.loader}
           />
         )}
-        {LANGUAGES.map((lang) => (
-          <LanguageItem
-            key={lang.id}
-            id={lang.id}
-            label={lang.label}
-            isSelected={selectedLanguage === lang.id}
-            onSelect={handleLanguageSelect}
-          />
-        ))}
-      </ScrollView>
+        <View style={styles.section}>
+          {LANGUAGES.map((lang) => (
+            <LanguageItem
+              key={lang.id}
+              id={lang.id}
+              label={lang.label}
+              isSelected={selectedLanguage === lang.id}
+              onSelect={handleLanguageSelect}
+              emoji={lang.emoji}
+            />
+          ))}
+        </View>
+      </View>
     </GlobalSafeAreaView>
   );
 }
@@ -72,5 +75,14 @@ const styles = StyleSheet.create({
   },
   loader: {
     marginVertical: Theme.spacing.vertical,
+  },
+  section: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
   },
 });

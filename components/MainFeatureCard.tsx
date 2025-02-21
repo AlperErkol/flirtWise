@@ -1,62 +1,77 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { useTranslation } from "@/hooks/useTranslation";
+import BadgeComponent from "./badge";
+import { router } from "expo-router";
 
-export function MainFeatureCard({
-  item,
-  navigation,
-}: {
-  item: any;
-  navigation: any;
-}) {
-  const handleFeaturePress = async (feature: any) => {
-    navigation.navigate(`${feature.screen}`);
-  };
-
+export function MainFeatureCard({ feature }: { feature: any }) {
   const { t } = useTranslation();
+
+  const handleFeaturePress = async (feature: any) => {
+    router.push(`/features/${feature.screen}` as any);
+  };
 
   return (
     <TouchableOpacity
-      onPress={() => handleFeaturePress(item)}
-      style={styles.mainFeatureWrapper}
-      key={item.id}
+      style={[
+        styles.secondaryCardWrapper,
+        { backgroundColor: feature.dark ? "#1c1c1c" : "#FFF" },
+      ]}
+      onPress={() => handleFeaturePress(feature)}
     >
-      <View
-        style={[
-          styles.mainCard,
-          { backgroundColor: item.dark ? "#1C1C1C" : "#FFF" },
-        ]}
-      >
-        <View style={styles.cardContent}>
-          <Text
-            style={[styles.cardTitle, { color: item.dark ? "#FFF" : "#000" }]}
-          >
-            {t(item.title)}
-          </Text>
+      <View style={styles.cardContent}>
+        <View style={styles.contentContainer}>
           <View
-            style={{
-              backgroundColor: item.dark ? "#323232" : "#F3F3F3",
-              borderRadius: 34,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              paddingLeft: 8,
-            }}
+            style={[
+              styles.emojiContainer,
+              { backgroundColor: feature.dark ? "#323232" : "#f1f1f1" },
+            ]}
           >
+            <Text style={{ fontSize: 24 }}>{feature.emoji}</Text>
+          </View>
+          <View style={{ flex: 1 }}>
             <Text
-              style={{
-                fontSize: 14,
-                color: item.dark ? "#999" : "#000",
-                letterSpacing: -0.5,
-                fontFamily: "Inter_500Medium",
-              }}
+              style={[
+                styles.secondaryCardTitle,
+                { color: feature.dark ? "#FFF" : "#000" },
+              ]}
             >
-              {t("getStarted")}
+              {t(feature.title)}
             </Text>
-            <View style={styles.startButtonContainer}>
-              <Ionicons name="caret-forward-outline" size={22} color="#FFF" />
-            </View>
+            <Text
+              style={[
+                styles.secondaryCardDesc,
+                { color: feature.dark ? "#FFF" : "#000" },
+              ]}
+            >
+              {t(feature.description)}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
+            {feature.tags.map((tag: string) => (
+              <BadgeComponent key={tag} value={tag} isDark={feature.dark} />
+            ))}
+          </View>
+          <View
+            style={[
+              styles.startButtonContainer,
+              { backgroundColor: feature.dark ? "#FFF" : "#FF6347" },
+            ]}
+          >
+            <Ionicons
+              name="caret-forward-outline"
+              size={26}
+              color={feature.dark ? "#FF6347" : "#FFF"}
+            />
           </View>
         </View>
       </View>
@@ -65,83 +80,67 @@ export function MainFeatureCard({
 }
 
 const styles = StyleSheet.create({
-  mainFeatureWrapper: {
-    flex: 1,
-    marginBottom: 15,
-  },
-  mainCard: {
-    borderRadius: 20,
+  secondaryCardWrapper: {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.15,
     shadowRadius: 16,
-  },
-  cardContent: {
-    padding: 20,
+    borderRadius: 16,
     flexDirection: "column",
-    gap: 50,
-  },
-  iconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "#F3F4F6",
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  featureIcon: {
-    fontSize: 24,
-  },
-  textContainer: {
-    flex: 1,
-  },
-  titleRow: {
-    flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 8,
   },
-  cardTitle: {
+  secondaryCardTitle: {
+    color: "#FFF",
+    marginBottom: 4,
     fontSize: 22,
     fontFamily: "Inter_600SemiBold",
     letterSpacing: -0.5,
-    width: 120,
   },
-  cardDesc: {
-    fontSize: 14,
-    color: "#666",
+  secondaryCardDesc: {
+    fontSize: 16,
+    fontFamily: "Inter_500Medium",
     letterSpacing: -0.5,
   },
-  viewButtonContainer: {
-    borderTopWidth: 2,
-    borderColor: "#D6BDF7",
+  contentContainer: {
+    marginBottom: 16,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
+  secondaryViewButtonContainer: {
+    borderTopWidth: 1,
+    borderColor: "#fff",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
+    padding: 16,
   },
-  viewButton: {
+  secondaryViewButton: {
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
   },
-  viewButtonText: {
+  secondaryViewButtonText: {
     fontSize: 15,
-    fontFamily: "Inter_500Medium",
-    color: "#000",
+    fontFamily: "Inter_600SemiBold",
+    color: "#fff",
     letterSpacing: -0.5,
   },
+  cardContent: {
+    padding: 20,
+  },
   startButtonContainer: {
-    backgroundColor: "#FF6347",
-    borderRadius: 34,
-    width: 34,
-    height: 34,
+    borderRadius: 44,
+    width: 44,
+    height: 44,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emojiContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
   },

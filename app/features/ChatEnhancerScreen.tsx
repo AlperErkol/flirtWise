@@ -1,26 +1,37 @@
 import React, { useState, useRef, useMemo, useEffect } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import useProfileStore from "../../../store/profileStore";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Switch,
+} from "react-native";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
+import Theme from "@/constants/Theme";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
+import AdditionalInfoModal from "@/components/AdditionalInfoModal";
 import CustomBottomSheetView from "@/components/CustomBottomSheetView";
 import pickImage from "@/common/image";
-import AdditionalInfoModal from "@/components/AdditionalInfoModal";
-import handleImageProcessing from "@/common/photo";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
+import handleImageProcessing from "@/common/photo";
 import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useRateUs } from "@/hooks/useRateUs";
-export default function PhotoOpenersScreen() {
+import useProfileStore from "@/store/profileStore";
+
+export default function ChatEnhancerScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [additionalInfo, setAdditionalInfo] = useState("");
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [additionalInfo, setAdditionalInfo] = useState("");
+  const [isDeadConversation, setIsDeadConversation] = useState(false);
+  const [hasAdditionalInfo, setHasAdditionalInfo] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [conversationStyle, setConversationStyle] = useState("");
   const { t } = useTranslation();
@@ -43,12 +54,14 @@ export default function PhotoOpenersScreen() {
     const suggestions = await handleImageProcessing(
       selectedImage as any,
       userProfile,
-      "photo_openers",
+      "chat_enhancer",
       additionalInfo,
-      conversationStyle
+      conversationStyle,
+      isDeadConversation
     );
     setSuggestions(suggestions);
     setLoading(false);
+
     await incrementActionCount();
     await checkAndShowRateUs();
   };
@@ -67,28 +80,38 @@ export default function PhotoOpenersScreen() {
   );
 
   const onModalClose = () => {
+    if (
+      additionalInfo.trim().length > 0 ||
+      conversationStyle.trim().length > 0
+    ) {
+      setHasAdditionalInfo(true);
+    } else {
+      setHasAdditionalInfo(false);
+    }
     setIsModalVisible(false);
   };
 
   return (
     <GlobalSafeAreaView>
       <Header logo={true} showBackButton={true} />
+
       <View style={styles.container}>
         {!selectedImage ? (
           <>
-            <View style={styles.instructionContainer}>
-              <Text style={styles.instructionText}>
-                {t("photoAnalysisInstruction")}
-              </Text>
-            </View>
             <View style={styles.heroContainer}>
+              <View style={styles.instructionContainer}>
+                <Text style={styles.instructionText}>
+                  {t("chatEnhancerInstruction")}
+                </Text>
+              </View>
               <Image
-                source={require("@/assets/images/photo-based.png")}
+                source={require("@/assets/images/chat-enhancer.png")}
                 style={styles.heroImage}
               />
             </View>
+
             <Button
-              title={t("uploadImage")}
+              title={t("uploadScreenshot")}
               buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
               titleStyle={globalStyles.buttonText}
               onPress={pickImageHandler}
@@ -102,10 +125,18 @@ export default function PhotoOpenersScreen() {
               style={styles.imagePreview}
             />
             <View style={styles.switchRow}>
+              <Text style={styles.switchLabel}>{t("isStuckConversation")}</Text>
+              <Switch
+                value={isDeadConversation}
+                onValueChange={setIsDeadConversation}
+                trackColor={{ false: "#D1D5DB", true: "#4F46E5" }}
+                thumbColor={isDeadConversation ? "#FFFFFF" : "#FFFFFF"}
+              />
+            </View>
+            <View style={styles.switchRow}>
               <View style={styles.switchLabelContainer}>
                 <Text style={styles.switchLabel}>{t("additionalContext")}</Text>
-                {(additionalInfo.trim().length > 0 ||
-                  conversationStyle.trim().length > 0) && (
+                {hasAdditionalInfo && (
                   <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
                 )}
               </View>
@@ -114,8 +145,7 @@ export default function PhotoOpenersScreen() {
                   style={styles.addButton}
                   onPress={() => setIsModalVisible(true)}
                 >
-                  {additionalInfo.trim().length > 0 ||
-                  conversationStyle.trim().length > 0 ? (
+                  {hasAdditionalInfo ? (
                     <Text style={styles.additionalButtonText}>{t("edit")}</Text>
                   ) : (
                     <Text style={styles.additionalButtonText}>{t("add")}</Text>
@@ -125,14 +155,17 @@ export default function PhotoOpenersScreen() {
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={t("generateOpeners")}
+                title={t("enhanceChat")}
                 buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
                 titleStyle={globalStyles.buttonText}
-                onPress={startAnalysis}
-                style={{ display: "flex", alignItems: "center" }}
+                onPress={() => startAnalysis()}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
               />
               <Button
-                title={t("uploadNewImage")}
+                title={t("uploadNewScreenshot")}
                 buttonStyle={[
                   globalStyles.button,
                   globalStyles.transparentButton,
@@ -151,9 +184,7 @@ export default function PhotoOpenersScreen() {
           </View>
         )}
       </View>
-
       {loading && <LoadingOverlay />}
-
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
@@ -163,11 +194,12 @@ export default function PhotoOpenersScreen() {
         backdropComponent={renderBackdrop}
       >
         <CustomBottomSheetView
-          title={t("suggestedOpeners")}
+          title={t("chatSuggestions")}
           suggestions={suggestions}
           bottomSheetRef={bottomSheetRef}
         />
       </BottomSheet>
+
       <AdditionalInfoModal
         visible={isModalVisible}
         onClose={onModalClose}
@@ -180,7 +212,10 @@ export default function PhotoOpenersScreen() {
   );
 }
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
@@ -206,12 +241,20 @@ export const styles = StyleSheet.create({
     height: 500,
     resizeMode: "contain",
   },
+  pickButton: {
+    backgroundColor: Theme.colors.primary,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 20,
+  },
   pickText: {
     color: "#fff",
     textAlign: "center",
     fontSize: 16,
-    letterSpacing: -0.5,
     fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
   imagePreview: {
     width: "100%",
@@ -224,6 +267,24 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 12,
   },
+  analyzeButton: {
+    backgroundColor: "#000000",
+    padding: 16,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  uploadButton: {
+    padding: 16,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 16,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
+  },
+
   bottomSheetBackground: {
     backgroundColor: "#fff",
     borderTopLeftRadius: 24,
@@ -232,10 +293,6 @@ export const styles = StyleSheet.create({
   bottomSheetIndicator: {
     backgroundColor: "#FF6347",
     width: 40,
-  },
-  bottomSheetContent: {
-    flex: 1,
-    padding: 20,
   },
   switchRow: {
     flexDirection: "row",
@@ -248,9 +305,10 @@ export const styles = StyleSheet.create({
   switchLabel: {
     fontSize: 16,
     fontFamily: "Inter_500Medium",
-    color: "#000000",
+    color: "#000",
     letterSpacing: -0.5,
   },
+
   addInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -260,10 +318,26 @@ export const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 12,
   },
+  addedInfoBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10,
+    backgroundColor: "#E8F5E9",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 15,
+  },
+  addedInfoText: {
+    color: "#4CAF50",
+    marginLeft: 5,
+    fontSize: 14,
+    fontWeight: "500",
+  },
   additionalButtonText: {
     color: "#FFF",
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
     padding: 4,
   },
   switchLabelContainer: {

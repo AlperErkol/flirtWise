@@ -6,10 +6,11 @@ import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import personas from "@/constants/tip/persona";
 import { useTranslation } from "@/hooks/useTranslation";
-export default function CommunicationCoachSelectionScreen({ navigation }: any) {
+import { router } from "expo-router";
+export default function CommunicationCoachSelectionScreen() {
   const { t } = useTranslation();
   const handlePersonaSelect = async (persona: any) => {
-    navigation.navigate("CommunicationCoachScreen", { persona: persona.id });
+    router.push(`/features/CommunicationCoachScreen?persona=${persona.id}`);
   };
 
   return (

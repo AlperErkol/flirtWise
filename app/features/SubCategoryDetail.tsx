@@ -10,13 +10,12 @@ import {
   Image,
 } from "react-native";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
-import { usePaywall } from "@/hooks/usePaywall";
-import { useRevenueCat } from "@/hooks/useRevenueCat";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/constants/Theme";
 import { getCommunicationTip } from "@/services/tips";
 import useProfileStore from "@/store/profileStore";
 import { useTranslation } from "@/hooks/useTranslation";
+import { router, useLocalSearchParams } from "expo-router";
 interface SubCategory {
   id: string;
   title: string;
@@ -32,9 +31,8 @@ const tabs = [
   { id: 3, title: "premium" },
 ];
 
-export default function SubCategoryDetailScreen({ route, navigation }: any) {
-  const { category, subCategory } = route.params;
-  const { isProMember } = useRevenueCat();
+export default function SubCategoryDetailScreen() {
+  const { category, subCategory }: any = useLocalSearchParams();
   const [activeTab, setActiveTab] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
@@ -58,15 +56,10 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
     };
 
     loadTip();
-  }, [route.params.category.id, route.params.subCategory.id]);
+  }, [category, subCategory]);
 
   const fetchTips = async () => {
-    const tip = await getCommunicationTip(
-      category.title,
-      subCategory.title,
-      userProfile,
-      isProMember
-    );
+    const tip = await getCommunicationTip(category, subCategory, userProfile);
     const formattedTips = [
       tip.mainTip,
       tip.explanation,
@@ -74,15 +67,13 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
       ...tip.doAndDonts.do.map((item: string) => `${item}`),
       ...tip.doAndDonts.dont.map((item: string) => `${item}`),
     ];
-    if (isProMember && tip.premiumContent) {
-      formattedTips.push(
-        tip.premiumContent.situationalVariations.casual,
-        tip.premiumContent.situationalVariations.romantic,
-        tip.premiumContent.situationalVariations.recovery,
-        tip.premiumContent.psychologyInsight,
-        tip.premiumContent.expertNotes
-      );
-    }
+    formattedTips.push(
+      tip.premiumContent.situationalVariations.casual,
+      tip.premiumContent.situationalVariations.romantic,
+      tip.premiumContent.situationalVariations.recovery,
+      tip.premiumContent.psychologyInsight,
+      tip.premiumContent.expertNotes
+    );
     setSelectedSubCategory({
       ...subCategory,
       tips: formattedTips,
@@ -105,10 +96,8 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
             <View style={styles.successRateContainer}>
               <View style={styles.successRateHeader}>
                 <View>
-                  <Text style={styles.categoryLabel}>{t(category.title)}</Text>
-                  <Text style={styles.subCategoryLabel}>
-                    {t(subCategory.title)}
-                  </Text>
+                  <Text style={styles.categoryLabel}>{t(category)}</Text>
+                  <Text style={styles.subCategoryLabel}>{t(subCategory)}</Text>
                 </View>
               </View>
               <View style={styles.successRateContent}>
@@ -218,7 +207,6 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
             )}
 
             {activeTab === 3 &&
-              isProMember &&
               selectedSubCategory?.tips &&
               renderPremiumContent()}
           </>
@@ -228,7 +216,7 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
   };
 
   const renderPremiumContent = () => {
-    if (!isProMember || !selectedSubCategory?.tips) return null;
+    if (!selectedSubCategory?.tips) return null;
 
     const premiumTips = selectedSubCategory.tips.slice(-5);
     return (
@@ -278,7 +266,7 @@ export default function SubCategoryDetailScreen({ route, navigation }: any) {
           source={require("@/assets/images/logo.png")}
           style={styles.logo}
         />
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="close" size={32} color="#000" />
         </TouchableOpacity>
       </View>

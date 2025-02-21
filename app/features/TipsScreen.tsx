@@ -10,10 +10,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { TIP_CATEGORIES } from "@/constants/tip/category";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/constants/Theme";
+import { router } from "expo-router";
 interface Category {
   id: string;
   isPremium: boolean;
@@ -31,18 +31,11 @@ interface SubCategory {
   successRate?: string;
 }
 
-type RootStackParamList = {
-  CategoryDetail: {
-    category: Category;
-  };
-};
-
 export default function TipsScreen() {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const { t } = useTranslation();
 
   const handleCategoryPress = async (category: Category) => {
-    navigation.navigate("CategoryDetail", { category });
+    router.push(`/features/CategoryDetailScreen?category=${category.title}`);
   };
 
   const renderCategory = (category: Category) => (

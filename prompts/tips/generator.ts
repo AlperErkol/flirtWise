@@ -1,14 +1,12 @@
 type TipParams = {
   category: string;
   subCategory: string;
-  isPremium: boolean;
   userInfo: any;
 };
 
 export const getTipPrompt = ({
   category,
   subCategory,
-  isPremium,
   userInfo,
 }: TipParams) => {
   return `You are an expert communication coach with deep understanding of social dynamics and interpersonal relationships. Your mission is to create personalized, actionable communication advice that resonates with the user's specific context and goals.
@@ -52,15 +50,11 @@ Guidelines for generating advice:
      * Context appropriateness
      * General success statistics
 
-${
-  isPremium
-    ? `6. Premium Insights:
+6. Premium Insights:
    - Situational variations for different contexts
    - Deeper psychological principles
    - Expert-level techniques
-   - Advanced success metrics`
-    : ""
-}
-
+   - Advanced success metrics
+  
 Ensure all advice is respectful, ethical, and aligned with modern communication standards.`;
 };

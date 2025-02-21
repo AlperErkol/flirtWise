@@ -11,6 +11,8 @@ import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/constants/Theme";
 import { useTranslation } from "@/hooks/useTranslation";
+import { router, useLocalSearchParams } from "expo-router";
+import { TIP_CATEGORIES } from "@/constants/tip/category";
 interface SubCategory {
   id: string;
   title: string;
@@ -19,13 +21,22 @@ interface SubCategory {
   successRate?: string;
 }
 
-export default function CategoryDetailScreen({ route, navigation }: any) {
-  const { category } = route.params;
+export default function CategoryDetailScreen() {
+  const { category }: any = useLocalSearchParams();
   const { t } = useTranslation();
 
+  const selectedCategory = TIP_CATEGORIES.find(
+    (c: any) => c.title === category
+  );
   const handleSubCategoryPress = async (subCategory: SubCategory) => {
-    navigation.navigate("SubCategoryDetail", { category, subCategory });
+    router.push(
+      `/features/SubCategoryDetail?category=${category}&subCategory=${subCategory.title}`
+    );
   };
+
+  if (!selectedCategory) {
+    return null;
+  }
 
   return (
     <GlobalSafeAreaView>
@@ -33,14 +44,20 @@ export default function CategoryDetailScreen({ route, navigation }: any) {
       <ScrollView style={styles.container}>
         <View style={styles.headerContainer}>
           <View style={styles.titleContainer}>
-            <Ionicons name="chatbubbles-outline" size={24} color="#4F46E5" />
-            <Text style={styles.headerTitle}>{t(category.title)}</Text>
+            <Ionicons
+              name={selectedCategory.icon as any}
+              size={24}
+              color="#4F46E5"
+            />
+            <Text style={styles.headerTitle}>
+              {t(selectedCategory.title as string)}
+            </Text>
           </View>
           <Text style={styles.headerDescription}>
-            {t(category.description)}
+            {t(selectedCategory.description)}
           </Text>
         </View>
-        {category.subCategories.map((subCategory: any) => (
+        {selectedCategory.subCategories.map((subCategory: any) => (
           <TouchableOpacity
             key={subCategory.id}
             style={styles.subCategoryCard}

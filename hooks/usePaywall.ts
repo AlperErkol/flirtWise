@@ -1,14 +1,9 @@
 import { useRevenueCat } from "./useRevenueCat";
 import { Alert } from "react-native";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
-
-type RootStackParamList = {
-  Paywall: undefined;
-};
+import { router } from "expo-router";
 
 export const usePaywall = () => {
   const { isProMember } = useRevenueCat();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const showAlreadyPremiumAlert = () => {
     Alert.alert(
@@ -24,7 +19,7 @@ export const usePaywall = () => {
     //   showAlreadyPremiumAlert();
     //   return;
     // }
-    navigation.navigate("Paywall");
+    router.push("/paywall");
   };
 
   return { showPaywall };

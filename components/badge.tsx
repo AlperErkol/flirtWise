@@ -13,17 +13,19 @@ const BadgeComponent = ({
   return (
     <Badge
       badgeStyle={{
+        width: "100%",
         padding: 6,
         height: "auto",
         borderRadius: 16,
         borderWidth: 0,
-        backgroundColor: isDark ? "#FF9375" : "#FF6347",
+        backgroundColor: isDark ? "#323232" : "#f1f1f1",
       }}
       value={t(value)}
       textStyle={{
         fontSize: 14,
         fontFamily: "Inter_500Medium",
         letterSpacing: -0.5,
+        color: isDark ? "#FFF" : "#000",
       }}
     />
   );

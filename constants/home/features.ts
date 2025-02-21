@@ -1,19 +1,21 @@
 const mainFeatures = [
   {
     id: "1",
-    title: "photoAnalysisTitle",
-    description: "photoAnalysisDescription",
+    title: "photoOpenerTitle",
+    description: "photoOpenerDescription",
     screen: "PhotoOpenersScreen",
-    icon: "camera-outline",
+    emoji: "📸",
     dark: true,
+    tags: ["Turn their photo into a convo."],
   },
   {
     id: "2",
-    title: "chatWizardTitle",
-    description: "chatWizardDescription",
+    title: "chatEnhancerTitle",
+    description: "chatEnhancerDescription",
     screen: "ChatEnhancerScreen",
-    icon: "chatbubble-ellipses-outline",
+    emoji: "💬",
     dark: false,
+    tags: ["Stuck on a reply? We fix that."],
   },
 ];
 
@@ -23,8 +25,8 @@ const secondaryFeatures = [
     title: "flirtingCoachTitle",
     description: "flirtingCoachDescription",
     screen: "CommunicationCoachSelectionScreen",
-    dark: true,
-    icon: "school",
+    dark: false,
+    emoji: "🧑🏻‍🏫",
     tags: ["guide", "oneToOneHelp"],
   },
   {
@@ -33,7 +35,7 @@ const secondaryFeatures = [
     description: "flirtingTipsDescription",
     screen: "TipsScreen",
     dark: false,
-    icon: "bulb",
+    emoji: "💡",
     tags: ["quickTips", "instant"],
   },
 ];

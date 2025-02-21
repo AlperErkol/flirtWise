@@ -10,10 +10,9 @@ import {
 export const getCommunicationTip = async (
   category: string,
   subCategory: string,
-  userInfo: any,
-  isPremium: boolean
+  userInfo: any
 ) => {
-  let prompt = getTipPrompt({ category, subCategory, isPremium, userInfo });
+  let prompt = getTipPrompt({ category, subCategory, userInfo });
 
   try {
     const response = await ApiService.post("/chat/completions", {
@@ -22,9 +21,7 @@ export const getCommunicationTip = async (
       temperature: 0.7,
       max_tokens: 500,
       response_format: zodResponseFormat(
-        isPremium
-          ? PremiumCommunicationTipExtraction
-          : CommunicationTipExtraction,
+        PremiumCommunicationTipExtraction,
         "communication_tip"
       ),
     });

@@ -10,7 +10,6 @@ import {
   Linking,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import GlobalSafeAreaView from "./GlobalSafeAreaView";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
 import Purchases from "react-native-purchases";
 import RevenueCatService from "@/services/payment/RevenueCatService";
@@ -18,8 +17,11 @@ import { PRIVACY_URL, TERMS_URL } from "@/constants/settings/urls";
 import { useTranslation } from "@/hooks/useTranslation";
 import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
-import FeatureItem from "./paywall/FeatureItem";
-import Plan from "./paywall/Plan";
+import Plan from "@/components/paywall/Plan";
+import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
+import FeatureItem from "@/components/paywall/FeatureItem";
+import { router } from "expo-router";
+
 export default function Paywall({ navigation }: any) {
   const { currentOffering } = useRevenueCat();
   const [selectedPlan, setSelectedPlan] = useState<"rc_499_1w" | "rc_4799_1q">(
@@ -87,7 +89,7 @@ export default function Paywall({ navigation }: any) {
 
     return (
       <>
-        <Text style={styles.selectPlanText}>
+        <Text onPress={() => router.back()} style={styles.selectPlanText}>
           {t("Get 3 days on us! Unlock access now!")}
         </Text>
         <View style={styles.plansContainer}>

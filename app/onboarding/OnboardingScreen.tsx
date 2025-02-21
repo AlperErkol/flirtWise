@@ -10,7 +10,7 @@ import WelcomeScreen from "./WelcomeScreen";
 import HowItWorksScreen from "./HowItWorksScreen";
 import BenefitsScreen from "./BenefitsScreen";
 import FinalScreen from "./FinalScreen";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const data = [
   <WelcomeScreen />,
   <HowItWorksScreen />,
@@ -34,8 +34,9 @@ export default function OnboardingScreen({ navigation }: any) {
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselHeight = height * 0.7;
 
-  const handleButtonPress = () => {
+  const handleButtonPress = async () => {
     if (activeIndex === 3) {
+      await AsyncStorage.setItem("onboardingCompleted", "true");
       navigation.navigate("HomeScreen");
     } else {
       ref.current?.scrollTo({

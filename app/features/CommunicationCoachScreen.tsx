@@ -20,6 +20,7 @@ import {
 import { sendCommunicationCoachMessage } from "@/services/chat/coach";
 import useProfileStore from "@/store/profileStore";
 import { useTranslation } from "@/hooks/useTranslation";
+import { router, useLocalSearchParams } from "expo-router";
 type PersonaStyleType = {
   messageColor: string;
   inputBgColor: string;
@@ -46,18 +47,9 @@ const PERSONA_STYLES: PersonaStyles = {
   },
 };
 
-type RouteParams = {
-  persona: keyof PersonaStyles;
-};
-
-type Props = {
-  route: { params: RouteParams };
-  navigation: any;
-};
-
-export default function CommunicationCoachScreen({ route, navigation }: Props) {
-  const { persona } = route.params;
-  const personaStyle = PERSONA_STYLES[persona];
+export default function CommunicationCoachScreen() {
+  const { persona }: any = useLocalSearchParams();
+  const personaStyle = PERSONA_STYLES[persona as keyof PersonaStyles];
   const scrollViewRef = useRef<ScrollView>(null);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -126,7 +118,7 @@ export default function CommunicationCoachScreen({ route, navigation }: Props) {
         title={t(personaDetails.title)}
         description={t(personaDetails.description)}
         gradient={personaDetails.gradient}
-        onBackPress={() => navigation.goBack()}
+        onBackPress={() => router.back()}
       />
 
       <ScrollView
