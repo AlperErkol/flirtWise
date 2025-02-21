@@ -90,7 +90,7 @@ export default function Paywall({ navigation }: any) {
     return (
       <>
         <Text onPress={() => router.back()} style={styles.selectPlanText}>
-          {t("Get 3 days on us! Unlock access now!")}
+          {t("unlockAccessNow")}
         </Text>
         <View style={styles.plansContainer}>
           {currentOffering.availablePackages.map((availablePackage: any) => (
@@ -120,7 +120,13 @@ export default function Paywall({ navigation }: any) {
             borderWidth: 1,
           }}
         />
-        <View style={{ marginBottom: 24, flexDirection: "column", gap: 12 }}>
+        <View
+          style={{
+            marginBottom: 24,
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Ionicons name="shield" size={18} />
             <Text style={styles.billingText}>{t("cancelAnytime")}</Text>
@@ -131,7 +137,13 @@ export default function Paywall({ navigation }: any) {
               {t("notify24HoursBeforeTrialEnds")}
             </Text>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
             <Ionicons name="card" size={18} />
             <Text style={styles.billingText}>
               {t("billingStartsAfterTrialEnds")}
