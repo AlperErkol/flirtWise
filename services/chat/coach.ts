@@ -19,7 +19,10 @@ export const sendCommunicationCoachMessage = async ({
   chatHistory,
 }: CommunicationCoachParams) => {
   try {
-    const systemPrompt = getCommunicationCoachPrompt({ persona, userInfo });
+    const systemPrompt = await getCommunicationCoachPrompt({
+      persona,
+      userInfo,
+    });
     const response = await ApiService.post("/chat/completions", {
       model: OPENAI_MODEL_SLOW,
       messages: [

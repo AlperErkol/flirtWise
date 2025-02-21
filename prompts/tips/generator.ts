@@ -1,23 +1,33 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import language from "@/constants/settings/language";
+
 type TipParams = {
   category: string;
   subCategory: string;
   userInfo: any;
 };
 
-export const getTipPrompt = ({
+export const getTipPrompt = async ({
   category,
   subCategory,
   userInfo,
 }: TipParams) => {
+  const lang = await AsyncStorage.getItem("userLanguage");
+  const promptLanguage = language[lang as keyof typeof language] || "English";
   return `You are an expert communication coach with deep understanding of social dynamics and interpersonal relationships. Your mission is to create personalized, actionable communication advice that resonates with the user's specific context and goals.
 
 Category: "${category}"
 Sub-Category: "${subCategory}"
 
-User Context:
-- Gender: ${userInfo?.gender || "Not specified"}
-- Age Range: ${userInfo?.ageRange || "Not specified"}
-- Interest: ${userInfo?.interest || "Not specified"}
+User Preferences
+   - Gender: ${
+     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all genders"
+   }  
+   - Age Range: ${userInfo?.age || "Not specified"}  
+   - Target Gender: ${
+     userInfo?.interest ||
+     "Not specified - Assume a general romantic interest, defaulting to gender-neutral interactions."
+   }
 
 
 Guidelines for generating advice:
@@ -55,6 +65,9 @@ Guidelines for generating advice:
    - Deeper psychological principles
    - Expert-level techniques
    - Advanced success metrics
+
+7. Language:
+   - All responses must be written in ${promptLanguage}.
   
 Ensure all advice is respectful, ethical, and aligned with modern communication standards.`;
 };

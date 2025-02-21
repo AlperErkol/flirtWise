@@ -104,6 +104,7 @@ class ApiService {
         throw error;
       }
       if (error.response) {
+        console.log("error.response", error.response);
         switch (error.response.status) {
           case 429:
             throw new Error("API rate limit aşıldı. Lütfen biraz bekleyin.");

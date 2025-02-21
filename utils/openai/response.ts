@@ -1,15 +1,19 @@
 import { z } from "zod";
 
 const ChatEnhancerExtraction = z.object({
-  enhancers: z.array(z.string()).transform((arr) => 
-    arr.map(str => str.replace(/\\"/g, '"').replace(/^"|"$/g, ''))
-  ),
+  enhancers: z
+    .array(z.string())
+    .transform((arr) =>
+      arr.map((str) => str.replace(/\\"/g, '"').replace(/^"|"$/g, ""))
+    ),
 });
 
 const PhotoOpenerExtraction = z.object({
-  openers: z.array(z.string()).transform((arr) => 
-    arr.map(str => str.replace(/\\"/g, '"').replace(/^"|"$/g, ''))
-  ),
+  openers: z
+    .array(z.string())
+    .transform((arr) =>
+      arr.map((str) => str.replace(/\\"/g, '"').replace(/^"|"$/g, ""))
+    ),
 });
 
 const CommunicationTipExtraction = z.object({

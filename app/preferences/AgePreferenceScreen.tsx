@@ -7,7 +7,8 @@ import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import { AGE_OPTIONS } from "@/constants/wizard/options";
 import { useTranslation } from "@/hooks/useTranslation";
-export default function AgePreferenceScreen({ navigation }: any) {
+import { router } from "expo-router";
+export default function AgePreferenceScreen() {
   const [selectedAge, setSelectedAge] = useState("");
   const setUserProfile = useProfileStore((state: any) => state.setUserProfile);
   const { t } = useTranslation();
@@ -37,7 +38,7 @@ export default function AgePreferenceScreen({ navigation }: any) {
       await AsyncStorage.setItem("userProfile", JSON.stringify(updatedProfile));
       await setUserProfile(updatedProfile);
 
-      navigation.goBack();
+      router.back();
     } catch (error) {
       console.error("Error saving preference:", error);
     }
@@ -68,16 +69,19 @@ export default function AgePreferenceScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    padding: 16,
   },
   leftContent: {
     flexDirection: "row",

@@ -50,8 +50,8 @@ export function SecondaryFeatureCard({ item }: { item: any }) {
             </Text>
           </View>
           <View style={styles.badgeContainer}>
-            <Text style={styles.badge}>Get Started</Text>
-            <Ionicons name="caret-forward-outline" size={24} color="#FFF" />
+            <Text style={styles.badge}>{t("getStarted")}</Text>
+            <Ionicons name="caret-forward-outline" size={20} color="#FFF" />
           </View>
         </View>
       </View>
@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
     backgroundColor: "#FF6347",
     paddingHorizontal: 16,

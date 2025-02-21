@@ -1,58 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "@/hooks/useTranslation";
-import { router } from "expo-router";
-const preferenceItems = [
-  {
-    id: "1",
-    title: "gender",
-    screen: "preferences/GenderPreferenceScreen",
-    icon: "man",
-    key: "gender",
-    getDisplayValue: (value: string) => {
-      const options = {
-        male: "male",
-        female: "female",
-        other: "other",
-      };
-      return options[value as keyof typeof options] || "notSet";
-    },
-  },
-  {
-    id: "2",
-    title: "ageRange",
-    screen: "preferences/AgePreferenceScreen",
-    icon: "calendar",
-    key: "age",
-    getDisplayValue: (value: string) => value || "notSet",
-  },
-  {
-    id: "3",
-    title: "perfectMatch",
-    screen: "preferences/MatchPreferenceScreen",
-    icon: "heart",
-    key: "interest",
-    getDisplayValue: (value: string) => {
-      const options = {
-        men: "men",
-        women: "women",
-        both: "both",
-      };
-      return options[value as keyof typeof options] || "notSet";
-    },
-  },
-];
+import { router, useFocusEffect } from "expo-router";
+import { PREFERENCE_OPTIONS } from "@/constants/wizard/options";
 
-export default function PreferencesScreen({ navigation }: any) {
+export default function PreferencesScreen() {
   const [userProfile, setUserProfile] = useState<any>({});
   const { t } = useTranslation();
 
-  useEffect(() => {
-    loadUserProfile();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadUserProfile();
+    }, [])
+  );
 
   const loadUserProfile = async () => {
     try {
@@ -77,7 +40,7 @@ export default function PreferencesScreen({ navigation }: any) {
       </View>
       <View style={{ flex: 1 }}>
         <View style={styles.wrapper}>
-          {preferenceItems.map((item) => (
+          {PREFERENCE_OPTIONS.map((item) => (
             <TouchableOpacity
               key={item.id}
               style={styles.menuItem}

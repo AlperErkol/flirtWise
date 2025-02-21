@@ -1,3 +1,6 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import language from "@/constants/settings/language";
+
 type CommunicationCoachParams = {
   persona?: "dating_coach" | "flirting_expert" | "relationship_guru";
   userInfo?: {
@@ -7,16 +10,24 @@ type CommunicationCoachParams = {
   };
 };
 
-export const getCommunicationCoachPrompt = ({
+export const getCommunicationCoachPrompt = async ({
   persona = "dating_coach",
   userInfo,
 }: CommunicationCoachParams = {}) => {
+  const lang = await AsyncStorage.getItem("userLanguage");
+  const promptLanguage = language[lang as keyof typeof language] || "English";
   const basePrompt = `You are an expert dating and flirting coach specializing in modern romance dynamics. Analyze user questions and provide personalized advice for dating success.
 
-User Context:
-- Gender: ${userInfo?.gender || "Not specified"}
-- Age: ${userInfo?.age || "Not specified"}
-- Interest: ${userInfo?.interest || "Not specified"}
+User Preferences
+   - Gender: ${
+     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all genders"
+   }  
+   - Age Range: ${userInfo?.age || "Not specified"}  
+   - Target Gender: ${
+     userInfo?.interest ||
+     "Not specified - Assume a general romantic interest, defaulting to gender-neutral interactions."
+   }
+
 
 Core Guidelines:
 1. Keep responses under 300 characters
@@ -24,7 +35,9 @@ Core Guidelines:
 3. Provide actionable flirting strategies
 4. Personalize based on user profile
 5. Use minimal emojis
-6. Build dating confidence`;
+6. Build dating confidence
+7. All responses must be written in ${promptLanguage}
+`;
 
   const personaPrompts = {
     dating_coach: `${basePrompt}

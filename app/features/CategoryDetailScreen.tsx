@@ -29,6 +29,7 @@ export default function CategoryDetailScreen() {
     (c: any) => c.title === category
   );
   const handleSubCategoryPress = async (subCategory: SubCategory) => {
+    console.log("gidiyorum..");
     router.push(
       `/features/SubCategoryDetail?category=${category}&subCategory=${subCategory.title}`
     );

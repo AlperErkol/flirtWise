@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 16,
-    fontWeight: "500",
+    fontFamily: "Inter_500Medium",
     color: "#333",
     letterSpacing: -0.5,
   },

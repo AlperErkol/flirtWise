@@ -6,24 +6,8 @@ import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "@/hooks/useTranslation";
-const genderOptions = [
-  {
-    id: "male",
-    label: "male",
-    icon: "man-outline",
-  },
-  {
-    id: "female",
-    label: "female",
-    icon: "woman-outline",
-  },
-
-  {
-    id: "other",
-    label: "other",
-    icon: "person-outline",
-  },
-];
+import { router } from "expo-router";
+import { GENDER_OPTIONS } from "@/constants/wizard/options";
 
 export default function GenderPreferenceScreen({ navigation }: any) {
   const [selectedGender, setSelectedGender] = useState("");
@@ -55,7 +39,7 @@ export default function GenderPreferenceScreen({ navigation }: any) {
       await AsyncStorage.setItem("userProfile", JSON.stringify(updatedProfile));
       await setUserProfile(updatedProfile);
 
-      navigation.goBack();
+      router.back();
     } catch (error) {
       console.error("Error saving preference:", error);
     }
@@ -65,23 +49,18 @@ export default function GenderPreferenceScreen({ navigation }: any) {
     <GlobalSafeAreaView>
       <Header showBackButton title={t("gender")} />
       <View style={styles.container}>
-        {genderOptions.map((option) => (
+        {GENDER_OPTIONS.map((option) => (
           <TouchableOpacity
             key={option.id}
             style={styles.menuItem}
             onPress={() => handleSave(option.id)}
           >
             <View style={styles.leftContent}>
-              <Ionicons
-                name={option.icon as any}
-                size={20}
-                color="#4F46E5"
-                style={{ marginRight: 15 }}
-              />
+              <Ionicons name={option.icon as any} size={20} color="#333" />
               <Text style={styles.menuText}>{t(option.label)}</Text>
             </View>
             {selectedGender === option.id && (
-              <Ionicons name="checkmark" size={24} color="#4F46E5" />
+              <Ionicons name="checkmark" size={20} color="#4F46E5" />
             )}
           </TouchableOpacity>
         ))}
@@ -92,28 +71,33 @@ export default function GenderPreferenceScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    padding: 16,
   },
   leftContent: {
     flexDirection: "row",
     alignItems: "center",
+    gap: 12,
   },
   emoji: {
     fontSize: 24,
-    marginRight: 15,
+    marginRight: 12,
   },
   menuText: {
     fontSize: 16,
-    color: "#333",
     fontFamily: "Inter_500Medium",
+    color: "#333",
+    letterSpacing: -0.5,
   },
 });

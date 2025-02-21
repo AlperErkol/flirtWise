@@ -6,7 +6,7 @@ const mainFeatures = [
     screen: "PhotoOpenersScreen",
     emoji: "📸",
     dark: true,
-    tags: ["Turn their photo into a convo."],
+    tags: ["photoOpenerBadge"],
   },
   {
     id: "2",
@@ -15,7 +15,7 @@ const mainFeatures = [
     screen: "ChatEnhancerScreen",
     emoji: "💬",
     dark: false,
-    tags: ["Stuck on a reply? We fix that."],
+    tags: ["chatEnhancerBadge"],
   },
 ];
 
@@ -27,7 +27,6 @@ const secondaryFeatures = [
     screen: "CommunicationCoachSelectionScreen",
     dark: false,
     emoji: "🧑🏻‍🏫",
-    tags: ["guide", "oneToOneHelp"],
   },
   {
     id: "4",
@@ -36,7 +35,6 @@ const secondaryFeatures = [
     screen: "TipsScreen",
     dark: false,
     emoji: "💡",
-    tags: ["quickTips", "instant"],
   },
 ];
 

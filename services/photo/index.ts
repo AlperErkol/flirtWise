@@ -9,10 +9,7 @@ export const generatePhotoOpeners = async (
   additionalInfo?: string,
   conversationStyle?: string
 ) => {
-  console.log("additionalInfo : ", additionalInfo);
-  console.log("conversationStyle : ", conversationStyle);
-
-  let prompt = getPhotoOpenerPrompt(
+  let prompt = await getPhotoOpenerPrompt(
     { userInfo },
     additionalInfo,
     conversationStyle
@@ -46,7 +43,6 @@ export const generatePhotoOpeners = async (
     });
 
     const aiText = response.choices[0].message.content;
-    console.log("aiText : ", aiText);
 
     try {
       const hints = JSON.parse(aiText);
@@ -55,10 +51,7 @@ export const generatePhotoOpeners = async (
       console.error("AI response parsing error:", parseError);
     }
   } catch (error: any) {
-    console.error(
-      "Error generating photo openers:",
-      error.response?.data || error.message
-    );
+    console.error("Error generating photo openers:", error.message);
     throw new Error(
       "An error occurred while processing the image. Please try again."
     );

@@ -1,8 +1,14 @@
-export const getChatEnhancerPrompt = (
+import { TextingVibe } from "@/constants/settings/convo-style";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import language from "@/constants/settings/language";
+
+export const getChatEnhancerPrompt = async (
   userInfo: any,
   additionalInfo: string | undefined,
   conversationStyle: string | undefined
 ) => {
+  const lang = await AsyncStorage.getItem("userLanguage");
+  const promptLanguage = language[lang as keyof typeof language] || "English";
   return `You are a modern dating and flirting expert, a master at turning ordinary chats into irresistible, engaging conversations. 
 
 Your goal is  To help users maintain playful, seductive, and captivating exchanges that naturally build attraction.  
@@ -11,15 +17,18 @@ You don’t just generate generic replies—you analyze the conversation’s flo
 
 1. User Preferences
    - Gender: ${
-     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all"
+     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all genders"
    }  
    - Age Range: ${userInfo?.age || "Not specified"}  
-   - Interest: ${
-     userInfo?.interest || "Not specified - Use general romantic themes"
-   }  
+   - Target Gender: ${
+     userInfo?.interest ||
+     "Not specified - Assume a general romantic interest, defaulting to gender-neutral interactions."
+   }
    - Conversation Style: ${
-     conversationStyle || "Not specified - Use general romantic themes"
-   }  
+     conversationStyle
+       ? TextingVibe[conversationStyle as keyof typeof TextingVibe]
+       : "Not specified - Use a balanced and engaging tone."
+   }
 
 
 2. Additional Context
@@ -47,22 +56,20 @@ Focus on:
    - Add playful, seductive questions to spark a deeper exchange  
 
 Generate 3 high-impact, flirtatious responses based on the conversation provided.
-Important: Return responses in a clean JSON array format without escape characters:
-{
-   "enhancers": [
-      "First response",
-      "Second response",
-      "Third response"
-   ]
-}
-`;
+Important: Return responses in a clean JSON array format without escape characters or additional quotes. Each opener should be a plain string without additional escaping:
+Example output:{"enhancers": [First response,Second response,Third response]}
+
+Language: ${promptLanguage}
+All responses must be written in ${promptLanguage}.`;
 };
 
-export const getDeadChatEnhancerPrompt = (
+export const getDeadChatEnhancerPrompt = async (
   userInfo: any,
   additionalInfo: string | undefined,
   conversationStyle: string | undefined
 ) => {
+  const lang = await AsyncStorage.getItem("userLanguage");
+  const promptLanguage = language[lang as keyof typeof language] || "English";
   return `You are a modern dating and flirting expert, a master at turning dull or one-sided conversations into irresistible, engaging exchanges. 
 
 Your goal is to help users break through dry conversations, reignite chemistry, and create responses that make the other person eager to engage.  
@@ -71,15 +78,18 @@ You don’t just generate replies—you analyze the flow, recognize conversation
 
 1. User Preferences
    - Gender: ${
-     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all"
+     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all genders"
    }  
    - Age Range: ${userInfo?.age || "Not specified"}  
-   - Interest: ${
-     userInfo?.interest || "Not specified - Use general romantic themes"
-   }  
+   - Target Gender: ${
+     userInfo?.interest ||
+     "Not specified - Assume a general romantic interest, defaulting to gender-neutral interactions."
+   }
    - Conversation Style: ${
-     conversationStyle || "Not specified - Use general romantic themes"
-   }  
+     conversationStyle
+       ? TextingVibe[conversationStyle as keyof typeof TextingVibe]
+       : "Not specified - Use a balanced and engaging tone."
+   }
 
 
 2. Additional Context
@@ -122,13 +132,9 @@ Check for:
    - Add playful, seductive questions to revive the conversation.  
 
 Generate 3 high-impact, flirtatious responses based on the conversation provided. Prioritize reviving interest if the conversation seems stalled.        
-Important: Return responses in a clean JSON array format without escape characters:
-{
-   "enhancers": [
-      "First response",
-      "Second response",
-      "Third response"
-   ]
-}
-`;
+Important: Return responses in a clean JSON array format without escape characters or additional quotes. Each opener should be a plain string without additional escaping:
+Example output:{"enhancers": [First response,Second response,Third response]}
+
+Language: ${promptLanguage}
+All responses must be written in ${promptLanguage}.`;
 };

@@ -1,34 +1,50 @@
 const convoStyles = [
   {
     id: "playful",
-    title: "Playful & Funny",
-    key: "playfulFunny",
+    title: "Playful",
+    key: "playful",
   },
   {
     id: "cool",
-    title: "Cool & Mysterious",
-    key: "coolMysterious",
+    title: "Cool",
+    key: "cool",
   },
   {
-    id: "sweet",
-    title: "Sweet & Romantic",
-    key: "sweetRomantic",
+    id: "romantic",
+    title: "Romantic",
+    key: "romanticVibe",
   },
   {
-    id: "smart",
-    title: "Smart & Witty",
-    key: "smartWitty",
+    id: "witty",
+    title: "Witty",
+    key: "witty",
   },
   {
     id: "confident",
-    title: "Confident & Bold",
-    key: "confidentBold",
+    title: "Confident",
+    key: "confident",
   },
   {
-    id: "casual",
-    title: "Casual & Flirty",
-    key: "casualFlirty",
+    id: "flirty",
+    title: "Flirty",
+    key: "flirty",
   },
 ];
+
+const TextingVibe = {
+  playful:
+    "Fun, energetic, and lighthearted messages that spark engaging interactions.",
+  cool: "Confident and mysterious messages that intrigue and create attraction.",
+  romantic:
+    "Sweet, warm, and heartfelt messages that foster deep emotional connection.",
+  witty:
+    "Clever and humorous messages that showcase intelligence and quick thinking.",
+  confident:
+    "Bold, direct, and charismatic messages that exude self-assurance.",
+  flirty:
+    "Charming, teasing, and playfully seductive messages that build attraction.",
+};
+
+export { TextingVibe };
 
 export default convoStyles;

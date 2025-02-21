@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import { Ionicons } from "@expo/vector-icons";
 import { INTEREST_OPTIONS } from "@/constants/wizard/options";
 import { useTranslation } from "@/hooks/useTranslation";
+import { router } from "expo-router";
 export default function MatchPreferenceScreen({ navigation }: any) {
   const [selectedInterest, setSelectedInterest] = useState("");
   const setUserProfile = useProfileStore((state: any) => state.setUserProfile);
@@ -33,11 +34,9 @@ export default function MatchPreferenceScreen({ navigation }: any) {
       const profile = await AsyncStorage.getItem("userProfile");
       const updatedProfile = profile ? JSON.parse(profile) : {};
       updatedProfile.interest = value;
-
       await AsyncStorage.setItem("userProfile", JSON.stringify(updatedProfile));
       await setUserProfile(updatedProfile);
-
-      navigation.goBack();
+      router.back();
     } catch (error) {
       console.error("Error saving preference:", error);
     }
@@ -57,14 +56,14 @@ export default function MatchPreferenceScreen({ navigation }: any) {
               <Ionicons
                 name={option.icon as any}
                 size={20}
-                color="#4F46E5"
-                style={{ marginRight: 15 }}
+                color="#333"
+                style={{ marginRight: 12 }}
               />
               <Text style={styles.menuText}>{t(option.label)}</Text>
             </View>
 
             {selectedInterest === option.id && (
-              <Ionicons name="checkmark" size={24} color="#4F46E5" />
+              <Ionicons name="checkmark" size={20} color="#4F46E5" />
             )}
           </TouchableOpacity>
         ))}
@@ -75,16 +74,19 @@ export default function MatchPreferenceScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
   },
   menuItem: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    padding: 16,
   },
   leftContent: {
     flexDirection: "row",
@@ -97,7 +99,8 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 16,
-    color: "#333",
     fontFamily: "Inter_500Medium",
+    color: "#333",
+    letterSpacing: -0.5,
   },
 });

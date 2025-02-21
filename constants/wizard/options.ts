@@ -1,7 +1,7 @@
 const GENDER_OPTIONS = [
-  { id: "male", label: "male", icon: "man-outline" },
-  { id: "female", label: "female", icon: "woman-outline" },
-  { id: "other", label: "other", icon: "person-outline" },
+  { id: "male", label: "male", icon: "man" },
+  { id: "female", label: "female", icon: "woman" },
+  { id: "other", label: "other", icon: "person" },
 ];
 
 const AGE_OPTIONS = [
@@ -12,9 +12,9 @@ const AGE_OPTIONS = [
 ];
 
 const INTEREST_OPTIONS = [
-  { id: "men", label: "men", icon: "man-outline" },
-  { id: "women", label: "women", icon: "woman-outline" },
-  { id: "both", label: "both", icon: "person-outline" },
+  { id: "men", label: "men", icon: "man" },
+  { id: "women", label: "women", icon: "woman" },
+  { id: "both", label: "both", icon: "person" },
 ];
 
 const COMMUNICATION_STYLES = [
@@ -51,10 +51,38 @@ const INTEREST_AREAS = [
   { id: "books", label: "Reading & Literature", emoji: "📚" },
 ];
 
+const PREFERENCE_OPTIONS = [
+  {
+    id: "1",
+    title: "gender",
+    screen: "preferences/GenderPreferenceScreen",
+    icon: "man",
+    key: "gender",
+    getDisplayValue: (value: string) => value || "notSet",
+  },
+  {
+    id: "2",
+    title: "ageRange",
+    screen: "preferences/AgePreferenceScreen",
+    icon: "calendar",
+    key: "age",
+    getDisplayValue: (value: string) => value || "notSet",
+  },
+  {
+    id: "3",
+    title: "perfectMatch",
+    screen: "preferences/MatchPreferenceScreen",
+    icon: "heart",
+    key: "interest",
+    getDisplayValue: (value: string) => value || "notSet",
+  },
+];
+
 export {
   GENDER_OPTIONS,
   AGE_OPTIONS,
   INTEREST_OPTIONS,
   COMMUNICATION_STYLES,
   INTEREST_AREAS,
+  PREFERENCE_OPTIONS,
 };

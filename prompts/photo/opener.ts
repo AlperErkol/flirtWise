@@ -1,3 +1,7 @@
+import { TextingVibe } from "@/constants/settings/convo-style";
+import language from "@/constants/settings/language";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 type PhotoOpenerParams = {
   userInfo: {
     gender: string;
@@ -6,11 +10,14 @@ type PhotoOpenerParams = {
   };
 };
 
-export const getPhotoOpenerPrompt = (
+export const getPhotoOpenerPrompt = async (
   { userInfo }: PhotoOpenerParams,
   additionalInfo: string | undefined,
   conversationStyle: string | undefined
 ) => {
+  const lang = await AsyncStorage.getItem("userLanguage");
+  const promptLanguage = language[lang as keyof typeof language] || "English";
+
   return `You are a master of attraction, an expert in analyzing dating profile photos and crafting irresistible, flirtatious openers.
 
 Your mission is to create conversation starters that are intriguing, playful, and seductive—ensuring a response is inevitable.
@@ -19,18 +26,20 @@ You don’t just generate generic flirty messages—you analyze every detail, fr
 
 Your goal: Turn profile photos into the perfect conversation hook, making the other person feel desired, excited, and eager to respond.
 
-1. User Preferences  
+1. User Preferences
    - Gender: ${
-     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all"
+     userInfo?.gender ? `Prefers ${userInfo.gender}` : "Open to all genders"
    }  
    - Age Range: ${userInfo?.age || "Not specified"}  
-   - Interest: ${
-     userInfo?.interest || "Not specified - Use general romantic themes"
-   }  
+   - Target Gender: ${
+     userInfo?.interest ||
+     "Not specified - Assume a general romantic interest, defaulting to gender-neutral interactions."
+   }
    - Conversation Style: ${
-     conversationStyle || "Not specified - Use general romantic themes"
-   }  
-
+     conversationStyle
+       ? TextingVibe[conversationStyle as keyof typeof TextingVibe]
+       : "Not specified - Use a balanced and engaging tone."
+   }
 
 2. Additional Context 
    ${additionalInfo || "No additional context provided"}  
@@ -62,13 +71,9 @@ Use this analysis to craft an opener that feels personal, bold, and impossible t
 
 6. Generate 3 seductive, high-impact conversation starters based on the image and user preferences.  
 
-Important: Return responses in a clean JSON array format without escape characters:
-{
-   "openers": [
-      "First response",
-      "Second response",
-      "Third response"
-   ]
-}
-`;
+Important: Return responses in a clean JSON array format without escape characters or additional quotes. Each opener should be a plain string without additional escaping:
+Example output:{"openers": ["First response", "Second response", "Third response"]}
+
+Language: ${promptLanguage}
+All responses must be written in ${promptLanguage}.`;
 };
