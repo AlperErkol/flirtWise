@@ -52,6 +52,7 @@ export default function Index({ navigation }: any) {
     <GlobalSafeAreaView>
       <View style={{ height: carouselHeight }}>
         <Carousel
+          enabled={false}
           ref={ref}
           testID={"xxx"}
           loop={false}
