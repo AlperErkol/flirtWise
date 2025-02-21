@@ -23,7 +23,7 @@ export default function Index() {
     if (!navigationState?.key || isOnboardingCompleted === null) return;
 
     router.replace(
-      !isOnboardingCompleted ? "/(tabs)" : "/onboarding/OnboardingScreen"
+      isOnboardingCompleted ? "/(tabs)" : "/onboarding/OnboardingScreen"
     );
   }, [navigationState?.key, isOnboardingCompleted]);
 
