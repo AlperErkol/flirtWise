@@ -213,5 +213,7 @@
   "home": "Home",
   "settings": "Settings",
   "profile": "Profile",
-  "unlockAccessNow": "Get 3 days on us! Unlock access now!"
+  "unlockAccessNow": "Get 3 days on us! Unlock access now!",
+  "connectionError": "Connection Error",
+  "connectionErrorDescription": "Please check your internet connection."
 }

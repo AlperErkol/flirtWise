@@ -213,5 +213,7 @@
   "home": "Inicio",
   "settings": "Ajustes",
   "profile": "Perfil",
-  "unlockAccessNow": "¡3 días gratis de nuestra parte! Desbloquea el acceso ahora!"
+  "unlockAccessNow": "¡3 días gratis de nuestra parte! Desbloquea el acceso ahora!",
+  "connectionError": "Error de Conexión",
+  "connectionErrorDescription": "Por favor, verifica tu conexión a internet."
 }

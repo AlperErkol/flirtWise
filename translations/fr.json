@@ -213,5 +213,7 @@
   "home": "Accueil",
   "settings": "Paramètres",
   "profile": "Profil",
-  "unlockAccessNow": "3 jours offerts ! Déverrouillez l'accès maintenant !"
+  "unlockAccessNow": "3 jours offerts ! Déverrouillez l'accès maintenant !",
+  "connectionError": "Erreur de Connexion",
+  "connectionErrorDescription": "Veuillez vérifier votre connexion internet."
 }

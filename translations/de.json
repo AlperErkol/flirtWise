@@ -213,5 +213,7 @@
   "home": "Startseite",
   "settings": "Einstellungen",
   "profile": "Profil",
-  "unlockAccessNow": "3 Tage gratis von uns! Jetzt freischalten!"
+  "unlockAccessNow": "3 Tage gratis von uns! Jetzt freischalten!",
+  "connectionError": "Verbindungsfehler",
+  "connectionErrorDescription": "Bitte überprüfe deine Internetverbindung."
 }

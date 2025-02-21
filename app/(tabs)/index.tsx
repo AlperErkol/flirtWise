@@ -9,7 +9,6 @@ import { usePaywall } from "@/hooks/usePaywall";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
-import Quote from "@/components/quote";
 
 export default function HomeScreen() {
   const { expoPushToken, notification } = usePushNotifications();
@@ -31,7 +30,6 @@ export default function HomeScreen() {
     <ScrollView style={{ backgroundColor: "#E6E6FA" }}>
       <GlobalSafeAreaView>
         <Header logo={true} />
-        {/* <Quote /> */}
         <View style={{ gap: 12 }}>
           {mainFeatures.map((feature) => (
             <MainFeatureCard key={feature.title} feature={feature} />
