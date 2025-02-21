@@ -11,6 +11,7 @@ import HowItWorksScreen from "./HowItWorksScreen";
 import BenefitsScreen from "./BenefitsScreen";
 import FinalScreen from "./FinalScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 const data = [
   <WelcomeScreen />,
   <HowItWorksScreen />,
@@ -27,7 +28,7 @@ const buttonText = [
   "startFlirtingSmarter",
 ];
 
-export default function OnboardingScreen({ navigation }: any) {
+export default function Index({ navigation }: any) {
   const { t } = useTranslation();
   const ref = React.useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
@@ -37,7 +38,7 @@ export default function OnboardingScreen({ navigation }: any) {
   const handleButtonPress = async () => {
     if (activeIndex === 3) {
       await AsyncStorage.setItem("onboardingCompleted", "true");
-      navigation.navigate("HomeScreen");
+      router.replace("/(tabs)");
     } else {
       ref.current?.scrollTo({
         index: activeIndex + 1,

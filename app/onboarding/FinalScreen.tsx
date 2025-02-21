@@ -1,16 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width } = Dimensions.get("window");
 import { useTranslation } from "@/hooks/useTranslation";
 
-export default function FinalScreen({ navigation }: any) {
+export default function FinalScreen() {
   const { t } = useTranslation();
-  const handleStart = () => {
-    AsyncStorage.setItem("onboardingCompleted", "true");
-    navigation.navigate("HomeScreen");
-  };
 
   return (
     <Animated.View
