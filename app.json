@@ -13,7 +13,9 @@
       "bundleIdentifier": "com.erkol.flirtWise",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "FlirtWise needs access to your camera for taking profile photos and video chats.",
+        "NSPhotoLibraryUsageDescription": "FlirtWise needs access to your photos to upload profile pictures and share media."
       }
     },
     "android": {
