@@ -22,7 +22,7 @@ import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import FeatureItem from "@/components/paywall/FeatureItem";
 import { router } from "expo-router";
 
-export default function Paywall({ navigation }: any) {
+export default function Paywall() {
   const { currentOffering } = useRevenueCat();
   const [selectedPlan, setSelectedPlan] = useState<"rc_499_1w" | "rc_4799_1q">(
     "rc_4799_1q"
@@ -52,7 +52,7 @@ export default function Paywall({ navigation }: any) {
       if (purchaserInfo.customerInfo.entitlements.active.pro) {
         await RevenueCatService.resetState();
         Alert.alert(t("purchaseSuccess"), t("purchaseSuccessDescription"));
-        navigation.goBack();
+        router.back();
       }
     } catch (error: any) {
       if (!error.userCancelled) {
@@ -89,9 +89,7 @@ export default function Paywall({ navigation }: any) {
 
     return (
       <>
-        <Text onPress={() => router.back()} style={styles.selectPlanText}>
-          {t("unlockAccessNow")}
-        </Text>
+        <Text style={styles.selectPlanText}>{t("unlockAccessNow")}</Text>
         <View style={styles.plansContainer}>
           {currentOffering.availablePackages.map((availablePackage: any) => (
             <Plan
@@ -155,9 +153,11 @@ export default function Paywall({ navigation }: any) {
           <TouchableOpacity onPress={() => handleLinkPress(PRIVACY_URL)}>
             <Text style={styles.footerText}>{t("privacyPolicy")}</Text>
           </TouchableOpacity>
-          <Text>{t("and")}</Text>
           <TouchableOpacity onPress={() => handleLinkPress(TERMS_URL)}>
             <Text style={styles.footerText}>{t("termsOfUse")}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleRestorePurchase}>
+            <Text style={styles.footerText}>{t("restorePurchase")}</Text>
           </TouchableOpacity>
         </View>
       </>
@@ -172,8 +172,8 @@ export default function Paywall({ navigation }: any) {
             source={require("@/assets/images/logo.png")}
             style={styles.logo}
           />
-          <TouchableOpacity onPress={handleRestorePurchase}>
-            <Text style={styles.footerText}>{t("restorePurchase")}</Text>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="close" size={28} color="#000" />
           </TouchableOpacity>
         </View>
         <Text style={styles.title}>{t("paywallTitle")}</Text>
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     gap: 4,
   },

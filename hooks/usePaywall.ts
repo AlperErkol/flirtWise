@@ -1,24 +1,25 @@
 import { useRevenueCat } from "./useRevenueCat";
 import { Alert } from "react-native";
 import { router } from "expo-router";
-
+import { useTranslation } from "./useTranslation";
 export const usePaywall = () => {
   const { isProMember } = useRevenueCat();
+  const { t } = useTranslation();
 
   const showAlreadyPremiumAlert = () => {
     Alert.alert(
-      "Active Premium+ Subscription",
-      "You already have an active Premium+ subscription. You can access all premium features.",
-      [{ text: "OK", style: "default" }],
+      t("activePremiumSubscription"),
+      t("alreadyHaveActivePremiumSubscription"),
+      [{ text: t("done"), style: "default" }],
       { cancelable: true }
     );
   };
 
   const showPaywall = async () => {
-    // if (isProMember) {
-    //   showAlreadyPremiumAlert();
-    //   return;
-    // }
+    if (isProMember) {
+      showAlreadyPremiumAlert();
+      return;
+    }
     router.push("/paywall");
   };
 

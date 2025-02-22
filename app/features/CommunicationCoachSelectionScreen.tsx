@@ -7,10 +7,21 @@ import Header from "@/components/Header";
 import personas from "@/constants/tip/persona";
 import { useTranslation } from "@/hooks/useTranslation";
 import { router } from "expo-router";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { usePaywall } from "@/hooks/usePaywall";
+
 export default function CommunicationCoachSelectionScreen() {
   const { t } = useTranslation();
+  const { isProMember, isLoading } = useRevenueCat();
+  const { showPaywall } = usePaywall();
+
   const handlePersonaSelect = async (persona: any) => {
-    router.push(`/features/CommunicationCoachScreen?persona=${persona.id}`);
+    if (!isLoading && !isProMember) {
+      await showPaywall();
+      return;
+    } else {
+      router.push(`/features/CommunicationCoachScreen?persona=${persona.id}`);
+    }
   };
 
   return (

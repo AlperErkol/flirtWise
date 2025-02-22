@@ -14,6 +14,9 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { Ionicons } from "@expo/vector-icons";
 import Theme from "@/constants/Theme";
 import { router } from "expo-router";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { usePaywall } from "@/hooks/usePaywall";
+
 interface Category {
   id: string;
   isPremium: boolean;
@@ -33,9 +36,16 @@ interface SubCategory {
 
 export default function TipsScreen() {
   const { t } = useTranslation();
+  const { isProMember, isLoading } = useRevenueCat();
+  const { showPaywall } = usePaywall();
 
   const handleCategoryPress = async (category: Category) => {
-    router.push(`/features/CategoryDetailScreen?category=${category.title}`);
+    if (!isLoading && !isProMember) {
+      await showPaywall();
+      return;
+    } else {
+      router.push(`/features/CategoryDetailScreen?category=${category.title}`);
+    }
   };
 
   const renderCategory = (category: Category) => (

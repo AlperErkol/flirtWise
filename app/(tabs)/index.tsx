@@ -5,26 +5,12 @@ import Header from "@/components/Header";
 import { MainFeatureCard } from "@/components/MainFeatureCard";
 import { SecondaryFeatureCard } from "@/components/SecondaryFeatureCard";
 import { mainFeatures, secondaryFeatures } from "@/constants/home/features";
-import { usePaywall } from "@/hooks/usePaywall";
-import { useRevenueCat } from "@/hooks/useRevenueCat";
 import { useTranslation } from "@/hooks/useTranslation";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 export default function HomeScreen() {
   const { expoPushToken, notification } = usePushNotifications();
-  const { showPaywall } = usePaywall();
   const { t } = useTranslation();
-  const { isProMember, isLoading } = useRevenueCat();
-
-  useEffect(() => {
-    const checkProStatus = async () => {
-      if (!isLoading && !isProMember) {
-        await showPaywall();
-      }
-    };
-
-    checkProStatus();
-  }, [isProMember, isLoading]);
 
   return (
     <ScrollView style={{ backgroundColor: "#E6E6FA" }}>

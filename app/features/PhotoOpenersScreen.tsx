@@ -14,6 +14,9 @@ import globalStyles from "@/constants/style";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useRateUs } from "@/hooks/useRateUs";
 import useProfileStore from "@/store/profileStore";
+import { useRevenueCat } from "@/hooks/useRevenueCat";
+import { usePaywall } from "@/hooks/usePaywall";
+
 export default function PhotoOpenersScreen() {
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -25,6 +28,8 @@ export default function PhotoOpenersScreen() {
   const [conversationStyle, setConversationStyle] = useState("");
   const { t } = useTranslation();
   const { checkAndShowRateUs, incrementActionCount } = useRateUs();
+  const { isProMember, isLoading } = useRevenueCat();
+  const { showPaywall } = usePaywall();
 
   useEffect(() => {
     if (suggestions.length > 0) {
@@ -33,8 +38,13 @@ export default function PhotoOpenersScreen() {
   }, [suggestions]);
 
   const pickImageHandler = async () => {
-    const imageUri = await pickImage();
-    setSelectedImage(imageUri as any);
+    if (!isLoading && !isProMember) {
+      await showPaywall();
+      return;
+    } else {
+      const imageUri = await pickImage();
+      setSelectedImage(imageUri as any);
+    }
   };
 
   const startAnalysis = async () => {
