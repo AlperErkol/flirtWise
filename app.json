@@ -2,9 +2,9 @@
   "expo": {
     "name": "FlirtWise",
     "slug": "flirtWise",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "orientation": "portrait",
-    "icon": "./assets/images/logo.png",
+    "icon": "./assets/images/1024.png",
     "scheme": "flirtwise",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
