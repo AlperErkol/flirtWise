@@ -2,6 +2,7 @@ import { getCommunicationCoachPrompt } from "@/prompts/chat/coach";
 import ApiService, { OPENAI_MODEL_SLOW } from "@/services/ApiService";
 import { CommunicationCoachExtraction } from "@/utils/openai/response";
 import { zodResponseFormat } from "openai/helpers/zod";
+import RemoteConfigService from "../RemoteConfigService";
 
 type CommunicationCoachParams = {
   persona: "dating_coach" | "flirting_expert" | "relationship_guru";
@@ -24,7 +25,7 @@ export const sendCommunicationCoachMessage = async ({
       userInfo,
     });
     const response = await ApiService.post("/chat/completions", {
-      model: OPENAI_MODEL_SLOW,
+      model: RemoteConfigService.getOpenAIModelSlow(),
       messages: [
         { role: "system", content: systemPrompt },
         ...chatHistory.map((msg) => ({

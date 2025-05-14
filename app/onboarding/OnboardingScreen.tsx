@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, Text } from "react-native";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useSharedValue } from "react-native-reanimated";
@@ -12,6 +12,8 @@ import BenefitsScreen from "./BenefitsScreen";
 import FinalScreen from "./FinalScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
+import Header from "@/components/Header";
+import { usePaywall } from "@/hooks/usePaywall";
 const data = [
   <WelcomeScreen />,
   <HowItWorksScreen />,
@@ -22,9 +24,9 @@ const data = [
 const { width, height } = Dimensions.get("window");
 
 const buttonText = [
-  "fixMyMessagesNow",
-  "generateMyOpener",
-  "saveMyChat",
+  "stopSayingHey",
+  "createMyOpener",
+  "tellMeWhatToText",
   "startFlirtingSmarter",
 ];
 
@@ -34,11 +36,15 @@ export default function Index({ navigation }: any) {
   const progress = useSharedValue<number>(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const carouselHeight = height * 0.7;
+  const { showOnboardingPaywall } = usePaywall();
 
   const handleButtonPress = async () => {
     if (activeIndex === 3) {
       await AsyncStorage.setItem("onboardingCompleted", "true");
       router.replace("/(tabs)");
+      setTimeout(() => {
+        showOnboardingPaywall();
+      }, 500);
     } else {
       ref.current?.scrollTo({
         index: activeIndex + 1,
@@ -50,6 +56,18 @@ export default function Index({ navigation }: any) {
 
   return (
     <GlobalSafeAreaView>
+      <Header logo />
+      <View style={styles.paginationContainer}>
+        {data.map((_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.dot,
+              activeIndex === index ? styles.activeDot : styles.inactiveDot,
+            ]}
+          />
+        ))}
+      </View>
       <View style={{ height: carouselHeight }}>
         <Carousel
           enabled={false}
@@ -65,17 +83,6 @@ export default function Index({ navigation }: any) {
           data={data}
           renderItem={({ item }) => item}
         />
-      </View>
-      <View style={styles.paginationContainer}>
-        {data.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              styles.dot,
-              activeIndex === index ? styles.activeDot : styles.inactiveDot,
-            ]}
-          />
-        ))}
       </View>
       <Button
         title={t(buttonText[activeIndex])}
@@ -94,12 +101,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 20,
+    width: "100%",
+    paddingHorizontal: 10,
   },
   dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 5,
+    height: 3,
+    marginHorizontal: 2,
+    flex: 1,
   },
   activeDot: {
     backgroundColor: "#4F46E5",

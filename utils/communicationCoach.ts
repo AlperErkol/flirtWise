@@ -1,4 +1,5 @@
-import ApiService, { OPENAI_MODEL_SLOW } from "../services/ApiService";
+import ApiService from "../services/ApiService";
+import RemoteConfigService from "../services/RemoteConfigService";
 
 const COMMUNICATION_COACH_PROMPT = `
 You are a modern communication coach and an expert in providing practical, engaging, and confidence-boosting advice for any social situation. Your tone should be professional, friendly, and relatable.
@@ -17,7 +18,7 @@ You are a modern communication coach and an expert in providing practical, engag
 export const sendCommunicationMessage = async (chatLog: any) => {
   try {
     const response = await ApiService.post("/chat/completions", {
-      model: OPENAI_MODEL_SLOW,
+      model: RemoteConfigService.getOpenAIModelSlow(),
       messages: [
         { role: "system", content: COMMUNICATION_COACH_PROMPT },
         ...chatLog,

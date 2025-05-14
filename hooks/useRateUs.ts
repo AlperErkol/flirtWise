@@ -15,7 +15,7 @@ export const useRateUs = () => {
 
       if (hasRated === "true") return;
 
-      if (actionCount >= 2) {
+      if (actionCount >= 3) {
         showRateUsAlert();
       }
     } catch (error) {

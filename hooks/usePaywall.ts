@@ -2,6 +2,7 @@ import { useRevenueCat } from "./useRevenueCat";
 import { Alert } from "react-native";
 import { router } from "expo-router";
 import { useTranslation } from "./useTranslation";
+import Superwall from "@superwall/react-native-superwall";
 export const usePaywall = () => {
   const { isProMember } = useRevenueCat();
   const { t } = useTranslation();
@@ -15,13 +16,21 @@ export const usePaywall = () => {
     );
   };
 
+  const showOnboardingPaywall = async () => {
+    Superwall.shared.register({
+      placement: "onboarding_trigger",
+    });
+  };
+
   const showPaywall = async () => {
     if (isProMember) {
       showAlreadyPremiumAlert();
       return;
     }
-    router.push("/paywall");
+    Superwall.shared.register({
+      placement: "campaign_trigger",
+    });
   };
 
-  return { showPaywall };
+  return { showOnboardingPaywall, showPaywall };
 };

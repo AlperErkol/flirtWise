@@ -2,6 +2,7 @@ import { getPhotoOpenerPrompt } from "@/prompts/photo/opener";
 import ApiService, { OPENAI_MODEL_FAST } from "../ApiService";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { PhotoOpenerExtraction } from "@/utils/openai/response";
+import RemoteConfigService from "../RemoteConfigService";
 
 export const generatePhotoOpeners = async (
   imageUrl: any,
@@ -17,7 +18,7 @@ export const generatePhotoOpeners = async (
 
   try {
     const response = await ApiService.post("/chat/completions", {
-      model: OPENAI_MODEL_FAST,
+      model: RemoteConfigService.getOpenAIModelFast(),
       messages: [
         {
           role: "user",

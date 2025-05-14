@@ -28,6 +28,9 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import RevenueCatService from "@/services/payment/RevenueCatService";
 import RemoteConfigService from "@/services/RemoteConfigService";
 import { Stack } from "expo-router/stack";
+import Superwall from "@superwall/react-native-superwall";
+import { RCPurchaseController } from "@/services/payment/PurchaseController";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -62,10 +65,16 @@ export default function RootLayout() {
 
         await checkOnboardingStatus();
         I18n.initialize();
+        const purchaseController = new RCPurchaseController();
 
         await Promise.all([
           RevenueCatService.initialize(),
           RemoteConfigService.initialize(),
+          Superwall.configure({
+            apiKey: "pk_49390d975213a7bbd9f5718914c1c4366b2ac09da15e6dd2",
+            purchaseController,
+          }),
+          purchaseController.syncSubscriptionStatus(),
         ]);
 
         setAppReady(true);

@@ -5,6 +5,7 @@ import {
 import ApiService, { OPENAI_MODEL_FAST } from "@/services/ApiService";
 import { ChatEnhancerExtraction } from "@/utils/openai/response";
 import { zodResponseFormat } from "openai/helpers/zod";
+import RemoteConfigService from "../RemoteConfigService";
 
 export const enhanceChat = async (
   imageUrl: any,
@@ -22,7 +23,7 @@ export const enhanceChat = async (
     : await getChatEnhancerPrompt(userInfo, additionalInfo, conversationStyle);
   try {
     const response = await ApiService.post("/chat/completions", {
-      model: OPENAI_MODEL_FAST,
+      model: RemoteConfigService.getOpenAIModelFast(),
       messages: [
         {
           role: "user",

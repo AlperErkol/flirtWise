@@ -4,7 +4,7 @@
     "slug": "flirtWise",
     "version": "1.0.3",
     "orientation": "portrait",
-    "icon": "./assets/images/1024.png",
+    "icon": "./assets/images/flirtwise-logo-1024.png",
     "scheme": "flirtwise",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

@@ -22,6 +22,21 @@
 8. Push Notification - Done
 9. Rate Us'ı geri ekle ve ayarlarını düzenle - Done
 
-# FlirtWise - New Feature Development (2.0.0) 🎯
+# FlirtWise - Development Tracking 1.0.4 🎯
 
-1. Dating CRM - Bütün dating platformlarının ortak yönetildiği bir yönetim paneli.
+1. Hard Paywall Update (Superwall) - Done
+2. Onboarding Funnel Update - Done
+3. Upgrade AI Models - Done
+4. Logo Update - Done
+5. Rate Us'ı üç generate sonra çıkart - Done
+6. Push Notification Prod Problem
+
+# FlirtWise - Development Tracking 1.0.5 🎯
+
+1. Profile Maxxing Feature
+2. UI Improvements
+
+Feature Ideas
+
+1. Profile Maxxing Feature
+2. Chat Wrapped Feature
