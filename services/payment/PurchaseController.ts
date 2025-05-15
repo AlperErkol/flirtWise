@@ -28,7 +28,6 @@ export class RCPurchaseController extends PurchaseController {
   }
 
   syncSubscriptionStatus() {
-    // Listen for changes
     Purchases.addCustomerInfoUpdateListener((customerInfo) => {
       const entitlementIds = Object.keys(customerInfo.entitlements.active);
       Superwall.shared.setSubscriptionStatus(

@@ -36,8 +36,6 @@ export default function SubCategoryDetailScreen() {
   const [activeTab, setActiveTab] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
-  console.log("category", category);
-  console.log("subCategory", subCategory);
 
   const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedSubCategory, setSelectedSubCategory] =
@@ -45,7 +43,6 @@ export default function SubCategoryDetailScreen() {
 
   useEffect(() => {
     const loadTip = async () => {
-      console.log("hola!!!");
       setIsLoading(true);
       try {
         await fetchTips();

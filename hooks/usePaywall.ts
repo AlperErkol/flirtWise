@@ -1,6 +1,5 @@
 import { useRevenueCat } from "./useRevenueCat";
 import { Alert } from "react-native";
-import { router } from "expo-router";
 import { useTranslation } from "./useTranslation";
 import Superwall from "@superwall/react-native-superwall";
 export const usePaywall = () => {

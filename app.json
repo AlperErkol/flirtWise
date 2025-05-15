@@ -2,9 +2,9 @@
   "expo": {
     "name": "FlirtWise",
     "slug": "flirtWise",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
-    "icon": "./assets/images/flirtwise-logo-1024.png",
+    "icon": "./assets/images/app-logo.png",
     "scheme": "flirtwise",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

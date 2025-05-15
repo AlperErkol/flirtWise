@@ -41,10 +41,8 @@ export default function Index({ navigation }: any) {
   const handleButtonPress = async () => {
     if (activeIndex === 3) {
       await AsyncStorage.setItem("onboardingCompleted", "true");
+      showOnboardingPaywall();
       router.replace("/(tabs)");
-      setTimeout(() => {
-        showOnboardingPaywall();
-      }, 500);
     } else {
       ref.current?.scrollTo({
         index: activeIndex + 1,
