@@ -45,6 +45,15 @@ const TextingVibe = {
     "Charming, teasing, and playfully seductive messages that build attraction.",
 };
 
+export const VIBE_REINFORCEMENT: Record<keyof typeof TextingVibe, string> = {
+  playful: "include one light onomatopoeia or exclamation (yay, boom, haha).",
+  cool: "add one hint of mystery or ellipsis (“…”) without emojis.",
+  romantic: "use one sensory adjective (soft, warm, glowing, velvet).",
+  witty: "inject one mild pun or clever wordplay.",
+  confident: "phrase a direct challenge using verbs like dare, bet, prove.",
+  flirty: "add a teasing phrase with a double meaning.",
+};
+
 export { TextingVibe };
 
 export default convoStyles;

@@ -1,26 +1,27 @@
-import {
-  getChatEnhancerPrompt,
-  getDeadChatEnhancerPrompt,
-} from "@/prompts/chat/enhancer";
-import ApiService, { OPENAI_MODEL_FAST } from "@/services/ApiService";
+import { getChatEnhancerPrompt } from "@/prompts/chat/enhancer";
+import ApiService from "@/services/ApiService";
 import { ChatEnhancerExtraction } from "@/utils/openai/response";
 import { zodResponseFormat } from "openai/helpers/zod";
 import RemoteConfigService from "../RemoteConfigService";
-
+import { AdditionalParams } from "@/constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getRiskLevel } from "@/utils";
 export const enhanceChat = async (
   imageUrl: any,
-  userInfo: any,
-  additionalInfo?: string,
-  conversationStyle?: string,
+  photoContext: string,
+  additionalSettings: AdditionalParams,
   isDeadConversation?: boolean
 ) => {
-  let prompt = isDeadConversation
-    ? await getDeadChatEnhancerPrompt(
-        userInfo,
-        additionalInfo,
-        conversationStyle
-      )
-    : await getChatEnhancerPrompt(userInfo, additionalInfo, conversationStyle);
+  const userProfileString = await AsyncStorage.getItem("userProfile");
+  const userProfile = userProfileString ? JSON.parse(userProfileString) : null;
+
+  let prompt = await getChatEnhancerPrompt(
+    userProfile,
+    photoContext,
+    additionalSettings,
+    isDeadConversation
+  );
+
   try {
     const response = await ApiService.post("/chat/completions", {
       model: RemoteConfigService.getOpenAIModelFast(),
@@ -41,7 +42,7 @@ export const enhanceChat = async (
           ],
         },
       ],
-      temperature: 0.8,
+      temperature: getRiskLevel(additionalSettings.riskLevel),
       response_format: zodResponseFormat(
         ChatEnhancerExtraction,
         "chat_enhancers"

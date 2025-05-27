@@ -1,13 +1,14 @@
+import { AdditionalParams } from "@/constants/types";
 import { enhanceChat } from "@/services/chat/enhancer";
 import { uploadImageToCloudinary } from "@/services/cloudinary";
 import { generatePhotoOpeners } from "@/services/photo";
+import useProfileStore from "@/store/profileStore";
 
 const handleImageProcessing = async (
   imageUri: string,
-  userProfile: any,
   type: "photo_openers" | "chat_enhancer",
-  additionalInfo?: string,
-  conversationStyle?: string,
+  photoContext: string,
+  additionalSettings: AdditionalParams,
   isDeadConversation?: boolean
 ) => {
   try {
@@ -17,16 +18,14 @@ const handleImageProcessing = async (
     if (type === "photo_openers") {
       newSuggestions = await generatePhotoOpeners(
         imageUrl,
-        userProfile,
-        additionalInfo,
-        conversationStyle
+        photoContext,
+        additionalSettings
       );
     } else if (type === "chat_enhancer") {
       newSuggestions = await enhanceChat(
         imageUrl,
-        userProfile,
-        additionalInfo,
-        conversationStyle,
+        photoContext,
+        additionalSettings,
         isDeadConversation
       );
     }

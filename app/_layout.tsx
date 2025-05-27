@@ -151,6 +151,10 @@ export default function RootLayout() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="preferences/SpellingStylePreferenceScreen"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="paywall"
             options={{ headerShown: false, presentation: "fullScreenModal" }}
           />

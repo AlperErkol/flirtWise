@@ -13,6 +13,7 @@ import Theme from "@/constants/Theme";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import AdditionalInfoModal from "@/components/AdditionalInfoModal";
+import ToneMessagingModal from "@/components/ToneMessagingModal";
 import CustomBottomSheetView from "@/components/CustomBottomSheetView";
 import pickImage from "@/common/image";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
@@ -21,21 +22,26 @@ import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useRateUs } from "@/hooks/useRateUs";
-import useProfileStore from "@/store/profileStore";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
 import { usePaywall } from "@/hooks/usePaywall";
+import { AdditionalParams } from "@/constants/types";
 
 export default function ChatEnhancerScreen() {
-  const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [additionalInfo, setAdditionalInfo] = useState("");
+  const [chatContext, setChatContext] = useState("");
   const [isDeadConversation, setIsDeadConversation] = useState(false);
-  const [hasAdditionalInfo, setHasAdditionalInfo] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [conversationStyle, setConversationStyle] = useState("");
+  const [isAdditionalInfoModalVisible, setIsAdditionalInfoModalVisible] =
+    useState(false);
+  const [isToneModalVisible, setIsToneModalVisible] = useState(false);
+  const [additionalSettings, setAdditionalSettings] =
+    useState<AdditionalParams>({
+      conversationStyle: "",
+      spellingStyle: "medium",
+      riskLevel: "medium",
+    });
   const { t } = useTranslation();
   const { checkAndShowRateUs, incrementActionCount } = useRateUs();
   const { isProMember, isLoading } = useRevenueCat();
@@ -62,10 +68,9 @@ export default function ChatEnhancerScreen() {
     setSuggestions([]);
     const suggestions = await handleImageProcessing(
       selectedImage as any,
-      userProfile,
       "chat_enhancer",
-      additionalInfo,
-      conversationStyle,
+      chatContext,
+      additionalSettings,
       isDeadConversation
     );
     setSuggestions(suggestions);
@@ -88,17 +93,19 @@ export default function ChatEnhancerScreen() {
     []
   );
 
-  const onModalClose = () => {
-    if (
-      additionalInfo.trim().length > 0 ||
-      conversationStyle.trim().length > 0
-    ) {
-      setHasAdditionalInfo(true);
-    } else {
-      setHasAdditionalInfo(false);
-    }
-    setIsModalVisible(false);
+  const onAdditionalInfoModalClose = () => {
+    setIsAdditionalInfoModalVisible(false);
   };
+
+  const onToneModalClose = () => {
+    setIsToneModalVisible(false);
+  };
+
+  const hasAdditionalInfo = chatContext.trim().length > 0;
+  const hasToneSettings =
+    additionalSettings.conversationStyle?.trim().length > 0 ||
+    additionalSettings.spellingStyle !== "medium" ||
+    additionalSettings.riskLevel !== "medium";
 
   return (
     <GlobalSafeAreaView>
@@ -133,6 +140,7 @@ export default function ChatEnhancerScreen() {
               source={{ uri: selectedImage }}
               style={styles.imagePreview}
             />
+
             <View style={styles.switchRow}>
               <Text style={styles.switchLabel}>{t("isStuckConversation")}</Text>
               <Switch
@@ -142,9 +150,10 @@ export default function ChatEnhancerScreen() {
                 thumbColor={isDeadConversation ? "#FFFFFF" : "#FFFFFF"}
               />
             </View>
+
             <View style={styles.switchRow}>
               <View style={styles.switchLabelContainer}>
-                <Text style={styles.switchLabel}>{t("additionalContext")}</Text>
+                <Text style={styles.switchLabel}>{t("photoContext")}</Text>
                 {hasAdditionalInfo && (
                   <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
                 )}
@@ -152,43 +161,61 @@ export default function ChatEnhancerScreen() {
               <View style={styles.addInfoContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => setIsModalVisible(true)}
+                  onPress={() => setIsAdditionalInfoModalVisible(true)}
                 >
-                  {hasAdditionalInfo ? (
-                    <Text style={styles.additionalButtonText}>{t("edit")}</Text>
-                  ) : (
-                    <Text style={styles.additionalButtonText}>{t("add")}</Text>
-                  )}
+                  <Text style={styles.additionalButtonText}>
+                    {hasAdditionalInfo ? t("edit") : t("add")}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
+
+            <View style={styles.switchRow}>
+              <View style={styles.switchLabelContainer}>
+                <Text style={styles.switchLabel}>
+                  {t("toneMessagingStyle")}
+                </Text>
+                {hasToneSettings && (
+                  <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
+                )}
+              </View>
+              <View style={styles.addInfoContainer}>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => setIsToneModalVisible(true)}
+                >
+                  <Text style={styles.additionalButtonText}>
+                    {hasToneSettings ? t("edit") : t("add")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
             <View style={styles.buttonContainer}>
-              <Button
-                title={t("enhanceChat")}
-                buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
-                titleStyle={globalStyles.buttonText}
-                onPress={() => startAnalysis()}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              />
-              <Button
-                title={t("uploadNewScreenshot")}
-                buttonStyle={[
-                  globalStyles.button,
-                  globalStyles.transparentButton,
-                ]}
-                titleStyle={[
-                  globalStyles.buttonText,
-                  globalStyles.transparentButton,
-                ]}
-                onPress={pickImageHandler}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              />
+              <View style={styles.buttonRow}>
+                <View style={styles.enhanceButtonContainer}>
+                  <Button
+                    title={t("enhanceChat")}
+                    buttonStyle={[
+                      globalStyles.button,
+                      globalStyles.primaryButton,
+                    ]}
+                    titleStyle={globalStyles.buttonText}
+                    onPress={() => startAnalysis()}
+                  />
+                </View>
+                <View style={styles.uploadButtonContainer}>
+                  <Button
+                    title={t("newImage")}
+                    buttonStyle={[
+                      globalStyles.button,
+                      globalStyles.transparentButton,
+                    ]}
+                    titleStyle={[globalStyles.buttonText, { color: "#000" }]}
+                    onPress={pickImageHandler}
+                  />
+                </View>
+              </View>
             </View>
           </View>
         )}
@@ -210,12 +237,17 @@ export default function ChatEnhancerScreen() {
       </BottomSheet>
 
       <AdditionalInfoModal
-        visible={isModalVisible}
-        onClose={onModalClose}
-        additionalInfo={additionalInfo}
-        onChangeText={setAdditionalInfo}
-        conversationStyle={conversationStyle}
-        setConversationStyle={setConversationStyle}
+        visible={isAdditionalInfoModalVisible}
+        onClose={onAdditionalInfoModalClose}
+        additionalInfo={chatContext}
+        onChangeText={setChatContext}
+      />
+
+      <ToneMessagingModal
+        visible={isToneModalVisible}
+        onClose={onToneModalClose}
+        additionalSettings={additionalSettings}
+        setAdditionalSettings={setAdditionalSettings}
       />
     </GlobalSafeAreaView>
   );
@@ -275,15 +307,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "column",
     gap: 12,
+    marginTop: 16,
   },
   analyzeButton: {
     backgroundColor: "#000000",
     padding: 16,
     borderRadius: 12,
-    alignItems: "center",
-  },
-  uploadButton: {
-    padding: 16,
     alignItems: "center",
   },
   buttonText: {
@@ -293,7 +322,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     letterSpacing: -0.5,
   },
-
   bottomSheetBackground: {
     backgroundColor: "#fff",
     borderTopLeftRadius: 24,
@@ -317,7 +345,6 @@ const styles = StyleSheet.create({
     color: "#000",
     letterSpacing: -0.5,
   },
-
   addInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -353,5 +380,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  enhanceButtonContainer: {
+    flex: 2,
+  },
+  uploadButtonContainer: {
+    flex: 1,
+  },
+  enhanceButton: {
+    flex: 2,
+  },
+  uploadButton: {
+    flex: 1,
+    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderColor: "#000",
+  },
+  uploadButtonText: {
+    color: "#000",
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: -0.5,
   },
 });

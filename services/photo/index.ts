@@ -1,19 +1,24 @@
 import { getPhotoOpenerPrompt } from "@/prompts/photo/opener";
-import ApiService, { OPENAI_MODEL_FAST } from "../ApiService";
+import ApiService from "../ApiService";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { PhotoOpenerExtraction } from "@/utils/openai/response";
 import RemoteConfigService from "../RemoteConfigService";
+import { AdditionalParams } from "@/constants/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getRiskLevel } from "@/utils";
 
 export const generatePhotoOpeners = async (
   imageUrl: any,
-  userInfo: any,
-  additionalInfo?: string,
-  conversationStyle?: string
+  photoContext: string,
+  additionalSettings: AdditionalParams
 ) => {
+  const userProfileString = await AsyncStorage.getItem("userProfile");
+  const userProfile = userProfileString ? JSON.parse(userProfileString) : null;
+
   let prompt = await getPhotoOpenerPrompt(
-    { userInfo },
-    additionalInfo,
-    conversationStyle
+    userProfile,
+    photoContext,
+    additionalSettings
   );
 
   try {
@@ -36,7 +41,7 @@ export const generatePhotoOpeners = async (
           ],
         },
       ],
-      temperature: 0.8,
+      temperature: getRiskLevel(additionalSettings.riskLevel),
       response_format: zodResponseFormat(
         PhotoOpenerExtraction,
         "photo_openers"

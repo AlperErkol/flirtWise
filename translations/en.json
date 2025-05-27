@@ -16,8 +16,8 @@
   "getStarted": "Get Started",
   "typeYourMessage": "Type your message...",
   "uploadImage": "Upload an Image",
-  "additionalContext": "Additional Context",
-  "additionalContextPlaceholder": "Add any helpful details about the photo (e.g. hobbies, vibe, profile highlights)",
+  "photoContext": "Photo Context",
+  "photoContextPlaceholder": "Add any helpful details about the photo (e.g. hobbies, vibe, profile highlights)",
   "conversationStyle": "Conversation Style",
   "homeMainTitle": "Unlock Your Next Match",
   "homeSecondaryTitle": "Flirting Boosters for Today",
@@ -218,5 +218,15 @@
   "connectionErrorDescription": "Please check your internet connection.",
   "stopSayingHey": "Stop Saying ‘Hey’",
   "createMyOpener": "Create My Opener",
-  "tellMeWhatToText": "Tell Me What to Text"
+  "tellMeWhatToText": "Tell Me What to Text",
+  "toneMessagingStyle": "Tone & Messaging Style",
+  "spellingStyle": "Spelling Style",
+  "riskLevel": "Risk Level",
+  "soft": "Soft",
+  "medium": "Medium",
+  "strict": "Strict",
+  "mirror": "Mirror",
+  "loose": "Loose",
+  "bold": "Bold",
+  "newImage": "New Image"
 }

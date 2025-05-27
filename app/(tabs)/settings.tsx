@@ -21,7 +21,6 @@ import {
 } from "@/constants/settings/urls";
 import { useTranslation } from "@/hooks/useTranslation";
 import GlobalSafeAreaView from "@/components/GlobalSafeAreaView";
-import Quote from "@/components/quote";
 import { router } from "expo-router";
 export default function Settings({ bottomSheetRef, navigation }: any) {
   const { showPaywall } = usePaywall();

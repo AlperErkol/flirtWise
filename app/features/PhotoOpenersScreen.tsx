@@ -7,25 +7,32 @@ import { Ionicons } from "@expo/vector-icons";
 import CustomBottomSheetView from "@/components/CustomBottomSheetView";
 import pickImage from "@/common/image";
 import AdditionalInfoModal from "@/components/AdditionalInfoModal";
+import ToneMessagingModal from "@/components/ToneMessagingModal";
 import handleImageProcessing from "@/common/photo";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
 import { Button } from "@rneui/themed";
 import globalStyles from "@/constants/style";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useRateUs } from "@/hooks/useRateUs";
-import useProfileStore from "@/store/profileStore";
 import { useRevenueCat } from "@/hooks/useRevenueCat";
 import { usePaywall } from "@/hooks/usePaywall";
+import { AdditionalParams } from "@/constants/types";
 
 export default function PhotoOpenersScreen() {
-  const userProfile = useProfileStore((state: any) => state.userProfile);
   const [selectedImage, setSelectedImage] = useState(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [additionalInfo, setAdditionalInfo] = useState("");
+  const [photoContext, setPhotoContext] = useState("");
+  const [additionalSettings, setAdditionalSettings] =
+    useState<AdditionalParams>({
+      conversationStyle: "",
+      spellingStyle: "medium",
+      riskLevel: "medium",
+    });
+  const [isAdditionalInfoModalVisible, setIsAdditionalInfoModalVisible] =
+    useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [conversationStyle, setConversationStyle] = useState("");
+  const [isToneModalVisible, setIsToneModalVisible] = useState(false);
   const { t } = useTranslation();
   const { checkAndShowRateUs, incrementActionCount } = useRateUs();
   const { isProMember, isLoading } = useRevenueCat();
@@ -52,10 +59,9 @@ export default function PhotoOpenersScreen() {
     setSuggestions([]);
     const suggestions = await handleImageProcessing(
       selectedImage as any,
-      userProfile,
       "photo_openers",
-      additionalInfo,
-      conversationStyle
+      photoContext,
+      additionalSettings
     );
     setSuggestions(suggestions);
     setLoading(false);
@@ -76,9 +82,19 @@ export default function PhotoOpenersScreen() {
     []
   );
 
-  const onModalClose = () => {
-    setIsModalVisible(false);
+  const onAdditionalInfoModalClose = () => {
+    setIsAdditionalInfoModalVisible(false);
   };
+
+  const onToneModalClose = () => {
+    setIsToneModalVisible(false);
+  };
+
+  const hasAdditionalInfo = photoContext.trim().length > 0;
+  const hasToneSettings =
+    additionalSettings.conversationStyle?.trim().length > 0 ||
+    additionalSettings.spellingStyle !== "medium" ||
+    additionalSettings.riskLevel !== "medium";
 
   return (
     <GlobalSafeAreaView>
@@ -111,28 +127,47 @@ export default function PhotoOpenersScreen() {
               source={{ uri: selectedImage }}
               style={styles.imagePreview}
             />
+
             <View style={styles.switchRow}>
               <View style={styles.switchLabelContainer}>
-                <Text style={styles.switchLabel}>{t("additionalContext")}</Text>
-                {(additionalInfo.trim().length > 0 ||
-                  conversationStyle.trim().length > 0) && (
+                <Text style={styles.switchLabel}>{t("photoContext")}</Text>
+                {hasAdditionalInfo && (
                   <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
                 )}
               </View>
               <View style={styles.addInfoContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => setIsModalVisible(true)}
+                  onPress={() => setIsAdditionalInfoModalVisible(true)}
                 >
-                  {additionalInfo.trim().length > 0 ||
-                  conversationStyle.trim().length > 0 ? (
-                    <Text style={styles.additionalButtonText}>{t("edit")}</Text>
-                  ) : (
-                    <Text style={styles.additionalButtonText}>{t("add")}</Text>
-                  )}
+                  <Text style={styles.additionalButtonText}>
+                    {hasAdditionalInfo ? t("edit") : t("add")}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
+
+            <View style={styles.switchRow}>
+              <View style={styles.switchLabelContainer}>
+                <Text style={styles.switchLabel}>
+                  {t("toneMessagingStyle")}
+                </Text>
+                {hasToneSettings && (
+                  <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
+                )}
+              </View>
+              <View style={styles.addInfoContainer}>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => setIsToneModalVisible(true)}
+                >
+                  <Text style={styles.additionalButtonText}>
+                    {hasToneSettings ? t("edit") : t("add")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
             <View style={styles.buttonContainer}>
               <Button
                 title={t("generateOpeners")}
@@ -178,13 +213,19 @@ export default function PhotoOpenersScreen() {
           bottomSheetRef={bottomSheetRef}
         />
       </BottomSheet>
+
       <AdditionalInfoModal
-        visible={isModalVisible}
-        onClose={onModalClose}
-        additionalInfo={additionalInfo}
-        onChangeText={setAdditionalInfo}
-        conversationStyle={conversationStyle}
-        setConversationStyle={setConversationStyle}
+        visible={isAdditionalInfoModalVisible}
+        onClose={onAdditionalInfoModalClose}
+        additionalInfo={photoContext}
+        onChangeText={setPhotoContext}
+      />
+
+      <ToneMessagingModal
+        visible={isToneModalVisible}
+        onClose={onToneModalClose}
+        additionalSettings={additionalSettings}
+        setAdditionalSettings={setAdditionalSettings}
       />
     </GlobalSafeAreaView>
   );

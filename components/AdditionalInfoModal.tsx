@@ -1,4 +1,3 @@
-import convoStyles from "@/constants/settings/convo-style";
 import Theme from "@/constants/Theme";
 import { useTranslation } from "@/hooks/useTranslation";
 import React from "react";
@@ -18,8 +17,6 @@ interface AdditionalInfoModalProps {
   onClose: () => void;
   additionalInfo: string;
   onChangeText: (text: string) => void;
-  conversationStyle: string;
-  setConversationStyle: (style: string) => void;
 }
 
 export default function AdditionalInfoModal({
@@ -27,10 +24,9 @@ export default function AdditionalInfoModal({
   onClose,
   additionalInfo,
   onChangeText,
-  conversationStyle,
-  setConversationStyle,
 }: AdditionalInfoModalProps) {
   const { t } = useTranslation();
+
   return (
     <Modal
       visible={visible}
@@ -41,51 +37,22 @@ export default function AdditionalInfoModal({
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{t("additionalContext")}</Text>
+            <Text style={styles.modalTitle}>{t("photoContext")}</Text>
             <TextInput
               style={styles.textArea}
               multiline
               numberOfLines={4}
-              placeholder={t("additionalContextPlaceholder")}
+              placeholder={t("photoContextPlaceholder")}
               placeholderTextColor="#999"
               value={additionalInfo}
               onChangeText={onChangeText}
             />
-            <View style={styles.convoStyleContainer}>
-              <Text style={styles.modalTitle}>{t("conversationStyle")}</Text>
-              <View style={styles.convoStyleRow}>
-                {convoStyles.map((style) => (
-                  <TouchableOpacity
-                    key={style.id}
-                    style={[
-                      styles.convoStyleButton,
-                      conversationStyle === style.id &&
-                        styles.selectedConvoStyle,
-                    ]}
-                    onPress={() =>
-                      setConversationStyle(
-                        conversationStyle === style.id ? "" : style.id
-                      )
-                    }
-                  >
-                    <Text
-                      style={[
-                        styles.convoStyleButtonText,
-                        conversationStyle === style.id &&
-                          styles.selectedConvoStyleText,
-                      ]}
-                    >
-                      {t(style.key)}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
+
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
                 <Text style={styles.buttonText}>{t("close")}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.submitButton]} onPress={onClose}>
+              <TouchableOpacity style={styles.submitButton} onPress={onClose}>
                 <Text style={styles.buttonText}>{t("add")}</Text>
               </TouchableOpacity>
             </View>
@@ -151,45 +118,5 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_500Medium",
     letterSpacing: -0.5,
     fontSize: 16,
-  },
-  submitButtonDisabled: {
-    opacity: 0.5,
-  },
-  convoStyleContainer: {
-    marginTop: 32,
-    marginBottom: 16,
-  },
-  convoStyleTitle: {
-    fontSize: 18,
-    fontFamily: "Inter_500Medium",
-    color: "#000",
-    marginBottom: 8,
-    letterSpacing: -0.5,
-  },
-  convoStyleRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-    marginBottom: -8,
-  },
-  convoStyleButton: {
-    backgroundColor: "#ffffff",
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 8,
-    borderWidth: 2,
-    borderColor: "#F3F4F6",
-  },
-  selectedConvoStyle: {
-    borderColor: Theme.colors.primary,
-  },
-  convoStyleButtonText: {
-    fontSize: 15,
-    fontFamily: "Inter_500Medium",
-    color: "#000",
-    letterSpacing: -0.5,
-  },
-  selectedConvoStyleText: {
-    color: Theme.colors.primary,
   },
 });

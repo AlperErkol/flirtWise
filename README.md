@@ -33,8 +33,7 @@
 
 # FlirtWise - Development Tracking 1.0.5 🎯
 
-1. Profile Maxxing Feature
-2. UI Improvements
+1. Prompt Optimization
 
 Feature Ideas
 
