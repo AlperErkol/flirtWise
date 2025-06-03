@@ -6,9 +6,6 @@ const RATE_LIMIT = 20;
 const RATE_LIMIT_WINDOW = 5 * 60 * 1000;
 const TIMEOUT = 50000;
 
-export const OPENAI_MODEL_FAST = RemoteConfigService.getOpenAIModelFast();
-export const OPENAI_MODEL_SLOW = RemoteConfigService.getOpenAIModelSlow();
-
 class ApiService {
   private static instance = axios.create({
     baseURL: "https://api.openai.com/v1",

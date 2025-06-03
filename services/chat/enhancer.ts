@@ -24,7 +24,7 @@ export const enhanceChat = async (
 
   try {
     const response = await ApiService.post("/chat/completions", {
-      model: RemoteConfigService.getOpenAIModelFast(),
+      model: RemoteConfigService.getOpenAIModelSlow(),
       messages: [
         {
           role: "user",

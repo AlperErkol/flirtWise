@@ -18,13 +18,12 @@ const mainFeatures = [
     tags: ["chatEnhancerBadge"],
   },
 ];
-
 const secondaryFeatures = [
   {
     id: "3",
-    title: "flirtingCoachTitle",
-    description: "flirtingCoachDescription",
-    screen: "CommunicationCoachSelectionScreen",
+    title: "profileMaxxingTitle",
+    description: "profileMaxxingDescription",
+    screen: "profile-maxxing/ProfileMaxxingSelectionScreen",
     dark: false,
     emoji: "🧑🏻‍🏫",
   },
@@ -37,5 +36,4 @@ const secondaryFeatures = [
     emoji: "💡",
   },
 ];
-
 export { mainFeatures, secondaryFeatures };
