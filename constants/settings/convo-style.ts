@@ -10,14 +10,14 @@ const convoStyles = [
     key: "cool",
   },
   {
-    id: "romantic",
-    title: "Romantic",
-    key: "romanticVibe",
-  },
-  {
     id: "witty",
     title: "Witty",
     key: "witty",
+  },
+  {
+    id: "romantic",
+    title: "Romantic",
+    key: "romanticVibe",
   },
   {
     id: "confident",
@@ -28,6 +28,47 @@ const convoStyles = [
     id: "flirty",
     title: "Flirty",
     key: "flirty",
+  },
+];
+
+const spellingStyles = [
+  {
+    id: "formal",
+    title: "Formal",
+    key: "formal",
+  },
+  {
+    id: "neutral",
+    title: "Neutral",
+    key: "neutral",
+  },
+  {
+    id: "loose",
+    title: "Loose",
+    key: "loose",
+  },
+  {
+    id: "mirroring",
+    title: "Mirroring",
+    key: "mirroring",
+  },
+];
+
+const riskLevels = [
+  {
+    id: "safe",
+    title: "Safe",
+    key: "safe",
+  },
+  {
+    id: "balanced",
+    title: "Balanced",
+    key: "balanced",
+  },
+  {
+    id: "spicy",
+    title: "Spicy",
+    key: "spicy",
   },
 ];
 
@@ -54,6 +95,4 @@ export const VIBE_REINFORCEMENT: Record<keyof typeof TextingVibe, string> = {
   flirty: "add a teasing phrase with a double meaning.",
 };
 
-export { TextingVibe };
-
-export default convoStyles;
+export { TextingVibe, convoStyles, spellingStyles, riskLevels };

@@ -2,36 +2,38 @@ import React from "react";
 import { View, Image, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import SettingsBottomSheet from "./SettingsBottomSheet";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { useTranslation } from "@/hooks/useTranslation";
+import StatusIndicator from "./CountdownTimer";
+
 interface HeaderProps {
   logo?: boolean;
   showBackButton?: boolean;
-  showSettingsIcon?: boolean;
+  showCountdown?: boolean;
+  showAddButton?: boolean;
+  showCloseButton?: boolean;
+  onAddPress?: () => void;
+  onClosePress?: () => void;
   title?: string;
-  bottomSheetRef?: React.RefObject<BottomSheet>;
 }
 
 export default function Header({
   logo,
   showBackButton = false,
-  showSettingsIcon = false,
+  showCountdown = false,
+  showAddButton = false,
+  showCloseButton = false,
+  onAddPress,
+  onClosePress,
   title,
-  bottomSheetRef,
 }: HeaderProps) {
   const navigation = useNavigation();
   const { t } = useTranslation();
-
-  const handleSettingsPress = () => {
-    bottomSheetRef?.current?.expand();
-  };
 
   return (
     <>
       <View style={styles.header}>
         <View style={[styles.leftContainer]}>
-          {showBackButton ? (
+          {showBackButton && (
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={styles.backButton}
@@ -39,50 +41,40 @@ export default function Header({
               <Ionicons name="chevron-back" size={24} color="#FF6347" />
               <Text style={styles.backButtonText}>{t("back")}</Text>
             </TouchableOpacity>
-          ) : (
-            showSettingsIcon &&
-            logo && (
-              <Image
-                source={require("../assets/images/logo.png")}
-                style={styles.logo}
-              />
-            )
           )}
-        </View>
-
-        <View
-          style={[
-            styles.centerContainer,
-            !showBackButton && !showSettingsIcon && styles.centerLogoContainer,
-          ]}
-        >
-          {logo && !showSettingsIcon && (
+          {!showBackButton && logo && (
             <Image
               source={require("../assets/images/logo.png")}
               style={styles.logo}
             />
           )}
-          {!logo && <Text style={styles.title}>{title}</Text>}
+        </View>
+
+        <View style={[styles.centerContainer]}>
+          {showBackButton && logo ? (
+            <Image
+              source={require("../assets/images/logo.png")}
+              style={styles.logo}
+            />
+          ) : !logo ? (
+            <Text style={styles.title}>{title}</Text>
+          ) : null}
         </View>
 
         <View style={styles.rightContainer}>
-          {showSettingsIcon && (
-            <TouchableOpacity
-              onPress={handleSettingsPress}
-              style={styles.settingsButton}
-            >
-              <Ionicons name="menu" size={34} color="#FF6347" />
+          {showCountdown && <StatusIndicator />}
+          {showAddButton && (
+            <TouchableOpacity onPress={onAddPress} style={styles.addButton}>
+              <Ionicons name="add" size={28} color="#FF6347" />
+            </TouchableOpacity>
+          )}
+          {showCloseButton && (
+            <TouchableOpacity onPress={onClosePress} style={styles.closeButton}>
+              <Ionicons name="close" size={28} color="#FF6347" />
             </TouchableOpacity>
           )}
         </View>
       </View>
-
-      {showSettingsIcon && (
-        <SettingsBottomSheet
-          navigation={navigation}
-          bottomSheetModalRef={bottomSheetRef}
-        />
-      )}
     </>
   );
 }
@@ -129,9 +121,14 @@ const styles = StyleSheet.create({
     color: "#FF6347",
     letterSpacing: -0.5,
   },
-
   centerLogoContainer: {
     flex: 1,
     justifyContent: "center",
+  },
+  addButton: {
+    padding: 8,
+  },
+  closeButton: {
+    padding: 8,
   },
 });

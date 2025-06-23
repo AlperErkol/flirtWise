@@ -2,6 +2,7 @@ import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
 import { useTranslation } from "@/hooks/useTranslation";
+
 export default function TabLayout() {
   const { t } = useTranslation();
   return (
@@ -10,7 +11,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: "#FF6347",
         tabBarInactiveTintColor: "#999",
         tabBarStyle: {
-          height: 80,
+          height: 90,
           borderRadius: 20,
           backgroundColor: "white",
           shadowColor: "#000",
@@ -18,15 +19,22 @@ export default function TabLayout() {
           shadowRadius: 5,
           elevation: 5,
           borderTopWidth: 0,
+          paddingTop: 10,
+          paddingBottom: 10,
         },
         tabBarItemStyle: {
           justifyContent: "center",
           alignItems: "center",
+          flex: 1,
         },
         tabBarLabelStyle: {
           fontSize: 13,
           fontFamily: "Inter_500Medium",
           letterSpacing: -0.5,
+          marginTop: 4,
+        },
+        tabBarIconStyle: {
+          marginBottom: 2,
         },
       }}
     >
@@ -43,7 +51,7 @@ export default function TabLayout() {
                 shadowRadius: focused ? 8 : 0,
               }}
             >
-              <Ionicons name="cog" size={22} color={color} />
+              <Ionicons name="cog" size={24} color={color} />
             </View>
           ),
         }}
@@ -53,41 +61,20 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: t("home"),
-          tabBarIcon: ({ focused }) => (
-            <View>
-              <View
-                style={{
-                  position: "absolute",
-                  backgroundColor: "white",
-                  padding: 6,
-                  borderRadius: 60,
-                  width: 70,
-                  height: 70,
-                  marginTop: -40,
-                  left: -10,
-                }}
-              ></View>
-              <View
-                style={{
-                  backgroundColor: "#FF6347",
-                  padding: 6,
-                  borderRadius: 30,
-                  width: 50,
-                  height: 50,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginTop: -30,
-                  shadowColor: focused ? "#FF6347" : "transparent",
-                  shadowOpacity: focused ? 0.5 : 0,
-                  shadowRadius: focused ? 8 : 0,
-                }}
-              >
-                <Ionicons name="home" size={28} color="white" />
-              </View>
+          tabBarIcon: ({ color, focused }) => (
+            <View
+              style={{
+                shadowColor: focused ? "#FF6347" : "transparent",
+                shadowOpacity: focused ? 0.5 : 0,
+                shadowRadius: focused ? 8 : 0,
+              }}
+            >
+              <Ionicons name="home" size={24} color={color} />
             </View>
           ),
         }}
       />
+
       <Tabs.Screen
         name="profile"
         options={{
@@ -101,7 +88,7 @@ export default function TabLayout() {
                 shadowRadius: focused ? 8 : 0,
               }}
             >
-              <Ionicons name="person" size={22} color={color} />
+              <Ionicons name="person" size={24} color={color} />
             </View>
           ),
         }}

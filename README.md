@@ -31,11 +31,13 @@
 5. Rate Us'ı üç generate sonra çıkart - Done
 6. Push Notification Prod Problem
 
-# FlirtWise - Development Tracking 1.0.5 🎯
+# FlirtWise - Development Tracking 1.1.0 🎯
 
-1. Prompt Optimization
+1. Prompt Optimization - Done
+2. Profile Maxxing Feature - Done
+3. UI Improvements
+4. Paywall Improvements
 
 Feature Ideas
 
-1. Profile Maxxing Feature
 2. Chat Wrapped Feature

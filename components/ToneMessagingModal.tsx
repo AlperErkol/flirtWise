@@ -1,4 +1,8 @@
-import convoStyles from "@/constants/settings/convo-style";
+import {
+  convoStyles,
+  riskLevels,
+  spellingStyles,
+} from "@/constants/settings/convo-style";
 import Theme from "@/constants/Theme";
 import { useTranslation } from "@/hooks/useTranslation";
 import React from "react";
@@ -45,14 +49,15 @@ export default function ToneMessagingModal({
   const updateSpellingStyle = (style: SpellingStyle) => {
     setAdditionalSettings({
       ...additionalSettings,
-      spellingStyle: style,
+      spellingStyle:
+        additionalSettings.spellingStyle === style ? "medium" : style,
     });
   };
 
   const updateRiskLevel = (level: RiskLevel) => {
     setAdditionalSettings({
       ...additionalSettings,
-      riskLevel: level,
+      riskLevel: additionalSettings.riskLevel === level ? "medium" : level,
     });
   };
 
@@ -107,31 +112,27 @@ export default function ToneMessagingModal({
 
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>{t("spellingStyle")}</Text>
-              <View style={styles.riskButtonsRow}>
-                {["strict", "medium", "loose", "mirror"].map((level) => (
+              <View style={styles.optionButtonsContainer}>
+                {spellingStyles.map((level) => (
                   <TouchableOpacity
-                    key={level}
+                    key={level.id}
                     style={[
-                      styles.riskLevelButton,
-                      additionalSettings.spellingStyle === level &&
-                        styles.selectedRiskLevel,
+                      styles.optionButton,
+                      additionalSettings.spellingStyle === level.id &&
+                        styles.selectedOptionButton,
                     ]}
-                    onPress={() => updateSpellingStyle(level as SpellingStyle)}
+                    onPress={() =>
+                      updateSpellingStyle(level.id as SpellingStyle)
+                    }
                   >
                     <Text
                       style={[
-                        styles.riskLevelButtonText,
-                        additionalSettings.spellingStyle === level &&
-                          styles.selectedRiskLevelText,
+                        styles.optionButtonText,
+                        additionalSettings.spellingStyle === level.id &&
+                          styles.selectedOptionButtonText,
                       ]}
                     >
-                      {level === "strict"
-                        ? t("strict")
-                        : level === "medium"
-                        ? t("medium")
-                        : level === "loose"
-                        ? t("loose")
-                        : t("mirror")}
+                      {t(level.key)}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -143,29 +144,25 @@ export default function ToneMessagingModal({
 
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>{t("riskLevel")}</Text>
-              <View style={styles.riskButtonsRow}>
-                {["soft", "medium", "bold"].map((level) => (
+              <View style={styles.optionButtonsContainer}>
+                {riskLevels.map((level) => (
                   <TouchableOpacity
-                    key={level}
+                    key={level.id}
                     style={[
-                      styles.riskLevelButton,
-                      additionalSettings.riskLevel === level &&
-                        styles.selectedRiskLevel,
+                      styles.optionButton,
+                      additionalSettings.riskLevel === level.id &&
+                        styles.selectedOptionButton,
                     ]}
-                    onPress={() => updateRiskLevel(level as RiskLevel)}
+                    onPress={() => updateRiskLevel(level.id as RiskLevel)}
                   >
                     <Text
                       style={[
-                        styles.riskLevelButtonText,
-                        additionalSettings.riskLevel === level &&
-                          styles.selectedRiskLevelText,
+                        styles.optionButtonText,
+                        additionalSettings.riskLevel === level.id &&
+                          styles.selectedOptionButtonText,
                       ]}
                     >
-                      {level === "soft"
-                        ? t("soft")
-                        : level === "medium"
-                        ? t("medium")
-                        : t("bold")}
+                      {t(level.key)}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -195,116 +192,165 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
   modalContent: {
     backgroundColor: "white",
-    borderRadius: 15,
-    padding: 20,
+    borderRadius: 24,
+    padding: 24,
     width: "90%",
-    maxWidth: 400,
-    maxHeight: "80%",
+    maxWidth: 420,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 16,
+    elevation: 12,
   },
-  modalTitle: {
-    fontSize: 20,
-    marginBottom: 20,
-    fontFamily: "Inter_700Bold",
-    letterSpacing: -0.5,
-    textAlign: "left",
-  },
+
   sectionContainer: {
-    marginBottom: 24,
+    marginBottom: 16,
   },
   sectionTitle: {
-    fontSize: 16,
-    marginBottom: 12,
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: -0.5,
+    fontSize: 18,
+    marginBottom: 14,
+    fontFamily: "Inter_700Bold",
+    letterSpacing: -0.6,
+    color: "#1F2937",
   },
   convoStyleRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
+    gap: 10,
     marginBottom: 8,
   },
   convoStyleButton: {
-    backgroundColor: "#ffffff",
-    padding: 12,
-    borderRadius: 12,
+    backgroundColor: "#F9FAFB",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 16,
     marginBottom: 8,
     borderWidth: 2,
-    borderColor: "#F3F4F6",
+    borderColor: "#E5E7EB",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   selectedConvoStyle: {
     borderColor: Theme.colors.primary,
+    backgroundColor: `${Theme.colors.primary}10`,
   },
   convoStyleButtonText: {
     fontSize: 14,
     fontFamily: "Inter_500Medium",
-    color: "#000",
+    color: "#374151",
     letterSpacing: -0.5,
   },
   selectedConvoStyleText: {
     color: Theme.colors.primary,
   },
-  riskButtonsRow: {
+  optionButtonsContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 8,
+    flexWrap: "wrap",
     gap: 8,
+    justifyContent: "space-between",
   },
-  riskLevelButton: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    padding: 12,
+  optionButton: {
+    width: "48%",
+    backgroundColor: "#F9FAFB",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#F3F4F6",
+    borderColor: "#E5E7EB",
     alignItems: "center",
+    justifyContent: "center",
+    minHeight: 46,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  selectedRiskLevel: {
+  selectedOptionButton: {
     borderColor: Theme.colors.primary,
+    backgroundColor: `${Theme.colors.primary}15`,
   },
-  riskLevelButtonText: {
+  optionButtonText: {
     fontSize: 13,
     fontFamily: "Inter_500Medium",
-    color: "#000",
+    color: "#374151",
     letterSpacing: -0.5,
+    textAlign: "center",
+    lineHeight: 16,
   },
-  selectedRiskLevelText: {
+  selectedOptionButtonText: {
     color: Theme.colors.primary,
+    fontFamily: "Inter_600SemiBold",
   },
   description: {
     fontSize: 12,
     fontFamily: "Inter_400Regular",
-    color: "#666",
+    color: "#6B7280",
     fontStyle: "italic",
     marginTop: 8,
     textAlign: "center",
+    lineHeight: 16,
+    paddingHorizontal: 8,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 20,
+    paddingTop: 14,
+    borderTopWidth: 1,
+    borderTopColor: "#F3F4F6",
   },
   submitButton: {
-    backgroundColor: "#000",
-    padding: 12,
-    borderRadius: 8,
+    backgroundColor: "#4F46E5",
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 16,
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 8,
+    shadowColor: "#4F46E5",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   cancelButton: {
-    backgroundColor: "#666",
-    padding: 12,
-    borderRadius: 8,
+    backgroundColor: "#6B7280",
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 16,
     flex: 1,
-    marginRight: 10,
+    marginRight: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   buttonText: {
     color: "white",
     textAlign: "center",
-    fontFamily: "Inter_500Medium",
+    fontFamily: "Inter_600SemiBold",
     letterSpacing: -0.5,
     fontSize: 16,
   },

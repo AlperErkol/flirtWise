@@ -23,7 +23,7 @@ const secondaryFeatures = [
     id: "3",
     title: "profileMaxxingTitle",
     description: "profileMaxxingDescription",
-    screen: "profile-maxxing/ProfileMaxxingSelectionScreen",
+    screen: "ProfileMaxxingSelectionScreen",
     dark: false,
     emoji: "🧑🏻‍🏫",
   },

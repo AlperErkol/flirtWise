@@ -1,5 +1,5 @@
 import { getCommunicationCoachPrompt } from "@/prompts/chat/coach";
-import ApiService, { OPENAI_MODEL_SLOW } from "@/services/ApiService";
+import ApiService from "@/services/ApiService";
 import { CommunicationCoachExtraction } from "@/utils/openai/response";
 import { zodResponseFormat } from "openai/helpers/zod";
 import RemoteConfigService from "../RemoteConfigService";

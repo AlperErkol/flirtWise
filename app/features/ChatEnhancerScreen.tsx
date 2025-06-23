@@ -54,16 +54,16 @@ export default function ChatEnhancerScreen() {
   }, [suggestions]);
 
   const pickImageHandler = async () => {
-    if (!isLoading && !isProMember) {
-      await showPaywall();
-      return;
-    } else {
-      const imageUri = await pickImage();
-      setSelectedImage(imageUri as any);
-    }
+    const imageUri = await pickImage();
+    setSelectedImage(imageUri as any);
   };
 
   const startAnalysis = async () => {
+    if (!isLoading && !isProMember) {
+      await showPaywall();
+      return;
+    }
+
     setLoading(true);
     setSuggestions([]);
     const suggestions = await handleImageProcessing(
@@ -109,7 +109,12 @@ export default function ChatEnhancerScreen() {
 
   return (
     <GlobalSafeAreaView>
-      <Header logo={true} showBackButton={true} />
+      <Header
+        logo={true}
+        showBackButton={true}
+        showAddButton={!!selectedImage}
+        onAddPress={pickImageHandler}
+      />
 
       <View style={styles.container}>
         {!selectedImage ? (
@@ -141,86 +146,122 @@ export default function ChatEnhancerScreen() {
               style={styles.imagePreview}
             />
 
-            <View style={styles.switchRow}>
-              <Text style={styles.switchLabel}>{t("isStuckConversation")}</Text>
-              <Switch
-                value={isDeadConversation}
-                onValueChange={setIsDeadConversation}
-                trackColor={{ false: "#D1D5DB", true: "#4F46E5" }}
-                thumbColor={isDeadConversation ? "#FFFFFF" : "#FFFFFF"}
-              />
-            </View>
+            <View style={styles.separator} />
 
-            <View style={styles.switchRow}>
-              <View style={styles.switchLabelContainer}>
-                <Text style={styles.switchLabel}>{t("photoContext")}</Text>
-                {hasAdditionalInfo && (
-                  <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
-                )}
-              </View>
-              <View style={styles.addInfoContainer}>
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={() => setIsAdditionalInfoModalVisible(true)}
-                >
-                  <Text style={styles.additionalButtonText}>
-                    {hasAdditionalInfo ? t("edit") : t("add")}
+            <View style={styles.settingsContainer}>
+              <View style={styles.switchRow}>
+                <View style={styles.switchLabelContainer}>
+                  <Ionicons
+                    name="refresh-circle"
+                    size={20}
+                    color={isDeadConversation ? "#4F46E5" : "#666"}
+                  />
+                  <Text style={styles.switchLabel}>
+                    {t("isStuckConversation")}
                   </Text>
-                </TouchableOpacity>
+                </View>
+                <Switch
+                  value={isDeadConversation}
+                  onValueChange={setIsDeadConversation}
+                  trackColor={{ false: "#D1D5DB", true: "#4F46E5" }}
+                  thumbColor={isDeadConversation ? "#FFFFFF" : "#FFFFFF"}
+                />
               </View>
-            </View>
+              <TouchableOpacity
+                style={[
+                  styles.settingCard,
+                  hasAdditionalInfo && styles.settingCardActive,
+                ]}
+                onPress={() => setIsAdditionalInfoModalVisible(true)}
+              >
+                <View style={styles.settingCardContent}>
+                  <View style={styles.settingCardLeft}>
+                    <View style={styles.iconContainer}>
+                      <Ionicons
+                        name="information-circle"
+                        size={24}
+                        color={hasAdditionalInfo ? "#4F46E5" : "#666"}
+                      />
+                    </View>
+                    <View style={styles.settingTextContainer}>
+                      <Text style={styles.settingTitle}>
+                        {t("photoContext")}
+                      </Text>
+                      <Text style={styles.settingSubtitle}>
+                        {hasAdditionalInfo
+                          ? t("contextAdded")
+                          : t("addContextForBetterResults")}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.settingCardRight}>
+                    {hasAdditionalInfo ? (
+                      <View style={styles.statusBadge}>
+                        <Ionicons name="checkmark" size={16} color="#FFF" />
+                      </View>
+                    ) : (
+                      <Ionicons name="chevron-forward" size={20} color="#666" />
+                    )}
+                  </View>
+                </View>
+              </TouchableOpacity>
 
-            <View style={styles.switchRow}>
-              <View style={styles.switchLabelContainer}>
-                <Text style={styles.switchLabel}>
-                  {t("toneMessagingStyle")}
-                </Text>
-                {hasToneSettings && (
-                  <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
-                )}
-              </View>
-              <View style={styles.addInfoContainer}>
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={() => setIsToneModalVisible(true)}
-                >
-                  <Text style={styles.additionalButtonText}>
-                    {hasToneSettings ? t("edit") : t("add")}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                style={[
+                  styles.settingCard,
+                  hasToneSettings && styles.settingCardActive,
+                ]}
+                onPress={() => setIsToneModalVisible(true)}
+              >
+                <View style={styles.settingCardContent}>
+                  <View style={styles.settingCardLeft}>
+                    <View style={styles.iconContainer}>
+                      <Ionicons
+                        name="chatbubbles"
+                        size={24}
+                        color={hasToneSettings ? "#4F46E5" : "#666"}
+                      />
+                    </View>
+                    <View style={styles.settingTextContainer}>
+                      <Text style={styles.settingTitle}>
+                        {t("toneMessagingStyle")}
+                      </Text>
+                      <Text style={styles.settingSubtitle}>
+                        {hasToneSettings
+                          ? t("styleConfigured")
+                          : t("customizeMessagingTone")}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.settingCardRight}>
+                    {hasToneSettings ? (
+                      <View style={styles.statusBadge}>
+                        <Ionicons name="checkmark" size={16} color="#FFF" />
+                      </View>
+                    ) : (
+                      <Ionicons name="chevron-forward" size={20} color="#666" />
+                    )}
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.buttonContainer}>
-              <View style={styles.buttonRow}>
-                <View style={styles.enhanceButtonContainer}>
-                  <Button
-                    title={t("enhanceChat")}
-                    buttonStyle={[
-                      globalStyles.button,
-                      globalStyles.primaryButton,
-                    ]}
-                    titleStyle={globalStyles.buttonText}
-                    onPress={() => startAnalysis()}
-                  />
-                </View>
-                <View style={styles.uploadButtonContainer}>
-                  <Button
-                    title={t("newImage")}
-                    buttonStyle={[
-                      globalStyles.button,
-                      globalStyles.transparentButton,
-                    ]}
-                    titleStyle={[globalStyles.buttonText, { color: "#000" }]}
-                    onPress={pickImageHandler}
-                  />
-                </View>
+              <Button
+                title={t("enhanceChat")}
+                buttonStyle={[globalStyles.button, globalStyles.primaryButton]}
+                titleStyle={globalStyles.buttonText}
+                onPress={() => startAnalysis()}
+                style={{ display: "flex", alignItems: "center" }}
+              />
+              <View style={styles.hintContainer}>
+                <Text style={styles.hintText}>{t("uploadNewImageHint")}</Text>
               </View>
             </View>
           </View>
         )}
       </View>
-      {loading && <LoadingOverlay />}
+      {loading && <LoadingOverlay type="chatEnhancer" />}
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
@@ -299,15 +340,128 @@ const styles = StyleSheet.create({
   },
   imagePreview: {
     width: "100%",
-    height: 400,
+    height: 320,
     borderRadius: 10,
     resizeMode: "contain",
     marginVertical: 10,
   },
+  separator: {
+    height: 1,
+    backgroundColor: "#9CA3AF",
+    marginVertical: 12,
+  },
+  settingsContainer: {
+    gap: 12,
+    marginVertical: 8,
+  },
+  switchCard: {
+    backgroundColor: "#FAFAFA",
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: "#E5E7EB",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  switchCardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  switchCardLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  switchCardRight: {
+    marginLeft: 12,
+  },
+  settingCard: {
+    backgroundColor: "#FAFAFA",
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: "#E5E7EB",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  settingCardActive: {
+    borderColor: "#4F46E5",
+    backgroundColor: "#F8FAFF",
+  },
+  settingCardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  settingCardLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  settingCardRight: {
+    marginLeft: 12,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "#F3F4F6",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+  },
+  settingTextContainer: {
+    flex: 1,
+  },
+  settingTitle: {
+    fontSize: 16,
+    fontFamily: "Inter_600SemiBold",
+    color: "#1F2937",
+    letterSpacing: -0.3,
+    marginBottom: 4,
+  },
+  settingSubtitle: {
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    color: "#6B7280",
+    letterSpacing: -0.2,
+    lineHeight: 18,
+  },
+  statusBadge: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#4F46E5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  hintContainer: {
+    alignItems: "center",
+  },
+  hintText: {
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    color: "#6B7280",
+    textAlign: "center",
+    letterSpacing: -0.2,
+  },
   buttonContainer: {
     flexDirection: "column",
     gap: 12,
-    marginTop: 16,
+    marginTop: 8,
   },
   analyzeButton: {
     backgroundColor: "#000000",
@@ -335,7 +489,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 12,
     paddingHorizontal: 4,
     marginBottom: 4,
   },

@@ -45,16 +45,16 @@ export default function PhotoOpenersScreen() {
   }, [suggestions]);
 
   const pickImageHandler = async () => {
-    if (!isLoading && !isProMember) {
-      await showPaywall();
-      return;
-    } else {
-      const imageUri = await pickImage();
-      setSelectedImage(imageUri as any);
-    }
+    const imageUri = await pickImage();
+    setSelectedImage(imageUri as any);
   };
 
   const startAnalysis = async () => {
+    if (!isLoading && !isProMember) {
+      await showPaywall();
+      return;
+    }
+
     setLoading(true);
     setSuggestions([]);
     const suggestions = await handleImageProcessing(
@@ -98,7 +98,12 @@ export default function PhotoOpenersScreen() {
 
   return (
     <GlobalSafeAreaView>
-      <Header logo={true} showBackButton={true} />
+      <Header
+        logo={true}
+        showBackButton={true}
+        showAddButton={!!selectedImage}
+        onAddPress={pickImageHandler}
+      />
       <View style={styles.container}>
         {!selectedImage ? (
           <>
@@ -128,44 +133,86 @@ export default function PhotoOpenersScreen() {
               style={styles.imagePreview}
             />
 
-            <View style={styles.switchRow}>
-              <View style={styles.switchLabelContainer}>
-                <Text style={styles.switchLabel}>{t("photoContext")}</Text>
-                {hasAdditionalInfo && (
-                  <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
-                )}
-              </View>
-              <View style={styles.addInfoContainer}>
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={() => setIsAdditionalInfoModalVisible(true)}
-                >
-                  <Text style={styles.additionalButtonText}>
-                    {hasAdditionalInfo ? t("edit") : t("add")}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <View style={styles.separator} />
 
-            <View style={styles.switchRow}>
-              <View style={styles.switchLabelContainer}>
-                <Text style={styles.switchLabel}>
-                  {t("toneMessagingStyle")}
-                </Text>
-                {hasToneSettings && (
-                  <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
-                )}
-              </View>
-              <View style={styles.addInfoContainer}>
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={() => setIsToneModalVisible(true)}
-                >
-                  <Text style={styles.additionalButtonText}>
-                    {hasToneSettings ? t("edit") : t("add")}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.settingsContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.settingCard,
+                  hasAdditionalInfo && styles.settingCardActive,
+                ]}
+                onPress={() => setIsAdditionalInfoModalVisible(true)}
+              >
+                <View style={styles.settingCardContent}>
+                  <View style={styles.settingCardLeft}>
+                    <View style={styles.iconContainer}>
+                      <Ionicons
+                        name="information-circle"
+                        size={24}
+                        color={hasAdditionalInfo ? "#4F46E5" : "#666"}
+                      />
+                    </View>
+                    <View style={styles.settingTextContainer}>
+                      <Text style={styles.settingTitle}>
+                        {t("photoContext")}
+                      </Text>
+                      <Text style={styles.settingSubtitle}>
+                        {hasAdditionalInfo
+                          ? t("contextAdded")
+                          : t("addContextForBetterResults")}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.settingCardRight}>
+                    {hasAdditionalInfo ? (
+                      <View style={styles.statusBadge}>
+                        <Ionicons name="checkmark" size={16} color="#FFF" />
+                      </View>
+                    ) : (
+                      <Ionicons name="chevron-forward" size={20} color="#666" />
+                    )}
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.settingCard,
+                  hasToneSettings && styles.settingCardActive,
+                ]}
+                onPress={() => setIsToneModalVisible(true)}
+              >
+                <View style={styles.settingCardContent}>
+                  <View style={styles.settingCardLeft}>
+                    <View style={styles.iconContainer}>
+                      <Ionicons
+                        name="chatbubbles"
+                        size={24}
+                        color={hasToneSettings ? "#4F46E5" : "#666"}
+                      />
+                    </View>
+                    <View style={styles.settingTextContainer}>
+                      <Text style={styles.settingTitle}>
+                        {t("toneMessagingStyle")}
+                      </Text>
+                      <Text style={styles.settingSubtitle}>
+                        {hasToneSettings
+                          ? t("styleConfigured")
+                          : t("customizeMessagingTone")}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.settingCardRight}>
+                    {hasToneSettings ? (
+                      <View style={styles.statusBadge}>
+                        <Ionicons name="checkmark" size={16} color="#FFF" />
+                      </View>
+                    ) : (
+                      <Ionicons name="chevron-forward" size={20} color="#666" />
+                    )}
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.buttonContainer}>
@@ -176,28 +223,15 @@ export default function PhotoOpenersScreen() {
                 onPress={startAnalysis}
                 style={{ display: "flex", alignItems: "center" }}
               />
-              <Button
-                title={t("uploadNewImage")}
-                buttonStyle={[
-                  globalStyles.button,
-                  globalStyles.transparentButton,
-                ]}
-                titleStyle={[
-                  globalStyles.buttonText,
-                  globalStyles.transparentButton,
-                ]}
-                onPress={pickImageHandler}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              />
+              <View style={styles.hintContainer}>
+                <Text style={styles.hintText}>{t("uploadNewImageHint")}</Text>
+              </View>
             </View>
           </View>
         )}
       </View>
 
-      {loading && <LoadingOverlay />}
+      {loading && <LoadingOverlay type="photoOpeners" />}
 
       <BottomSheet
         ref={bottomSheetRef}
@@ -266,10 +300,16 @@ export const styles = StyleSheet.create({
   },
   imagePreview: {
     width: "100%",
-    height: 400,
+    height: 320,
     borderRadius: 10,
     resizeMode: "contain",
     marginVertical: 10,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#9CA3AF",
+    marginVertical: 16,
+    marginHorizontal: 16,
   },
   buttonContainer: {
     flexDirection: "column",
@@ -321,5 +361,85 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  settingsContainer: {
+    gap: 16,
+    marginVertical: 16,
+  },
+  settingCard: {
+    backgroundColor: "#FAFAFA",
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: "#E5E7EB",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  settingCardActive: {
+    borderColor: "#4F46E5",
+    backgroundColor: "#F8FAFF",
+  },
+  settingCardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  settingCardLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  settingCardRight: {
+    marginLeft: 12,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: "#F3F4F6",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+  },
+  settingTextContainer: {
+    flex: 1,
+  },
+  settingTitle: {
+    fontSize: 16,
+    fontFamily: "Inter_600SemiBold",
+    color: "#1F2937",
+    letterSpacing: -0.3,
+    marginBottom: 4,
+  },
+  settingSubtitle: {
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    color: "#6B7280",
+    letterSpacing: -0.2,
+    lineHeight: 18,
+  },
+  statusBadge: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#4F46E5",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  hintContainer: {
+    alignItems: "center",
+  },
+  hintText: {
+    fontSize: 14,
+    fontFamily: "Inter_400Regular",
+    color: "#6B7280",
+    textAlign: "center",
+    letterSpacing: -0.2,
   },
 });

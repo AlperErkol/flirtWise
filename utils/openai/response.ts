@@ -53,10 +53,49 @@ const CommunicationCoachExtraction = z.object({
   suggestedTopics: z.array(z.string()).optional(),
 });
 
+const ProfileMaxxingExtraction = z.object({
+  overallScore: z.number(),
+  styleVibe: z.object({
+    summary: z.string(),
+    keywords: z.array(z.string()),
+    improvements: z.array(z.string()),
+  }),
+  photoAnalysis: z.array(
+    z.object({
+      idx: z.number(),
+      score: z.number(),
+      strength: z.string(),
+      fix: z.string(),
+    })
+  ),
+  bioAnalysis: z.object({
+    strengths: z.array(z.string()),
+    weaknesses: z.array(z.string()),
+    rewriteSuggestion: z.string(),
+  }),
+  detailedScores: z.object({
+    firstImpression: z.number(),
+    authenticity: z.number(),
+    humor: z.number(),
+    clarity: z.number(),
+  }),
+  photoOrder: z.array(z.number()),
+  psychologyInsight: z.string(),
+  expertNotes: z.string(),
+  actionChecklist: z.array(
+    z.object({
+      task: z.string(),
+      impact: z.string(),
+      effort: z.string(),
+    })
+  ),
+});
+
 export {
   ChatEnhancerExtraction,
   PhotoOpenerExtraction,
   CommunicationTipExtraction,
   PremiumCommunicationTipExtraction,
   CommunicationCoachExtraction,
+  ProfileMaxxingExtraction,
 };

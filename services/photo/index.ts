@@ -5,10 +5,9 @@ import { PhotoOpenerExtraction } from "@/utils/openai/response";
 import RemoteConfigService from "../RemoteConfigService";
 import { AdditionalParams } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getRiskLevel } from "@/utils";
 
 export const generatePhotoOpeners = async (
-  imageUrl: any,
+  imageUrl: string,
   photoContext: string,
   additionalSettings: AdditionalParams
 ) => {
@@ -23,7 +22,7 @@ export const generatePhotoOpeners = async (
 
   try {
     const response = await ApiService.post("/chat/completions", {
-      model: RemoteConfigService.getOpenAIModelSlow(),
+      model: RemoteConfigService.getOpenAIModelFast(),
       messages: [
         {
           role: "user",
@@ -41,7 +40,6 @@ export const generatePhotoOpeners = async (
           ],
         },
       ],
-      temperature: getRiskLevel(additionalSettings.riskLevel),
       response_format: zodResponseFormat(
         PhotoOpenerExtraction,
         "photo_openers"

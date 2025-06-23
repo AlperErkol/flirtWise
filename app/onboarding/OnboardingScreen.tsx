@@ -14,9 +14,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import Header from "@/components/Header";
 import { usePaywall } from "@/hooks/usePaywall";
+import ProfileMaxxingScreen from "./ProfileMaxxingScreen";
+
 const data = [
   <WelcomeScreen />,
   <HowItWorksScreen />,
+  <ProfileMaxxingScreen />,
   <BenefitsScreen />,
   <FinalScreen />,
 ];
@@ -26,11 +29,12 @@ const { width, height } = Dimensions.get("window");
 const buttonText = [
   "stopSayingHey",
   "createMyOpener",
+  "boostMyProfile",
   "tellMeWhatToText",
   "startFlirtingSmarter",
 ];
 
-export default function Index({ navigation }: any) {
+export default function Index() {
   const { t } = useTranslation();
   const ref = React.useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
@@ -39,7 +43,7 @@ export default function Index({ navigation }: any) {
   const { showOnboardingPaywall } = usePaywall();
 
   const handleButtonPress = async () => {
-    if (activeIndex === 3) {
+    if (activeIndex === 4) {
       await AsyncStorage.setItem("onboardingCompleted", "true");
       showOnboardingPaywall();
       router.replace("/(tabs)");

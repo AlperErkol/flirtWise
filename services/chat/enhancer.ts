@@ -7,7 +7,7 @@ import { AdditionalParams } from "@/constants/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getRiskLevel } from "@/utils";
 export const enhanceChat = async (
-  imageUrl: any,
+  imageUrl: string,
   photoContext: string,
   additionalSettings: AdditionalParams,
   isDeadConversation?: boolean
@@ -24,7 +24,7 @@ export const enhanceChat = async (
 
   try {
     const response = await ApiService.post("/chat/completions", {
-      model: RemoteConfigService.getOpenAIModelSlow(),
+      model: RemoteConfigService.getOpenAIModelFast(),
       messages: [
         {
           role: "user",
@@ -42,7 +42,6 @@ export const enhanceChat = async (
           ],
         },
       ],
-      temperature: getRiskLevel(additionalSettings.riskLevel),
       response_format: zodResponseFormat(
         ChatEnhancerExtraction,
         "chat_enhancers"

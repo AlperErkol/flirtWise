@@ -1,32 +1,54 @@
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { useTranslation } from "@/hooks/useTranslation";
+import {
+  loadingMessages,
+  LoadingMessageType,
+} from "@/constants/loadingMessages";
+import { useState, useEffect } from "react";
 
-export function LoadingOverlay() {
+interface LoadingOverlayProps {
+  type: LoadingMessageType;
+}
+
+export function LoadingOverlay({ type }: LoadingOverlayProps) {
   const { t } = useTranslation();
+  const messages = loadingMessages[type].map((key) => t(key));
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMessageIndex((prevIndex) => {
+        if (prevIndex === messages.length - 1) {
+          return prevIndex;
+        }
+        return prevIndex + 1;
+      });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [messages.length]);
+
   return (
-    <View style={styles.loadingOverlay}>
-      <ActivityIndicator size="large" color="#FF6347" />
-      <Text style={styles.loadingText}>{t("analyzing")}</Text>
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color="#fff" />
+      <Text style={styles.loadingText}>{messages[currentMessageIndex]}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    zIndex: 1000,
   },
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
     color: "#fff",
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: -0.5,
+    fontSize: 16,
+    marginTop: 12,
+    textAlign: "center",
+    paddingHorizontal: 20,
   },
 });

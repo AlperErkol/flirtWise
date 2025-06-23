@@ -1,8 +1,7 @@
 import { AdditionalParams } from "@/constants/types";
 import { enhanceChat } from "@/services/chat/enhancer";
-import { uploadImageToCloudinary } from "@/services/cloudinary";
 import { generatePhotoOpeners } from "@/services/photo";
-import useProfileStore from "@/store/profileStore";
+import { uriToDataURL } from "@/utils";
 
 const handleImageProcessing = async (
   imageUri: string,
@@ -12,8 +11,7 @@ const handleImageProcessing = async (
   isDeadConversation?: boolean
 ) => {
   try {
-    const cloudinaryImage: any = await uploadImageToCloudinary(imageUri);
-    const imageUrl = cloudinaryImage.secure_url;
+    const imageUrl: string = await uriToDataURL(imageUri);
     let newSuggestions = [];
     if (type === "photo_openers") {
       newSuggestions = await generatePhotoOpeners(

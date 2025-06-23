@@ -1,5 +1,5 @@
 import { getTipPrompt } from "@/prompts/tips/generator";
-import ApiService, { OPENAI_MODEL_SLOW } from "@/services/ApiService";
+import ApiService from "@/services/ApiService";
 import { zodResponseFormat } from "openai/helpers/zod";
 import RemoteConfigService from "../RemoteConfigService";
 import { PremiumCommunicationTipExtraction } from "@/utils/openai/response";
@@ -12,10 +12,8 @@ export const getCommunicationTip = async (
   let prompt = await getTipPrompt({ category, subCategory, userInfo });
   try {
     const response = await ApiService.post("/chat/completions", {
-      model: RemoteConfigService.getOpenAIModelSlow(),
+      model: RemoteConfigService.getOpenAIModelFast(),
       messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
-      max_tokens: 1000,
       response_format: zodResponseFormat(
         PremiumCommunicationTipExtraction,
         "communication_tip"

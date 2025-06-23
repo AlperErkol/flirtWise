@@ -130,6 +130,18 @@ export default function RootLayout() {
             options={{ headerShown: false, presentation: "fullScreenModal" }}
           />
           <Stack.Screen
+            name="features/ProfileMaxxingSelectionScreen"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="features/ProfileMaxxingAnalysisScreen"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="features/ProfileMaxxingResultScreen"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="settings/LanguageScreen"
             options={{ headerShown: false }}
           />
@@ -137,7 +149,6 @@ export default function RootLayout() {
             name="settings/PreferencesScreen"
             options={{ headerShown: false }}
           />
-
           <Stack.Screen
             name="preferences/GenderPreferenceScreen"
             options={{ headerShown: false }}
@@ -148,10 +159,6 @@ export default function RootLayout() {
           />
           <Stack.Screen
             name="preferences/MatchPreferenceScreen"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="preferences/SpellingStylePreferenceScreen"
             options={{ headerShown: false }}
           />
           <Stack.Screen
