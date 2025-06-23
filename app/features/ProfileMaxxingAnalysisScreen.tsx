@@ -339,14 +339,14 @@ export default function ProfileMaxxingAnalysisScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.instructionContainer}>
-            <Text style={styles.instructionText}>Profil Fotoğrafları</Text>
+            <Text style={styles.instructionText}>{t("profilePhotos")}</Text>
             <Text style={styles.subInstructionText}>
-              Profil fotoğraflarınızı ekleyin.
+              {t("profilePhotosSubtitle")}
             </Text>
           </View>
 
           <View style={styles.noPhotosContainer}>
-            <Text style={styles.noPhotosText}>Profilimde fotoğraf yok</Text>
+            <Text style={styles.noPhotosText}>{t("noPhotos")}</Text>
             <Switch
               value={noPhotos}
               onValueChange={(value) => {

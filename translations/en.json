@@ -310,5 +310,7 @@
   "requiredFieldsInfo": "Red dots indicate required fields",
   "clear": "Clear",
   "contextAdded": "Context added",
-  "styleConfigured": "Style configured"
+  "styleConfigured": "Style configured",
+  "profilePhotosSubtitle": "Add your profile photos for analysis",
+  "noPhotos": "No photos in my profile"
 }
